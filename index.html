@@ -660,15 +660,6 @@
       </div>
 
       <!-- ======================================================
-           JAM DIGITAL
-           ====================================================== -->
-      <div class="clock-box" aria-live="polite">
-        <div id="clockTime" class="clock-time">00:00:00</div>
-        <div id="clockDate" class="clock-date">DD/MM/YYYY</div>
-        <div id="clockSource" class="clock-source">Waktu server</div>
-      </div>
-
-      <!-- ======================================================
            TAB UTAMA
            ====================================================== -->
       <div id="tab-utama" class="tab-content active">
@@ -685,6 +676,17 @@
         id="tab-absen"
         class="tab-content active"
       >
+
+      <!-- ======================================================
+           JAM DIGITAL
+           ====================================================== -->
+      <div class="clock-box" aria-live="polite">
+        <div id="clockTime" class="clock-time">00:00:00</div>
+        <div id="clockDate" class="clock-date">DD/MM/YYYY</div>
+        <div id="clockSource" class="clock-source">Waktu server</div>
+      </div>
+
+
 
         <div
           class="card"
@@ -997,7 +999,7 @@
     // API CONFIGURATION
     // ==========================================================
     // Ganti URL di bawah dengan URL Web App Google Apps Script.
-    const API_URL = "https://script.google.com/macros/s/AKfycbxntMvHpu3R5A96EQRVgBO7l9jqZ0JKjMasnYw-5aZQv8RIwhlKvmS7NpjLdL8qtI8XlQ/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbzfExUCjrw9bh5zCXCPxlA1OBAkYxCbbEPyDxw6Hn7LqM0PdkvvcNYHAGAb6P-zVb6jVw/exec";
 
     const NIP_KEY = "absensi_v5_nip";
     const DEV_KEY = "absensi_v5_device";
@@ -1269,6 +1271,12 @@
 
       if (tabName === "absen") {
         $("tab-absen").classList.add("active");
+
+        // Saat halaman Absen dibuka, langsung cek lokasi agar
+        // browser dapat menampilkan permintaan izin lokasi bila diperlukan.
+        setTimeout(() => {
+          checkGps(true);
+        }, 250);
         return;
       }
 
@@ -1419,17 +1427,67 @@
       }
     }
 
-    async function checkGps() {
-      busy("gpsBtn", true, "Mencari...");
+    async function checkGps(autoCheck = false) {
+      if (!navigator.geolocation) {
+        $("gpsStatus").textContent =
+          "GPS/lokasi tidak didukung oleh browser ini.";
+        return;
+      }
+
+      if (!autoCheck) {
+        busy("gpsBtn", true, "Meminta lokasi...");
+      }
+
+      $("gpsStatus").textContent =
+        "Meminta izin lokasi / mencari GPS...";
 
       try {
+        // Cek status izin browser jika API Permissions tersedia.
+        // Jika status prompt, getCurrentPosition akan memunculkan
+        // dialog izin lokasi browser.
+        if (navigator.permissions && navigator.permissions.query) {
+          try {
+            const permission = await navigator.permissions.query({ name: "geolocation" });
+
+            if (permission.state === "denied") {
+              throw Error(
+                "Izin lokasi diblokir. Buka pengaturan browser lalu izinkan Lokasi untuk situs ini."
+              );
+            }
+          } catch (permissionError) {
+            // Beberapa browser tidak mendukung Permissions API untuk geolocation.
+            // Tetap lanjutkan ke getCurrentPosition.
+            if (permissionError.message && permissionError.message.includes("diblokir")) {
+              throw permissionError;
+            }
+          }
+        }
+
         const pos = await position();
+        const accuracy = Math.round(pos.coords.accuracy);
+
         $("gpsStatus").textContent =
-          "GPS aktif. Akurasi ±" + Math.round(pos.coords.accuracy) + " meter.";
+          "GPS aktif. Akurasi ±" + accuracy + " meter.";
+
+        return pos;
       } catch (error) {
-        $("gpsStatus").textContent = "GPS gagal: " + error.message;
+        const message = error && error.message ? error.message : "GPS gagal.";
+
+        $("gpsStatus").textContent = message;
+
+        // Berikan petunjuk berbeda sesuai kondisi.
+        if (/Lokasi tidak tersedia|GPS sedang mati/i.test(message)) {
+          $("gpsStatus").textContent =
+            "GPS/lokasi perangkat belum aktif. Aktifkan Lokasi pada pengaturan HP, lalu tekan tombol ini lagi.";
+        }
+
+        if (!autoCheck) {
+          attendanceMsg($("gpsStatus").textContent, "error");
+        }
       } finally {
-        busy("gpsBtn", false, "CEK / AKTIFKAN GPS");
+        if (!autoCheck) {
+          busy("gpsBtn", false, "CEK / AKTIFKAN GPS");
+        }
       }
     }
 
@@ -1442,17 +1500,27 @@
         navigator.geolocation.getCurrentPosition(
           resolve,
           error => {
+            if (error.code === 1) {
+              reject(Error(
+                "Izin lokasi ditolak. Izinkan Lokasi untuk situs ini pada browser."
+              ));
+              return;
+            }
+
+            if (error.code === 2) {
+              reject(Error(
+                "Lokasi tidak tersedia atau GPS sedang mati."
+              ));
+              return;
+            }
+
             reject(Error(
-              error.code === 1
-                ? "Izin lokasi ditolak. Silakan izinkan lokasi pada browser."
-                : error.code === 2
-                ? "Lokasi tidak tersedia atau GPS sedang mati."
-                : "Pengambilan lokasi melebihi batas waktu."
+              "Pengambilan lokasi melebihi batas waktu. Pastikan Lokasi aktif dan coba lagi."
             ));
           },
           {
             enableHighAccuracy: true,
-            timeout: 15000,
+            timeout: 20000,
             maximumAge: 0
           }
         );
