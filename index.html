@@ -1681,17 +1681,17 @@
         setUploadStatus("SKD berhasil diunggah. Menyimpan pengajuan...", "success");
 
         const result = await api({
-          action: "submitIjin",
-          jenisIjin: "SAKIT",
-          nip,
-          deviceId,
-          tanggalMulai: mulai,
-          tanggalSelesai: selesai,
-          alasan: alasan,
-          fileSKD: upload.fileUrl || upload.fileId || "SKD_TERUNGGAH",
-          browser: navigator.userAgent,
-          os: os()
-        });
+  action: "submitIjin",
+  jenisIjin: "SAKIT",
+  nip,
+  deviceId,
+  tanggalMulai: mulai,
+  tanggalSelesai: selesai,
+  alasanAtauKeperluan: alasan,
+  fileSKD: upload.fileUrl || upload.fileId || "SKD_TERUNGGAH",
+  browser: navigator.userAgent,
+  os: os()
+});
 
         if (!result.ok) {
           return setUploadStatus(result.message || "Pengajuan ijin sakit gagal disimpan.", "error");
@@ -1854,18 +1854,17 @@
 
       try {
         const result = await api({
-          action: "submitIjin",
-          jenisIjin: "DINAS_LUAR",
-          nip,
-          deviceId,
-          tanggalMulai: mulai,
-          tanggalSelesai: selesai,
-          alasan: keperluan,
-          keperluan,
-          suratTugasId,
-          browser: navigator.userAgent,
-          os: os()
-        });
+  action: "submitIjin",
+  jenisIjin: "DINAS_LUAR",
+  nip,
+  deviceId,
+  tanggalMulai: mulai,
+  tanggalSelesai: selesai,
+  alasanAtauKeperluan: keperluan,
+  suratTugasId,
+  browser: navigator.userAgent,
+  os: os()
+});
 
         if (!result.ok) {
           return setDinasStatus(result.message || "Pengajuan dinas luar gagal.", "error");
