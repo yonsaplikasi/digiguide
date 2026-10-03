@@ -226,7 +226,203 @@
       display: none !important;
     }
 
+/* ============================================================
+   IJIN
+   ============================================================ */
 
+.ijin-menu {
+  margin-top: 20px;
+}
+
+.ijin-menu-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.ijin-card {
+  border: 1px solid #d9dee3;
+  padding: 15px;
+  margin-bottom: 12px;
+  background: #fff;
+}
+
+.ijin-card-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.ijin-card-desc {
+  font-size: 13px;
+  color: #68737d;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.ijin-status {
+  font-size: 13px;
+  padding: 8px;
+  margin-top: 10px;
+  border: 1px solid #d9dee3;
+}
+
+.ijin-status.success {
+  background: #edf8f1;
+  color: #0f5132;
+  border-color: #badbcc;
+}
+
+.ijin-status.error {
+  background: #fff0ee;
+  color: #842029;
+  border-color: #f5c2c7;
+}
+
+
+/* ============================================================
+   FORM IJIN
+   ============================================================ */
+
+.ijin-form {
+  margin-top: 15px;
+}
+
+.ijin-form label {
+  display: block;
+  font-weight: 700;
+  font-size: 14px;
+  margin-top: 14px;
+  margin-bottom: 6px;
+}
+
+.ijin-form input,
+.ijin-form textarea,
+.ijin-form select {
+  width: 100%;
+  border: 1px solid #cbd2d8;
+  padding: 12px 14px;
+  font-size: 16px;
+  font-family: inherit;
+  border-radius: 0;
+}
+
+.ijin-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+
+/* ============================================================
+   FILE SKD
+   ============================================================ */
+
+.skd-preview-box {
+  margin-top: 12px;
+  border: 1px solid #d9dee3;
+  padding: 10px;
+  text-align: center;
+}
+
+.skd-preview-box img {
+  display: block;
+  max-width: 100%;
+  max-height: 280px;
+  margin: auto;
+  object-fit: contain;
+}
+
+.skd-file-info {
+  font-size: 13px;
+  color: #68737d;
+  margin-top: 8px;
+}
+
+.upload-progress {
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+
+/* ============================================================
+   SURAT TUGAS
+   ============================================================ */
+
+.surat-list {
+  margin-top: 10px;
+}
+
+.surat-item {
+  border: 1px solid #cbd2d8;
+  padding: 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  background: #fff;
+}
+
+.surat-item.selected {
+  border-color: #0088cc;
+  background: #eef8fd;
+}
+
+.surat-item-title {
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.surat-item-info {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #68737d;
+}
+
+
+/* ============================================================
+   RIWAYAT IJIN
+   ============================================================ */
+
+.riwayat-item {
+  border: 1px solid #d9dee3;
+  padding: 14px;
+  margin-bottom: 10px;
+  background: #fff;
+}
+
+.riwayat-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.riwayat-info {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.status-menunggu {
+  color: #856404;
+}
+
+.status-acc {
+  color: #0f5132;
+}
+
+.status-tolak {
+  color: #842029;
+}
+
+
+/* ============================================================
+   GPS DETAIL
+   ============================================================ */
+
+.gps-detail {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #68737d;
+}
+    
+    
     /* ============================================================
        FOOTER
        ============================================================ */
@@ -246,7 +442,8 @@
   <main class="app">
 
     <div class="header-box">
-      <h1>Judul</h1>
+      <h1>DIGITAL GUIDE</h1>
+      <div style="font-size:14px; margin-top:6px;">SATPOL PP KABUPATEN SUKABUMI</div>
     </div>
 
 
@@ -449,8 +646,237 @@
           style="margin-top: 15px;"
         ></div>
 
+<!-- ======================================================
+     MENU IJIN
+     ====================================================== -->
+
+<div class="ijin-menu">
+
+  <div class="ijin-menu-title">
+    Ijin
+  </div>
+
+
+  <!-- IJIN SAKIT -->
+
+  <div class="ijin-card">
+
+    <div class="ijin-card-title">
+      Ijin Sakit
+    </div>
+
+    <div class="ijin-card-desc">
+      Pengajuan ijin sakit dengan melampirkan
+      foto SKD.
+    </div>
+
+    <button
+      id="ijinSakitBtn"
+      class="action-btn"
+    >
+      IJIN SAKIT
+    </button>
+
+  </div>
+
+
+  <!-- DINAS LUAR -->
+
+  <div class="ijin-card">
+
+    <div class="ijin-card-title">
+      Ijin Dinas Luar
+    </div>
+
+    <div class="ijin-card-desc">
+      Pengajuan dinas luar menggunakan
+      Surat Tugas yang telah disetujui atasan.
+    </div>
+
+    <button
+      id="ijinDinasBtn"
+      class="action-btn"
+    >
+      IJIN DINAS LUAR
+    </button>
+
+  </div>
+
+
+  <!-- RIWAYAT -->
+
+  <div class="ijin-card">
+
+    <div class="ijin-card-title">
+      Riwayat Ijin
+    </div>
+
+    <div class="ijin-card-desc">
+      Lihat status pengajuan ijin Anda.
+    </div>
+
+    <button
+      id="riwayatIjinBtn"
+      class="action-btn secondary"
+    >
+      LIHAT RIWAYAT IJIN
+    </button>
+
+  </div>
+
+</div>
+        
+      </div>
+ <!-- ======================================================
+           HALAMAN FORM IJIN SAKIT
+           ====================================================== -->
+
+      <div
+        id="ijinSakitView"
+        class="hidden"
+      >
+
+        <div class="card">
+
+          <button
+            id="backIjinSakitBtn"
+            class="action-btn secondary"
+          >
+            ← KEMBALI
+          </button>
+
+          <h2>IJIN SAKIT</h2>
+
+          <div class="ijin-form">
+
+            <label for="sakitTanggalMulai">
+              Tanggal Mulai
+            </label>
+
+            <input
+              type="date"
+              id="sakitTanggalMulai"
+            >
+
+
+            <label for="sakitTanggalSelesai">
+              Tanggal Selesai
+            </label>
+
+            <input
+              type="date"
+              id="sakitTanggalSelesai"
+            >
+
+
+            <label for="sakitAlasan">
+              Alasan / Keterangan Sakit
+            </label>
+
+            <textarea
+              id="sakitAlasan"
+              placeholder="Masukkan alasan atau keterangan sakit..."
+            ></textarea>
+
+
+            <label for="skdFile">
+              Foto Surat Keterangan Dokter (SKD)
+            </label>
+
+            <input
+              type="file"
+              id="skdFile"
+              accept="image/jpeg,image/png,image/webp"
+            >
+
+
+            <div
+              id="skdPreview"
+              class="skd-preview-box hidden"
+            >
+
+              <img
+                id="skdPreviewImg"
+                alt="Preview SKD"
+              >
+
+              <div
+                id="skdFileInfo"
+                class="skd-file-info"
+              ></div>
+
+            </div>
+
+
+            <div
+              id="skdUploadStatus"
+              class="upload-progress"
+            ></div>
+
+
+            <button
+              id="submitIjinSakitBtn"
+              class="action-btn"
+            >
+              KIRIM IJIN SAKIT
+            </button>
+
+          </div>
+
+        </div>
+
       </div>
 
+      
+
+      <!-- ======================================================
+           HALAMAN FORM IJIN DINAS LUAR
+           ====================================================== -->
+
+      <div id="ijinDinasView" class="hidden">
+        <div class="card">
+          <button id="backIjinDinasBtn" class="action-btn secondary">
+            ← KEMBALI
+          </button>
+
+          <h2>IJIN DINAS LUAR</h2>
+
+          <div class="ijin-form">
+            <label>Surat Tugas yang Disetujui</label>
+            <div id="dinasStatus" class="upload-progress"></div>
+            <div id="suratTugasList" class="surat-list"></div>
+            <div id="suratTugasDetail"></div>
+
+            <label for="dinasTanggalMulai">Tanggal Mulai</label>
+            <input type="date" id="dinasTanggalMulai">
+
+            <label for="dinasTanggalSelesai">Tanggal Selesai</label>
+            <input type="date" id="dinasTanggalSelesai">
+
+            <label for="dinasKeperluan">Keperluan Dinas Luar</label>
+            <textarea id="dinasKeperluan" placeholder="Masukkan keperluan dinas luar..."></textarea>
+
+            <button id="submitIjinDinasBtn" class="action-btn">
+              KIRIM IJIN DINAS LUAR
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================
+           HALAMAN RIWAYAT IJIN
+           ====================================================== -->
+
+      <div id="riwayatIjinView" class="hidden">
+        <div class="card">
+          <button id="backRiwayatIjinBtn" class="action-btn secondary">
+            ← KEMBALI
+          </button>
+
+          <h2>RIWAYAT IJIN</h2>
+          <div id="riwayatList"></div>
+        </div>
+      </div>
 
       <!-- ======================================================
            TAB DINAMIS
@@ -489,90 +915,51 @@
     // ==========================================================
     // API CONFIGURATION
     // ==========================================================
-
-    // PENTING:
-    // Ganti dengan URL Web App Apps Script Anda
-    // yang baru dari Google Apps Script.
-
-    const API_URL =
-      "PASTE_APPS_SCRIPT_WEB_APP_EXEC_URL_DI_SINI";
+    // Ganti URL di bawah dengan URL Web App Google Apps Script.
+    const API_URL = "PASTE_APPS_SCRIPT_WEB_APP_EXEC_URL_DI_SINI";
 
     const NIP_KEY = "absensi_v5_nip";
     const DEV_KEY = "absensi_v5_device";
     const VERIFIED_KEY = "absensi_v5_verified";
     const EMPLOYEE_KEY = "absensi_v5_employee";
 
-
-    // ==========================================================
-    // GLOBAL VARIABLES
-    // ==========================================================
-
     let pending = null;
+    let selectedSuratTugas = null;
+    let suratTugasData = [];
 
-    const $ = id =>
-      document.getElementById(id);
+    const $ = id => document.getElementById(id);
 
+    document.addEventListener("DOMContentLoaded", init);
 
     // ==========================================================
     // INITIALIZATION
     // ==========================================================
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      init
-    );
-
-
     async function init() {
-
       [
-        "cekBtn",
-        "simpanBtn",
-        "ulangiBtn",
-        "gpsBtn",
-        "masukBtn",
-        "keluarBtn"
+        "cekBtn", "simpanBtn", "ulangiBtn", "gpsBtn",
+        "masukBtn", "keluarBtn", "ijinSakitBtn", "ijinDinasBtn",
+        "riwayatIjinBtn", "backIjinSakitBtn", "submitIjinSakitBtn",
+        "backIjinDinasBtn", "submitIjinDinasBtn", "backRiwayatIjinBtn"
       ].forEach(id => {
-        $(id)?.addEventListener(
-          "click",
-          () => handlers[id]()
-        );
+        $(id)?.addEventListener("click", () => handlers[id]?.());
       });
 
+      $("skdFile")?.addEventListener("change", previewSKD);
 
-      document
-        .querySelectorAll(".tab-btn")
-        .forEach(btn => {
-          btn.addEventListener(
-            "click",
-            e => switchTab(
-              e.target.dataset.tab
-            )
-          );
-        });
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.addEventListener("click", e => switchTab(e.currentTarget.dataset.tab));
+      });
 
-
-      const nip =
-        localStorage.getItem(NIP_KEY);
-
-      const deviceId =
-        localStorage.getItem(DEV_KEY);
-
+      const nip = localStorage.getItem(NIP_KEY);
+      const deviceId = localStorage.getItem(DEV_KEY);
 
       if (!nip || !deviceId) {
         showVerify();
         return;
       }
 
-
       try {
-
-        const result = await api({
-          action: "getSession",
-          nip,
-          deviceId
-        });
-
+        const result = await api({ action: "getSession", nip, deviceId });
 
         if (result.ok) {
           saveSession(result.employee);
@@ -580,854 +967,793 @@
           return;
         }
 
-
         clearSession();
         showVerify();
-
-        msg(
-          result.message,
-          "error"
-        );
-
+        msg(result.message, "error");
       } catch (error) {
-
-        const cachedEmployee =
-          loadCachedEmployee();
-
+        const cachedEmployee = loadCachedEmployee();
 
         if (cachedEmployee) {
-
-          showAttendance(
-            cachedEmployee
-          );
-
-          msg(
-            "Sesi tersimpan. Server offline.",
-            "error"
-          );
-
+          showAttendance(cachedEmployee);
+          msg("Sesi tersimpan. Server sedang tidak dapat dihubungi.", "error");
         } else {
-
           showVerify();
-
-          msg(
-            error.message,
-            "error"
-          );
+          msg(error.message, "error");
         }
       }
     }
 
-
     // ==========================================================
     // EVENT HANDLERS
     // ==========================================================
-
     const handlers = {
       cekBtn: verifyNip,
       simpanBtn: confirmVerification,
       ulangiBtn: resetSetup,
       gpsBtn: checkGps,
-      masukBtn: () =>
-        attendance("MASUK"),
-      keluarBtn: () =>
-        attendance("KELUAR")
+      masukBtn: () => attendance("MASUK"),
+      keluarBtn: () => attendance("KELUAR"),
+      ijinSakitBtn: openIjinSakit,
+      ijinDinasBtn: openIjinDinas,
+      riwayatIjinBtn: openRiwayatIjin,
+      backIjinSakitBtn: backToAttendance,
+      submitIjinSakitBtn: submitIjinSakit,
+      backIjinDinasBtn: backToAttendance,
+      submitIjinDinasBtn: submitIjinDinas,
+      backRiwayatIjinBtn: backToAttendance
     };
-
 
     // ==========================================================
     // DEVICE
     // ==========================================================
-
     function device() {
-
-      let deviceId =
-        localStorage.getItem(DEV_KEY);
-
+      let deviceId = localStorage.getItem(DEV_KEY);
 
       if (!deviceId) {
+        const uuid = window.crypto && typeof window.crypto.randomUUID === "function"
+          ? window.crypto.randomUUID()
+          : Math.random().toString(36).slice(2) + Date.now();
 
-        deviceId =
-          "DEV-" +
-          (
-            crypto.randomUUID
-              ? crypto.randomUUID()
-              : Math.random()
-                  .toString(36)
-                  .slice(2) +
-                Date.now()
-          );
-
-
-        localStorage.setItem(
-          DEV_KEY,
-          deviceId
-        );
+        deviceId = "DEV-" + uuid;
+        localStorage.setItem(DEV_KEY, deviceId);
       }
-
 
       return deviceId;
     }
 
-
     // ==========================================================
     // VERIFY NIP
     // ==========================================================
-
     async function verifyNip() {
-
-      const nip =
-        $("nip").value.trim();
-
+      const nip = $("nip").value.trim();
 
       if (!nip) {
-        return msg(
-          "NIP wajib diisi.",
-          "error"
-        );
+        return msg("NIP wajib diisi.", "error");
       }
 
-
-      busy(
-        "cekBtn",
-        true,
-        "Memeriksa..."
-      );
-
+      busy("cekBtn", true, "Memeriksa...");
 
       try {
-
         const result = await api({
           action: "verifyNip",
           nip,
           deviceId: device()
         });
 
-
         if (!result.ok) {
-          return msg(
-            result.message,
-            "error"
-          );
+          return msg(result.message, "error");
         }
 
+        pending = result.employee;
 
-        pending =
-          result.employee;
+        $("lblNama").textContent = pending.nama || "-";
+        $("lblBagian").textContent = pending.bagian || "-";
+        $("lblJabatan").textContent = pending.jabatan || "-";
 
-
-        $("lblNama").textContent =
-          pending.nama;
-
-        $("lblBagian").textContent =
-          pending.bagian;
-
-        $("lblJabatan").textContent =
-          pending.jabatan;
-
-
-        $("cekBtn")
-          .classList
-          .add("hidden");
-
-        $("dataPegawai")
-          .classList
-          .remove("hidden");
-
+        $("cekBtn").classList.add("hidden");
+        $("dataPegawai").classList.remove("hidden");
         $("nip").disabled = true;
-
-
         msg("", "");
-
       } catch (error) {
-
-        msg(
-          error.message,
-          "error"
-        );
-
+        msg(error.message, "error");
       } finally {
-
-        busy(
-          "cekBtn",
-          false,
-          "CEK NIP"
-        );
+        busy("cekBtn", false, "CEK NIP");
       }
     }
 
-
-    // ==========================================================
-    // RESET SETUP
-    // ==========================================================
-
     function resetSetup() {
-
       pending = null;
-
       $("nip").value = "";
       $("nip").disabled = false;
-
-      $("dataPegawai")
-        .classList
-        .add("hidden");
-
-      $("cekBtn")
-        .classList
-        .remove("hidden");
-
+      $("dataPegawai").classList.add("hidden");
+      $("cekBtn").classList.remove("hidden");
       msg("", "");
     }
-
 
     // ==========================================================
     // CONFIRM VERIFICATION
     // ==========================================================
-
     async function confirmVerification() {
+      if (!pending) return;
 
-      if (!pending) {
-        return;
-      }
-
-
-      busy(
-        "simpanBtn",
-        true,
-        "Menyimpan..."
-      );
-
+      busy("simpanBtn", true, "Menyimpan...");
 
       try {
-
-        const result =
-          await api({
-            action:
-              "confirmVerification",
-
-            nip:
-              pending.nip,
-
-            deviceId:
-              device()
-          });
-
+        const result = await api({
+          action: "confirmVerification",
+          nip: pending.nip,
+          deviceId: device()
+        });
 
         if (!result.ok) {
-          return msg(
-            result.message,
-            "error"
-          );
+          return msg(result.message, "error");
         }
 
-
-        saveSession(
-          result.employee ||
-          pending
-        );
-
-
-        showAttendance(
-          result.employee ||
-          pending
-        );
-
-
-        msg(
-          "Verifikasi berhasil.",
-          "success"
-        );
-
+        saveSession(result.employee || pending);
+        showAttendance(result.employee || pending);
+        msg("Verifikasi berhasil.", "success");
       } catch (error) {
-
-        msg(
-          error.message,
-          "error"
-        );
-
+        msg(error.message, "error");
       } finally {
-
-        busy(
-          "simpanBtn",
-          false,
-          "Simpan"
-        );
+        busy("simpanBtn", false, "Simpan");
       }
     }
-
 
     // ==========================================================
     // SESSION
     // ==========================================================
-
     function saveSession(employee) {
+      if (!employee || !employee.nip) return;
 
-      if (
-        !employee ||
-        !employee.nip
-      ) {
-        return;
-      }
-
-
-      localStorage.setItem(
-        NIP_KEY,
-        employee.nip
-      );
-
-      localStorage.setItem(
-        VERIFIED_KEY,
-        "1"
-      );
-
-      localStorage.setItem(
-        EMPLOYEE_KEY,
-        JSON.stringify(employee)
-      );
+      localStorage.setItem(NIP_KEY, employee.nip);
+      localStorage.setItem(VERIFIED_KEY, "1");
+      localStorage.setItem(EMPLOYEE_KEY, JSON.stringify(employee));
     }
 
-
     function loadCachedEmployee() {
-
       try {
-
-        const raw =
-          localStorage.getItem(
-            EMPLOYEE_KEY
-          );
-
-        return raw
-          ? JSON.parse(raw)
-          : null;
-
+        const raw = localStorage.getItem(EMPLOYEE_KEY);
+        return raw ? JSON.parse(raw) : null;
       } catch (e) {
-
         return null;
       }
     }
 
-
     function clearSession() {
-
-      localStorage.removeItem(
-        NIP_KEY
-      );
-
-      localStorage.removeItem(
-        DEV_KEY
-      );
-
-      localStorage.removeItem(
-        VERIFIED_KEY
-      );
-
-      localStorage.removeItem(
-        EMPLOYEE_KEY
-      );
-
-
+      localStorage.removeItem(NIP_KEY);
+      localStorage.removeItem(DEV_KEY);
+      localStorage.removeItem(VERIFIED_KEY);
+      localStorage.removeItem(EMPLOYEE_KEY);
       pending = null;
     }
-
 
     // ==========================================================
     // VIEW
     // ==========================================================
-
     function showVerify() {
-
-      $("setupView")
-        .classList
-        .remove("hidden");
-
-      $("attendanceView")
-        .classList
-        .add("hidden");
-
+      $("setupView").classList.remove("hidden");
+      $("attendanceView").classList.add("hidden");
       resetSetup();
     }
 
+    function hideIjinViews() {
+      ["ijinSakitView", "ijinDinasView", "riwayatIjinView"].forEach(id => {
+        $(id)?.classList.add("hidden");
+      });
+      $("tab-absen")?.classList.remove("hidden");
+    }
 
     function showAttendance(employee) {
+      if (!employee) return showVerify();
 
-      if (!employee) {
-        return showVerify();
-      }
+      $("setupView").classList.add("hidden");
+      $("attendanceView").classList.remove("hidden");
+      hideIjinViews();
 
+      const dateStr = new Date().toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+      });
 
-      $("setupView")
-        .classList
-        .add("hidden");
-
-      $("attendanceView")
-        .classList
-        .remove("hidden");
-
-
-      // Format Tanggal:
-      // "3 Okt 2026"
-
-      const dateStr =
-        new Date()
-          .toLocaleDateString(
-            "id-ID",
-            {
-              day: "numeric",
-              month: "short",
-              year: "numeric"
-            }
-          );
-
-
-      // Ambil nama panggilan
-      // (kata pertama)
-
-      const firstName =
-        employee.nama.split(" ")[0];
-
-
-      // Isi data ke Header
-      // Sesuai Wireframe
-
-      $("headerUser").textContent =
-        `${firstName} - ${employee.bagian} - ${employee.jabatan}`;
-
-      $("headerDate").textContent =
-        dateStr;
-
+      const firstName = String(employee.nama || "").trim().split(" ")[0] || "-";
+      $("headerUser").textContent = `${firstName} - ${employee.bagian || "-"} - ${employee.jabatan || "-"}`;
+      $("headerDate").textContent = dateStr;
 
       switchTab("absen");
     }
 
-
-    // ==========================================================
-    // TAB NAVIGATION
-    // ==========================================================
-
     function switchTab(tabName) {
+      hideIjinViews();
 
-      document
-        .querySelectorAll(".tab-btn")
-        .forEach(b => {
-          b.classList.toggle(
-            "active",
-            b.dataset.tab === tabName
-          );
-        });
+      document.querySelectorAll(".tab-btn").forEach(b => {
+        b.classList.toggle("active", b.dataset.tab === tabName);
+      });
 
-
-      document
-        .querySelectorAll(".tab-content")
-        .forEach(c => {
-          c.classList.remove(
-            "active"
-          );
-        });
-
+      document.querySelectorAll(".tab-content").forEach(c => {
+        c.classList.remove("active");
+      });
 
       if (tabName === "absen") {
-
-        $("tab-absen")
-          .classList
-          .add("active");
-
+        $("tab-absen").classList.add("active");
       } else {
-
-        $("tab-dynamic")
-          .classList
-          .add("active");
-
-        fetchDynamicContent(
-          tabName.toUpperCase()
-        );
+        $("tab-dynamic").classList.add("active");
+        fetchDynamicContent(tabName.toUpperCase());
       }
     }
 
+    function backToAttendance() {
+      hideIjinViews();
+      switchTab("absen");
+    }
 
     // ==========================================================
-    // DYNAMIC CONTENT
+    // DYNAMIC CONTENT: PERDA / SOP / INFO
     // ==========================================================
-
     async function fetchDynamicContent(type) {
-
-      $("dynamicDesc").textContent =
-        "Memuat informasi dari server...";
-
+      $("dynamicDesc").textContent = "Memuat informasi dari server...";
       $("dynamicList").innerHTML = "";
 
-
       try {
+        const res = await api({
+          action: "getContent",
+          page: type
+        });
 
-        const res =
-          await api({
-            action: "getContent",
-            contentType: type
-          });
-
-
-        if (res.ok) {
-
-          $("dynamicDesc").textContent =
-            res.deskripsi;
-
-
-          // Merender kotak-kotak
-          // sub-menu
-
-          $("dynamicList").innerHTML =
-            res.items
-              .map(
-                item => `
-                  <a
-                    href="${item.url || "#"}"
-                    target="_blank"
-                    rel="noopener"
-                    class="sub-item"
-                  >
-                    ${esc(item.judul)}
-                  </a>
-                `
-              )
-              .join("");
-
-        } else {
-
-          $("dynamicDesc").textContent =
-            res.message;
+        if (!res.ok) {
+          $("dynamicDesc").textContent = res.message || "Data tidak tersedia.";
+          return;
         }
 
-      } catch (e) {
+        const rows = Array.isArray(res.data) ? res.data : [];
+        const description = rows.find(item => String(item.tipe || "").toUpperCase() === "DESKRIPSI");
+        const items = rows.filter(item => String(item.tipe || "").toUpperCase() !== "DESKRIPSI");
 
-        $("dynamicDesc").textContent =
-          "Gagal memuat data. Periksa koneksi internet Anda.";
+        $("dynamicDesc").textContent = description?.judul || "";
+
+        if (!items.length) {
+          $("dynamicList").innerHTML = '<div class="card">Belum ada data.</div>';
+          return;
+        }
+
+        $("dynamicList").innerHTML = items.map(item => {
+          const title = esc(item.judul || "Tanpa judul");
+          const link = String(item.link || "").trim();
+
+          if (link) {
+            return `
+              <a href="${esc(link)}" target="_blank" rel="noopener" class="sub-item">
+                ${title}
+              </a>`;
+          }
+
+          return `<div class="sub-item">${title}</div>`;
+        }).join("");
+      } catch (e) {
+        $("dynamicDesc").textContent = "Gagal memuat data. Periksa koneksi internet Anda.";
       }
     }
-
 
     // ==========================================================
     // ATTENDANCE
     // ==========================================================
-
     async function attendance(type) {
+      const nip = localStorage.getItem(NIP_KEY);
+      const deviceId = localStorage.getItem(DEV_KEY);
 
-      const nip =
-        localStorage.getItem(
-          NIP_KEY
-        );
+      if (!nip || !deviceId) return showVerify();
 
-      const deviceId =
-        localStorage.getItem(
-          DEV_KEY
-        );
-
-
-      if (!nip || !deviceId) {
-        return showVerify();
-      }
-
-
-      $("gpsStatus").textContent =
-        "Meminta lokasi GPS...";
-
-
+      $("gpsStatus").textContent = "Meminta lokasi GPS...";
       $("masukBtn").disabled = true;
       $("keluarBtn").disabled = true;
 
-
       try {
+        const positionData = await position();
 
-        const positionData =
-          await position();
+        const result = await api({
+          action: "submitAttendance",
+          type,
+          nip,
+          deviceId,
+          latitude: positionData.coords.latitude,
+          longitude: positionData.coords.longitude,
+          accuracy: positionData.coords.accuracy,
+          browser: navigator.userAgent,
+          os: os()
+        });
 
-
-        const result =
-          await api({
-            action:
-              "submitAttendance",
-
-            type,
-            nip,
-            deviceId,
-
-            latitude:
-              positionData.coords.latitude,
-
-            longitude:
-              positionData.coords.longitude,
-
-            accuracy:
-              positionData.coords.accuracy,
-
-            browser:
-              navigator.userAgent,
-
-            os: os()
-          });
-
-
-        attendanceMsg(
-          result.message,
-          result.ok
-            ? "success"
-            : "error"
-        );
-
+        attendanceMsg(result.message, result.ok ? "success" : "error");
       } catch (error) {
-
-        attendanceMsg(
-          error.message,
-          "error"
-        );
-
+        attendanceMsg(error.message, "error");
       } finally {
-
-        $("masukBtn").disabled =
-          false;
-
-        $("keluarBtn").disabled =
-          false;
+        $("masukBtn").disabled = false;
+        $("keluarBtn").disabled = false;
       }
     }
-
-
-    // ==========================================================
-    // CHECK GPS
-    // ==========================================================
 
     async function checkGps() {
-
-      busy(
-        "gpsBtn",
-        true,
-        "Mencari..."
-      );
-
+      busy("gpsBtn", true, "Mencari...");
 
       try {
-
-        const pos =
-          await position();
-
-
+        const pos = await position();
         $("gpsStatus").textContent =
-          "GPS aktif. Akurasi ±" +
-          Math.round(
-            pos.coords.accuracy
-          ) +
-          " meter.";
-
+          "GPS aktif. Akurasi ±" + Math.round(pos.coords.accuracy) + " meter.";
       } catch (error) {
-
-        $("gpsStatus").textContent =
-          "GPS gagal: " +
-          error.message;
-
+        $("gpsStatus").textContent = "GPS gagal: " + error.message;
       } finally {
-
-        busy(
-          "gpsBtn",
-          false,
-          "CEK / AKTIFKAN GPS"
-        );
+        busy("gpsBtn", false, "CEK / AKTIFKAN GPS");
       }
     }
 
-
-    // ==========================================================
-    // GEOLOCATION
-    // ==========================================================
-
     function position() {
-
-      return new Promise(
-        (resolve, reject) => {
-
-          if (!navigator.geolocation) {
-            return reject(
-              Error(
-                "GPS tidak didukung perangkat ini."
-              )
-            );
-          }
-
-
-          navigator.geolocation.getCurrentPosition(
-            resolve,
-
-            error => {
-              reject(
-                Error(
-                  error.code === 1
-                    ? "Izin lokasi ditolak."
-                    : error.code === 2
-                    ? "Lokasi mati."
-                    : "Timeout."
-                )
-              );
-            },
-
-            {
-              enableHighAccuracy: true,
-              timeout: 15000,
-              maximumAge: 0
-            }
-          );
+      return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+          return reject(Error("GPS tidak didukung perangkat ini."));
         }
-      );
+
+        navigator.geolocation.getCurrentPosition(
+          resolve,
+          error => {
+            reject(Error(
+              error.code === 1
+                ? "Izin lokasi ditolak. Silakan izinkan lokasi pada browser."
+                : error.code === 2
+                ? "Lokasi tidak tersedia atau GPS sedang mati."
+                : "Pengambilan lokasi melebihi batas waktu."
+            ));
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 0
+          }
+        );
+      });
     }
 
+    // ==========================================================
+    // IJIN SAKIT
+    // ==========================================================
+    function openIjinSakit() {
+      hideIjinViews();
+      $("tab-absen").classList.remove("active");
+      $("ijinSakitView").classList.remove("hidden");
+      resetSakitForm();
+    }
+
+    function resetSakitForm() {
+      $("sakitTanggalMulai").value = "";
+      $("sakitTanggalSelesai").value = "";
+      $("sakitAlasan").value = "";
+      $("skdFile").value = "";
+      $("skdPreview").classList.add("hidden");
+      $("skdPreviewImg").removeAttribute("src");
+      $("skdFileInfo").textContent = "";
+      $("skdUploadStatus").textContent = "";
+      $("submitIjinSakitBtn").disabled = false;
+    }
+
+    function previewSKD(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      const allowed = ["image/jpeg", "image/png", "image/webp"];
+      const maxSize = 5 * 1024 * 1024;
+
+      if (!allowed.includes(file.type)) {
+        $("skdFile").value = "";
+        $("skdPreview").classList.add("hidden");
+        return setUploadStatus("Format SKD harus JPG, PNG, atau WEBP.", "error");
+      }
+
+      if (file.size > maxSize) {
+        $("skdFile").value = "";
+        $("skdPreview").classList.add("hidden");
+        return setUploadStatus("Ukuran foto SKD maksimal 5 MB.", "error");
+      }
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        $("skdPreviewImg").src = e.target.result;
+        $("skdFileInfo").textContent = `${file.name} • ${formatBytes(file.size)}`;
+        $("skdPreview").classList.remove("hidden");
+        setUploadStatus("Foto SKD siap diunggah.", "success");
+      };
+      reader.onerror = () => setUploadStatus("Foto SKD tidak dapat dibaca.", "error");
+      reader.readAsDataURL(file);
+    }
+
+    async function submitIjinSakit() {
+      const nip = localStorage.getItem(NIP_KEY);
+      const deviceId = localStorage.getItem(DEV_KEY);
+      const mulai = $("sakitTanggalMulai").value;
+      const selesai = $("sakitTanggalSelesai").value;
+      const alasan = $("sakitAlasan").value.trim();
+      const file = $("skdFile").files?.[0];
+
+      if (!nip || !deviceId) return showVerify();
+      if (!mulai || !selesai) return setUploadStatus("Tanggal mulai dan selesai wajib diisi.", "error");
+      if (selesai < mulai) return setUploadStatus("Tanggal selesai tidak boleh lebih awal dari tanggal mulai.", "error");
+      if (!alasan) return setUploadStatus("Alasan / keterangan sakit wajib diisi.", "error");
+      if (!file) return setUploadStatus("Foto SKD wajib dilampirkan.", "error");
+
+      const allowed = ["image/jpeg", "image/png", "image/webp"];
+      if (!allowed.includes(file.type)) return setUploadStatus("Format SKD harus JPG, PNG, atau WEBP.", "error");
+      if (file.size > 5 * 1024 * 1024) return setUploadStatus("Ukuran foto SKD maksimal 5 MB.", "error");
+
+      busy("submitIjinSakitBtn", true, "Mengunggah SKD...");
+      setUploadStatus("Mengunggah foto SKD...", "");
+
+      try {
+        const base64 = await fileToBase64(file);
+
+        const upload = await api({
+          action: "uploadSKD",
+          nip,
+          deviceId,
+          fileBase64: base64,
+          mimeType: file.type,
+          fileName: file.name
+        });
+
+        if (!upload.ok) {
+          return setUploadStatus(upload.message || "Upload SKD gagal.", "error");
+        }
+
+        setUploadStatus("SKD berhasil diunggah. Menyimpan pengajuan...", "success");
+
+        const result = await api({
+          action: "submitIjin",
+          jenisIjin: "SAKIT",
+          nip,
+          deviceId,
+          tanggalMulai: mulai,
+          tanggalSelesai: selesai,
+          alasan: alasan,
+          fileSKD: upload.fileUrl || upload.fileId || "SKD_TERUNGGAH",
+          browser: navigator.userAgent,
+          os: os()
+        });
+
+        if (!result.ok) {
+          return setUploadStatus(result.message || "Pengajuan ijin sakit gagal disimpan.", "error");
+        }
+
+        setUploadStatus(result.message || "Pengajuan ijin sakit berhasil dikirim.", "success");
+        $("sakitAlasan").value = "";
+        $("skdFile").value = "";
+      } catch (error) {
+        setUploadStatus(error.message, "error");
+      } finally {
+        busy("submitIjinSakitBtn", false, "KIRIM IJIN SAKIT");
+      }
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = String(reader.result || "");
+          const comma = result.indexOf(",");
+          resolve(comma >= 0 ? result.slice(comma + 1) : result);
+        };
+        reader.onerror = () => reject(Error("File tidak dapat dibaca."));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function setUploadStatus(text, type) {
+      const el = $("skdUploadStatus");
+      el.textContent = text || "";
+      el.className = "upload-progress" + (type ? " " + type : "");
+    }
+
+    // ==========================================================
+    // IJIN DINAS LUAR
+    // ==========================================================
+    async function openIjinDinas() {
+      hideIjinViews();
+      $("tab-absen").classList.remove("active");
+      $("ijinDinasView").classList.remove("hidden");
+
+      selectedSuratTugas = null;
+      $("dinasTanggalMulai").value = "";
+      $("dinasTanggalSelesai").value = "";
+      $("dinasKeperluan").value = "";
+      $("suratTugasDetail").innerHTML = "";
+      $("dinasStatus").textContent = "Memuat Surat Tugas...";
+      $("suratTugasList").innerHTML = "";
+
+      await loadSuratTugas();
+    }
+
+    async function loadSuratTugas() {
+      const nip = localStorage.getItem(NIP_KEY);
+      const deviceId = localStorage.getItem(DEV_KEY);
+
+      if (!nip || !deviceId) return showVerify();
+
+      try {
+        const res = await api({
+          action: "getSuratTugas",
+          nip,
+          deviceId
+        });
+
+        if (!res.ok) {
+          suratTugasData = [];
+          $("suratTugasList").innerHTML = `<div class="ijin-status error">${esc(res.message || "Surat Tugas tidak tersedia.")}</div>`;
+          $("dinasStatus").textContent = "";
+          return;
+        }
+
+        suratTugasData = Array.isArray(res.data) ? res.data : (Array.isArray(res.suratTugas) ? res.suratTugas : []);
+        renderSuratTugas(suratTugasData);
+      } catch (error) {
+        $("suratTugasList").innerHTML = `<div class="ijin-status error">${esc(error.message)}</div>`;
+        $("dinasStatus").textContent = "";
+      }
+    }
+
+    function renderSuratTugas(list) {
+      const container = $("suratTugasList");
+
+      if (!list.length) {
+        container.innerHTML = '<div class="ijin-status">Belum ada Surat Tugas yang disetujui untuk NIP Anda.</div>';
+        $("dinasStatus").textContent = "";
+        return;
+      }
+
+      $("dinasStatus").textContent = "Pilih Surat Tugas yang akan digunakan.";
+
+      container.innerHTML = list.map((item, index) => `
+        <div class="surat-item" data-index="${index}">
+          <div class="surat-item-title">${esc(item.nomorSurat || item.nomor || item.Surat_Tugas_ID || "Surat Tugas")}</div>
+          <div class="surat-item-info">
+            ${esc(item.keperluan || "Tidak ada keterangan keperluan.")}<br>
+            Periode: ${esc(item.tanggalMulai || "-")} s.d. ${esc(item.tanggalSelesai || "-")}<br>
+            Status: ${esc(item.status || item.statusAtasan || "ACC")}
+          </div>
+        </div>
+      `).join("");
+
+      container.querySelectorAll(".surat-item").forEach(el => {
+        el.addEventListener("click", () => selectSuratTugas(Number(el.dataset.index)));
+      });
+    }
+
+    function selectSuratTugas(index) {
+      selectedSuratTugas = suratTugasData[index] || null;
+
+      document.querySelectorAll(".surat-item").forEach((el, i) => {
+        el.classList.toggle("selected", i === index);
+      });
+
+      if (!selectedSuratTugas) {
+        $("suratTugasDetail").innerHTML = "";
+        return;
+      }
+
+      const id = selectedSuratTugas.suratTugasId || selectedSuratTugas.id || selectedSuratTugas.Surat_Tugas_ID || "-";
+      const nomor = selectedSuratTugas.nomorSurat || selectedSuratTugas.nomor || selectedSuratTugas.Nomor_Surat || "-";
+      const keperluan = selectedSuratTugas.keperluan || selectedSuratTugas.Keperluan || "-";
+      const mulai = selectedSuratTugas.tanggalMulai || selectedSuratTugas.Tanggal_Mulai || "-";
+      const selesai = selectedSuratTugas.tanggalSelesai || selectedSuratTugas.Tanggal_Selesai || "-";
+
+      $("suratTugasDetail").innerHTML = `
+        <div class="ijin-status success">
+          <strong>Surat Tugas dipilih</strong><br>
+          ID: ${esc(id)}<br>
+          Nomor: ${esc(nomor)}<br>
+          Keperluan: ${esc(keperluan)}<br>
+          Periode Surat: ${esc(mulai)} s.d. ${esc(selesai)}
+        </div>
+      `;
+
+      if (!$("dinasTanggalMulai").value && mulai !== "-") $("dinasTanggalMulai").value = normalizeDateValue(mulai);
+      if (!$("dinasTanggalSelesai").value && selesai !== "-") $("dinasTanggalSelesai").value = normalizeDateValue(selesai);
+      if (!$("dinasKeperluan").value && keperluan !== "-") $("dinasKeperluan").value = keperluan;
+    }
+
+    async function submitIjinDinas() {
+      const nip = localStorage.getItem(NIP_KEY);
+      const deviceId = localStorage.getItem(DEV_KEY);
+      const mulai = $("dinasTanggalMulai").value;
+      const selesai = $("dinasTanggalSelesai").value;
+      const keperluan = $("dinasKeperluan").value.trim();
+
+      if (!nip || !deviceId) return showVerify();
+      if (!selectedSuratTugas) return setDinasStatus("Pilih Surat Tugas terlebih dahulu.", "error");
+      if (!mulai || !selesai) return setDinasStatus("Tanggal mulai dan selesai wajib diisi.", "error");
+      if (selesai < mulai) return setDinasStatus("Tanggal selesai tidak boleh lebih awal dari tanggal mulai.", "error");
+      if (!keperluan) return setDinasStatus("Keperluan dinas luar wajib diisi.", "error");
+
+      const suratTugasId = selectedSuratTugas.suratTugasId || selectedSuratTugas.id || selectedSuratTugas.Surat_Tugas_ID;
+      if (!suratTugasId) return setDinasStatus("ID Surat Tugas tidak ditemukan.", "error");
+
+      busy("submitIjinDinasBtn", true, "Mengirim...");
+      setDinasStatus("Menyimpan pengajuan...", "");
+
+      try {
+        const result = await api({
+          action: "submitIjin",
+          jenisIjin: "DINAS_LUAR",
+          nip,
+          deviceId,
+          tanggalMulai: mulai,
+          tanggalSelesai: selesai,
+          alasan: keperluan,
+          keperluan,
+          suratTugasId,
+          browser: navigator.userAgent,
+          os: os()
+        });
+
+        if (!result.ok) {
+          return setDinasStatus(result.message || "Pengajuan dinas luar gagal.", "error");
+        }
+
+        setDinasStatus(result.message || "Pengajuan dinas luar berhasil dikirim.", "success");
+      } catch (error) {
+        setDinasStatus(error.message, "error");
+      } finally {
+        busy("submitIjinDinasBtn", false, "KIRIM IJIN DINAS LUAR");
+      }
+    }
+
+    function setDinasStatus(text, type) {
+      const el = $("dinasStatus");
+      el.textContent = text || "";
+      el.className = "upload-progress" + (type ? " " + type : "");
+    }
+
+    // ==========================================================
+    // RIWAYAT IJIN
+    // ==========================================================
+    async function openRiwayatIjin() {
+      hideIjinViews();
+      $("tab-absen").classList.remove("active");
+      $("riwayatIjinView").classList.remove("hidden");
+      $("riwayatList").innerHTML = '<div class="ijin-status">Memuat riwayat...</div>';
+
+      const nip = localStorage.getItem(NIP_KEY);
+      const deviceId = localStorage.getItem(DEV_KEY);
+
+      if (!nip || !deviceId) return showVerify();
+
+      try {
+        const res = await api({
+          action: "getIjin",
+          nip,
+          deviceId
+        });
+
+        if (!res.ok) {
+          return $("riwayatList").innerHTML = `<div class="ijin-status error">${esc(res.message || "Riwayat tidak dapat dimuat.")}</div>`;
+        }
+
+        const list = Array.isArray(res.data) ? res.data : (Array.isArray(res.ijin) ? res.ijin : []);
+        renderRiwayatIjin(list);
+      } catch (error) {
+        $("riwayatList").innerHTML = `<div class="ijin-status error">${esc(error.message)}</div>`;
+      }
+    }
+
+    function renderRiwayatIjin(list) {
+      if (!list.length) {
+        $("riwayatList").innerHTML = '<div class="ijin-status">Belum ada pengajuan ijin.</div>';
+        return;
+      }
+
+      $("riwayatList").innerHTML = list.map(item => {
+        const jenis = item.jenisIjin || item.jenis || item.Jenis_Ijin || "-";
+        const mulai = item.tanggalMulai || item.Tanggal_Mulai || "-";
+        const selesai = item.tanggalSelesai || item.Tanggal_Selesai || "-";
+        const status = item.status || item.Status || "MENUNGGU";
+        const statusAtasan = item.statusAtasan || item.Status_Atasan || "-";
+        const statusAdmin = item.statusAdmin || item.Status_Admin || "-";
+        const alasan = item.alasan || item.keperluan || item.Alasan_Atau_Keperluan || "-";
+        const id = item.idIjin || item.id || item.ID_Ijin || "-";
+        const cls = String(status).toUpperCase() === "ACC" ? "status-acc" : String(status).toUpperCase() === "DITOLAK" ? "status-tolak" : "status-menunggu";
+
+        return `
+          <div class="riwayat-item">
+            <div class="riwayat-title">${esc(jenis)} <span class="${cls}">(${esc(status)})</span></div>
+            <div class="riwayat-info">
+              ID: ${esc(id)}<br>
+              Periode: ${esc(mulai)} s.d. ${esc(selesai)}<br>
+              Keterangan: ${esc(alasan)}<br>
+              Status Atasan: ${esc(statusAtasan)}<br>
+              Status Admin: ${esc(statusAdmin)}<br>
+              Status Akhir: <strong>${esc(status)}</strong>
+              ${item.catatan || item.Catatan ? `<br>Catatan: ${esc(item.catatan || item.Catatan)}` : ""}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
 
     // ==========================================================
     // API REQUEST
     // ==========================================================
-
     async function api(payload) {
-
-      if (
-        API_URL.includes(
-          "PASTE_APPS_SCRIPT"
-        )
-      ) {
-        throw Error(
-          "API_URL belum diisi dengan URL dari Google Apps Script."
-        );
+      if (API_URL.includes("PASTE_APPS_SCRIPT")) {
+        throw Error("API_URL belum diisi dengan URL dari Google Apps Script.");
       }
 
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
 
-      const response =
-        await fetch(
-          API_URL,
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type":
-                "text/plain;charset=utf-8"
-            },
-
-            body:
-              JSON.stringify(payload)
-          }
-        );
-
-
-      const text =
-        await response.text();
-
+      const text = await response.text();
 
       try {
-
         return JSON.parse(text);
-
       } catch (error) {
-
-        throw Error(
-          "Respons gagal diproses."
-        );
+        throw Error("Respons server gagal diproses. Pastikan Web App Apps Script mengembalikan JSON.");
       }
     }
-
 
     // ==========================================================
     // UTILITY
     // ==========================================================
+    function normalizeDateValue(value) {
+      const s = String(value || "").trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+
+      const d = new Date(s);
+      if (Number.isNaN(d.getTime())) return "";
+
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes) return "0 B";
+      const units = ["B", "KB", "MB", "GB"];
+      const i = Math.floor(Math.log(bytes) / Math.log(1024));
+      return `${(bytes / Math.pow(1024, i)).toFixed(i ? 2 : 0)} ${units[i]}`;
+    }
 
     function esc(value) {
-
-      return String(
-        value ?? ""
-      ).replace(
-        /[&<>"']/g,
-
-        m =>
-          ({
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#39;"
-          }[m])
-      );
+      return String(value ?? "").replace(/[&<>"']/g, m => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[m]));
     }
 
-
-    function busy(
-      id,
-      isBusy,
-      text
-    ) {
-
-      $(id).disabled =
-        isBusy;
-
-      $(id).textContent =
-        text;
+    function busy(id, isBusy, text) {
+      if (!$(id)) return;
+      $(id).disabled = isBusy;
+      $(id).textContent = text;
     }
 
-
-    function msg(
-      text,
-      type
-    ) {
-
-      const el =
-        $("message");
-
-      el.textContent =
-        text || "";
-
-      el.className =
-        text
-          ? "message " + type
-          : "message hidden";
+    function msg(text, type) {
+      const el = $("message");
+      el.textContent = text || "";
+      el.className = text ? "message " + type : "message hidden";
     }
 
-
-    function attendanceMsg(
-      text,
-      type
-    ) {
-
-      const el =
-        $("attendanceMessage");
-
-      el.textContent =
-        text || "";
-
-      el.className =
-        text
-          ? "message " + type
-          : "message hidden";
+    function attendanceMsg(text, type) {
+      const el = $("attendanceMessage");
+      el.textContent = text || "";
+      el.className = text ? "message " + type : "message hidden";
     }
-
-
-    // ==========================================================
-    // OPERATING SYSTEM
-    // ==========================================================
 
     function os() {
-
-      const ua =
-        navigator.userAgent;
-
-
-      if (/Android/i.test(ua)) {
-        return "Android";
-      }
-
-
-      if (
-        /iPhone|iPad|iPod/i.test(ua)
-      ) {
-        return "iOS";
-      }
-
-
-      if (/Windows/i.test(ua)) {
-        return "Windows";
-      }
-
-
+      const ua = navigator.userAgent;
+      if (/Android/i.test(ua)) return "Android";
+      if (/iPhone|iPad|iPod/i.test(ua)) return "iOS";
+      if (/Windows/i.test(ua)) return "Windows";
+      if (/Macintosh|Mac OS X/i.test(ua)) return "macOS";
+      if (/Linux/i.test(ua)) return "Linux";
       return "Unknown";
     }
   </script>
