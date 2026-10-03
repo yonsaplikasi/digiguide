@@ -794,74 +794,82 @@
 
       <div id="ijinDinasView" class="hidden">
 
-        <div class="card">
+  <div class="card dinas-luar-card">
 
-          <button
-            id="backIjinDinasBtn"
-            class="action-btn secondary"
-          >
-            ← KEMBALI
-          </button>
+    <button id="backIjinDinasBtn" class="action-btn secondary">
+      ← KEMBALI
+    </button>
 
-          <h2>IJIN DINAS LUAR</h2>
+    <h2>IJIN DINAS LUAR</h2>
 
-          <div class="ijin-form">
+    <div class="ijin-form">
 
-            <label>
-              Surat Tugas yang Disetujui
-            </label>
+      <label for="dinasTanggalMulai">
+        Tanggal Mulai
+      </label>
 
-            <div
-              id="dinasStatus"
-              class="upload-progress"
-            ></div>
+      <input
+        type="date"
+        id="dinasTanggalMulai"
+      >
 
-            <div
-              id="suratTugasList"
-              class="surat-list"
-            ></div>
+      <label for="dinasTanggalSelesai">
+        Tanggal Selesai
+      </label>
 
-            <div id="suratTugasDetail"></div>
+      <input
+        type="date"
+        id="dinasTanggalSelesai"
+      >
 
-            <label for="dinasTanggalMulai">
-              Tanggal Mulai
-            </label>
+      <label for="dinasKeperluan">
+        Keterangan / Keperluan
+      </label>
 
-            <input
-              type="date"
-              id="dinasTanggalMulai"
-            >
+      <textarea
+        id="dinasKeperluan"
+        placeholder="Masukkan keterangan / keperluan dinas luar..."
+      ></textarea>
 
-            <label for="dinasTanggalSelesai">
-              Tanggal Selesai
-            </label>
+      <div
+        id="dinasStatus"
+        class="upload-progress"
+      ></div>
 
-            <input
-              type="date"
-              id="dinasTanggalSelesai"
-            >
+      <button
+        id="submitIjinDinasBtn"
+        class="action-btn"
+      >
+        KIRIM IJIN DINAS LUAR
+      </button>
 
-            <label for="dinasKeperluan">
-              Keperluan Dinas Luar
-            </label>
+    </div>
 
-            <textarea
-              id="dinasKeperluan"
-              placeholder="Masukkan keperluan dinas luar..."
-            ></textarea>
 
-            <button
-              id="submitIjinDinasBtn"
-              class="action-btn"
-            >
-              KIRIM IJIN DINAS LUAR
-            </button>
+    <!-- ========================= -->
+    <!-- SURAT TUGAS -->
+    <!-- ========================= -->
 
-          </div>
+    <div class="surat-tugas-section">
 
-        </div>
+      <h3>SURAT TUGAS YANG DISETUJUI</h3>
 
-      </div>
+      <div
+        id="suratTugasList"
+        class="surat-list"
+      ></div>
+
+      <div
+        id="suratTugasDetail"
+      ></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+  
 
       <!-- ======================================================
            RIWAYAT IJIN
