@@ -53,6 +53,63 @@
       font-weight: 500;
     }
 
+    .header-subtitle {
+      margin-top: 6px;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .clock-box {
+      border: 1px solid #17202a;
+      padding: 20px 10px;
+      text-align: center;
+      margin: 0 0 28px;
+      background: #fff;
+    }
+
+    .clock-time {
+      font-size: 42px;
+      line-height: 1.15;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .clock-source {
+      margin-top: 4px;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      opacity: 0.75;
+      text-transform: uppercase;
+    }
+
+    .clock-date {
+      margin-top: 4px;
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    .utama-description {
+      font-size: 16px;
+      line-height: 1.6;
+      margin: 0 0 18px;
+    }
+
+    .utama-item {
+      display: block;
+      border: 1px solid #17202a;
+      padding: 16px;
+      margin-bottom: 12px;
+      color: #17202a;
+      text-decoration: none;
+      background: #fff;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .utama-item:hover {
+      background: #f3f5f7;
+    }
+
 
     /* ============================================================
        USER INFO BAR
@@ -443,7 +500,7 @@
 
     <div class="header-box">
       <h1>DIGITAL GUIDE</h1>
-      <div style="font-size:14px; margin-top:6px;">SATPOL PP KABUPATEN SUKABUMI</div>
+      <div class="header-subtitle">SATPOL PP KABUPATEN SUKABUMI</div>
     </div>
 
 
@@ -562,45 +619,62 @@
       </div>
 
 
-      <!-- Tombol Navigasi 4 Tab -->
+      <!-- Tombol Navigasi 5 Tab -->
       <div class="tabs">
 
-  <button
-    class="tab-btn active"
-    data-tab="utama"
-  >
-    Utama
-  </button>
+        <button
+          class="tab-btn active"
+          data-tab="utama"
+        >
+          Utama
+        </button>
 
-  <button
-    class="tab-btn"
-    data-tab="absen"
-  >
-    Absen
-  </button>
+        <button
+          class="tab-btn"
+          data-tab="absen"
+        >
+          Absen
+        </button>
 
-  <button
-    class="tab-btn"
-    data-tab="perda"
-  >
-    Perda
-  </button>
+        <button
+          class="tab-btn"
+          data-tab="perda"
+        >
+          Perda
+        </button>
 
-  <button
-    class="tab-btn"
-    data-tab="sop"
-  >
-    SOP
-  </button>
+        <button
+          class="tab-btn"
+          data-tab="sop"
+        >
+          SOP
+        </button>
 
-  <button
-    class="tab-btn"
-    data-tab="info"
-  >
-    Info
-  </button>
+        <button
+          class="tab-btn"
+          data-tab="info"
+        >
+          Info
+        </button>
 
-</div>
+      </div>
+
+      <!-- ======================================================
+           JAM DIGITAL
+           ====================================================== -->
+      <div class="clock-box" aria-live="polite">
+        <div id="clockTime" class="clock-time">00:00:00</div>
+        <div id="clockDate" class="clock-date">DD/MM/YYYY</div>
+        <div id="clockSource" class="clock-source">Waktu server</div>
+      </div>
+
+      <!-- ======================================================
+           TAB UTAMA
+           ====================================================== -->
+      <div id="tab-utama" class="tab-content active">
+        <p id="utamaDesc" class="utama-description">Memuat informasi dari server...</p>
+        <div id="utamaList"></div>
+      </div>
 
 
       <!-- ======================================================
@@ -923,7 +997,7 @@
     // API CONFIGURATION
     // ==========================================================
     // Ganti URL di bawah dengan URL Web App Google Apps Script.
-    const API_URL = "https://script.google.com/macros/s/AKfycbyJvddb9EXn7OREz-SpKs0ya73WYLC6s6Kxi8pq_tZIVSibx_8mer5Fzz4-saNTWZK2nw/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxM0GEndiC9t4SmnR9TOc5_hv2wGk8sXLf7ypVh127c59r40JAN2C03pAmbIOiKbWqUxw/exec";
 
     const NIP_KEY = "absensi_v5_nip";
     const DEV_KEY = "absensi_v5_device";
@@ -942,6 +1016,11 @@
     // INITIALIZATION
     // ==========================================================
     async function init() {
+      // Jam aplikasi menggunakan waktu SERVER Apps Script, bukan jam HP.
+      await syncServerClock();
+      setInterval(updateClock, 1000);
+      setInterval(syncServerClock, 5 * 60 * 1000);
+
       [
         "cekBtn", "simpanBtn", "ulangiBtn", "gpsBtn",
         "masukBtn", "keluarBtn", "ijinSakitBtn", "ijinDinasBtn",
@@ -1167,7 +1246,8 @@
       $("headerUser").textContent = `${firstName} - ${employee.bagian || "-"} - ${employee.jabatan || "-"}`;
       $("headerDate").textContent = dateStr;
 
-      switchTab("absen");
+      updateClock();
+      switchTab("utama");
     }
 
     function switchTab(tabName) {
@@ -1181,9 +1261,18 @@
         c.classList.remove("active");
       });
 
+      if (tabName === "utama") {
+        $("tab-utama").classList.add("active");
+        fetchUtama();
+        return;
+      }
+
       if (tabName === "absen") {
         $("tab-absen").classList.add("active");
-      } else {
+        return;
+      }
+
+      if (["perda", "sop", "info"].includes(tabName)) {
         $("tab-dynamic").classList.add("active");
         fetchDynamicContent(tabName.toUpperCase());
       }
@@ -1192,6 +1281,58 @@
     function backToAttendance() {
       hideIjinViews();
       switchTab("absen");
+    }
+
+    // ==========================================================
+    // HALAMAN UTAMA
+    // ==========================================================
+    async function fetchUtama() {
+      $("utamaDesc").textContent = "Memuat informasi dari server...";
+      $("utamaList").innerHTML = "";
+
+      try {
+        const res = await api({
+          action: "getContent",
+          page: "UTAMA"
+        });
+
+        if (!res.ok) {
+          $("utamaDesc").textContent = res.message || "Data utama tidak tersedia.";
+          return;
+        }
+
+        const rows = Array.isArray(res.data) ? res.data : [];
+        if (!rows.length) {
+          $("utamaDesc").textContent = "Belum ada informasi.";
+          return;
+        }
+
+        const description = rows.find(item => String(item.tipe || "").toUpperCase() === "DESKRIPSI");
+        const items = rows.filter(item => String(item.tipe || "").toUpperCase() !== "DESKRIPSI");
+
+        $("utamaDesc").textContent = description?.judul || "";
+
+        if (!items.length) {
+          $("utamaList").innerHTML = '<div class="card">Belum ada menu atau informasi tambahan.</div>';
+          return;
+        }
+
+        $("utamaList").innerHTML = items.map(item => {
+          const title = esc(item.judul || "Tanpa judul");
+          const link = String(item.link || "").trim();
+
+          if (link) {
+            return `
+              <a href="${esc(link)}" target="_blank" rel="noopener" class="utama-item">
+                ${title}
+              </a>`;
+          }
+
+          return `<div class="utama-item">${title}</div>`;
+        }).join("");
+      } catch (e) {
+        $("utamaDesc").textContent = "Gagal memuat halaman utama. Periksa koneksi internet Anda.";
+      }
     }
 
     // ==========================================================
@@ -1678,6 +1819,60 @@
           </div>
         `;
       }).join("");
+    }
+
+    // ==========================================================
+    // JAM DIGITAL - WAKTU SERVER
+    // ==========================================================
+    let serverTimeOffsetMs = null;
+    let serverClockReady = false;
+
+    async function syncServerClock() {
+      try {
+        const startedAt = Date.now();
+        const res = await api({ action: "getServerTime" });
+        const receivedAt = Date.now();
+
+        if (!res || !res.ok || !Number.isFinite(Number(res.serverEpoch))) {
+          throw Error(res?.message || "Waktu server tidak tersedia.");
+        }
+
+        // Perkiraan offset dikoreksi dengan setengah waktu perjalanan request.
+        const roundTrip = receivedAt - startedAt;
+        const estimatedClientAtServerResponse = receivedAt - Math.round(roundTrip / 2);
+        serverTimeOffsetMs = Number(res.serverEpoch) - estimatedClientAtServerResponse;
+        serverClockReady = true;
+        $("clockSource").textContent = "WAKTU SERVER";
+        updateClock();
+      } catch (error) {
+        serverClockReady = false;
+        $("clockSource").textContent = "MENUNGGU SINKRONISASI SERVER";
+        updateClock();
+        console.warn("Jam server belum tersinkron:", error);
+      }
+    }
+
+    function getServerNow() {
+      if (serverClockReady && Number.isFinite(serverTimeOffsetMs)) {
+        return new Date(Date.now() + serverTimeOffsetMs);
+      }
+      return new Date();
+    }
+
+    function updateClock() {
+      const now = getServerNow();
+
+      const hh = String(now.getHours()).padStart(2, "0");
+      const mm = String(now.getMinutes()).padStart(2, "0");
+      const ss = String(now.getSeconds()).padStart(2, "0");
+
+      const dd = String(now.getDate()).padStart(2, "0");
+      const mo = String(now.getMonth() + 1).padStart(2, "0");
+      const yyyy = now.getFullYear();
+
+      $("clockTime").textContent = `${hh}:${mm}:${ss}`;
+      $("clockDate").textContent = `${dd}/${mo}/${yyyy}`;
+      $("headerDate").textContent = `${dd}/${mo}/${yyyy}`;
     }
 
     // ==========================================================
