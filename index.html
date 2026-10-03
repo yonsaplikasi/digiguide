@@ -238,6 +238,10 @@
       display: none !important;
     }
 
+    /* ========================================================
+       IJIN
+       ======================================================== */
+
     .ijin-menu {
       margin-top: 20px;
     }
@@ -341,44 +345,131 @@
       font-size: 13px;
     }
 
+    .upload-progress.success {
+      color: #0f5132;
+    }
+
+    .upload-progress.error {
+      color: #842029;
+    }
+
+    /* ========================================================
+       DINAS LUAR
+       ======================================================== */
+
+    .dinas-luar-card {
+      border: 1px solid #d9dee3;
+      padding: 18px;
+      background: #fff;
+    }
+
+    .dinas-luar-card h2 {
+      margin: 20px 0 5px;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .dinas-luar-card .ijin-form {
+      margin-top: 5px;
+    }
+
+    .dinas-luar-card .ijin-form label {
+      margin-top: 16px;
+    }
+
+    .dinas-luar-card .ijin-form input {
+      height: 50px;
+    }
+
+    .dinas-luar-card .ijin-form textarea {
+      min-height: 110px;
+    }
+
+    .surat-tugas-section {
+      margin-top: 30px;
+      border-top: 1px solid #d9dee3;
+      padding-top: 20px;
+    }
+
+    .surat-tugas-section h3 {
+      margin: 0 0 12px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
     .surat-list {
       margin-top: 10px;
     }
 
     .surat-item {
       border: 1px solid #cbd2d8;
-      padding: 14px;
-      margin-bottom: 10px;
+      padding: 15px;
+      margin-bottom: 12px;
       cursor: pointer;
       background: #fff;
+      transition: all 0.2s;
+    }
+
+    .surat-item:hover {
+      background: #f8fafb;
     }
 
     .surat-item.selected {
       border-color: #0088cc;
       background: #eef8fd;
+      box-shadow: 0 0 0 1px #0088cc;
     }
 
-    .surat-item-title {
+    .surat-item-row {
+      font-size: 14px;
+      line-height: 1.55;
+      margin-bottom: 9px;
+    }
+
+    .surat-item-label {
       font-weight: 700;
-      margin-bottom: 5px;
+      color: #17202a;
     }
 
-    .surat-item-info {
+    .surat-status {
       font-size: 13px;
-      line-height: 1.5;
-      color: #68737d;
+      font-weight: 700;
+      color: #0f5132;
+      margin-top: 5px;
+      margin-bottom: 10px;
     }
 
-    .surat-file-link {
-      display: inline-block;
-      margin-top: 8px;
-      padding: 7px 10px;
+    .surat-download {
+      display: block;
+      width: 100%;
+      text-align: center;
+      margin-top: 10px;
+      padding: 10px 12px;
       background: #0088cc;
       color: #fff;
       text-decoration: none;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
+      cursor: pointer;
     }
+
+    .surat-download:hover {
+      background: #006fa8;
+    }
+
+    .surat-selected-info {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid #badbcc;
+      background: #edf8f1;
+      color: #0f5132;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* ========================================================
+       RIWAYAT
+       ======================================================== */
 
     .riwayat-item {
       border: 1px solid #d9dee3;
@@ -429,9 +520,15 @@
 
   <main class="app">
 
+    <!-- ========================================================
+         HEADER
+         ======================================================== -->
+
     <div class="header-box">
       <h1>DIGITAL GUIDE</h1>
-      <div class="header-subtitle">SATPOL PP KABUPATEN SUKABUMI</div>
+      <div class="header-subtitle">
+        SATPOL PP KABUPATEN SUKABUMI
+      </div>
     </div>
 
     <section id="message" class="message hidden"></section>
@@ -443,7 +540,11 @@
     <section id="setupView" class="card">
 
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:15px;">
-        <label for="nip" style="font-weight:bold;font-size:16px;">
+
+        <label
+          for="nip"
+          style="font-weight:bold;font-size:16px;"
+        >
           NIP :
         </label>
 
@@ -454,6 +555,7 @@
           style="flex:1;margin:0;"
           placeholder="Ketik NIP Anda"
         >
+
       </div>
 
       <button
@@ -466,26 +568,56 @@
 
       <div id="dataPegawai" class="hidden">
 
-        <div style="margin:20px 0;line-height:2;font-size:16px;">
+        <div
+          style="
+            margin:20px 0;
+            line-height:2;
+            font-size:16px;
+          "
+        >
 
           <div style="display:flex;">
-            <span style="width:80px;">Nama</span>:
-            <strong id="lblNama" style="margin-left:8px;"></strong>
+            <span style="width:80px;">
+              Nama
+            </span>:
+
+            <strong
+              id="lblNama"
+              style="margin-left:8px;"
+            ></strong>
           </div>
 
           <div style="display:flex;">
-            <span style="width:80px;">Bagian</span>:
-            <strong id="lblBagian" style="margin-left:8px;"></strong>
+            <span style="width:80px;">
+              Bagian
+            </span>:
+
+            <strong
+              id="lblBagian"
+              style="margin-left:8px;"
+            ></strong>
           </div>
 
           <div style="display:flex;">
-            <span style="width:80px;">Jabatan</span>:
-            <strong id="lblJabatan" style="margin-left:8px;"></strong>
+            <span style="width:80px;">
+              Jabatan
+            </span>:
+
+            <strong
+              id="lblJabatan"
+              style="margin-left:8px;"
+            ></strong>
           </div>
 
         </div>
 
-        <div style="display:flex;gap:10px;margin-top:20px;">
+        <div
+          style="
+            display:flex;
+            gap:10px;
+            margin-top:20px;
+          "
+        >
 
           <button
             id="simpanBtn"
@@ -516,6 +648,7 @@
     <section id="attendanceView" class="hidden">
 
       <div class="user-info-bar">
+
         <span id="headerUser">
           Nama - Bagian - Jabatan
         </span>
@@ -523,27 +656,43 @@
         <span id="headerDate">
           Tgl.
         </span>
+
       </div>
 
       <div class="tabs">
 
-        <button class="tab-btn active" data-tab="utama">
+        <button
+          class="tab-btn active"
+          data-tab="utama"
+        >
           Utama
         </button>
 
-        <button class="tab-btn" data-tab="absen">
+        <button
+          class="tab-btn"
+          data-tab="absen"
+        >
           Absen
         </button>
 
-        <button class="tab-btn" data-tab="perda">
+        <button
+          class="tab-btn"
+          data-tab="perda"
+        >
           Perda
         </button>
 
-        <button class="tab-btn" data-tab="sop">
+        <button
+          class="tab-btn"
+          data-tab="sop"
+        >
           SOP
         </button>
 
-        <button class="tab-btn" data-tab="info">
+        <button
+          class="tab-btn"
+          data-tab="info"
+        >
           Info
         </button>
 
@@ -553,9 +702,15 @@
            UTAMA
            ====================================================== -->
 
-      <div id="tab-utama" class="tab-content active">
+      <div
+        id="tab-utama"
+        class="tab-content active"
+      >
 
-        <p id="utamaDesc" class="utama-description">
+        <p
+          id="utamaDesc"
+          class="utama-description"
+        >
           Memuat informasi dari server...
         </p>
 
@@ -567,20 +722,37 @@
            ABSEN
            ====================================================== -->
 
-      <div id="tab-absen" class="tab-content">
+      <div
+        id="tab-absen"
+        class="tab-content"
+      >
 
-        <div class="clock-box" aria-live="polite">
-          <div id="clockTime" class="clock-time">
+        <div
+          class="clock-box"
+          aria-live="polite"
+        >
+
+          <div
+            id="clockTime"
+            class="clock-time"
+          >
             00:00:00
           </div>
 
-          <div id="clockDate" class="clock-date">
+          <div
+            id="clockDate"
+            class="clock-date"
+          >
             DD/MM/YYYY
           </div>
 
-          <div id="clockSource" class="clock-source">
+          <div
+            id="clockSource"
+            class="clock-source"
+          >
             Waktu server
           </div>
+
         </div>
 
         <div
@@ -590,7 +762,10 @@
 
           <p
             id="gpsStatus"
-            style="font-size:14px;margin-top:0;"
+            style="
+              font-size:14px;
+              margin-top:0;
+            "
           >
             Lokasi belum diperiksa.
           </p>
@@ -634,6 +809,8 @@
             IJIN
           </div>
 
+          <!-- SAKIT / CUTI / TIDAK MASUK -->
+
           <div class="ijin-card">
 
             <div class="ijin-card-title">
@@ -654,6 +831,8 @@
 
           </div>
 
+          <!-- DINAS LUAR -->
+
           <div class="ijin-card">
 
             <div class="ijin-card-title">
@@ -673,6 +852,8 @@
             </button>
 
           </div>
+
+          <!-- RIWAYAT -->
 
           <div class="ijin-card">
 
@@ -701,7 +882,10 @@
            FORM IJIN SAKIT
            ====================================================== -->
 
-      <div id="ijinSakitView" class="hidden">
+      <div
+        id="ijinSakitView"
+        class="hidden"
+      >
 
         <div class="card">
 
@@ -712,7 +896,9 @@
             ← KEMBALI
           </button>
 
-          <h2>PERIODE IJIN</h2>
+          <h2>
+            PERIODE IJIN
+          </h2>
 
           <div class="ijin-form">
 
@@ -792,90 +978,106 @@
            FORM DINAS LUAR
            ====================================================== -->
 
-      <div id="ijinDinasView" class="hidden">
-
-  <div class="card dinas-luar-card">
-
-    <button id="backIjinDinasBtn" class="action-btn secondary">
-      ← KEMBALI
-    </button>
-
-    <h2>IJIN DINAS LUAR</h2>
-
-    <div class="ijin-form">
-
-      <label for="dinasTanggalMulai">
-        Tanggal Mulai
-      </label>
-
-      <input
-        type="date"
-        id="dinasTanggalMulai"
+      <div
+        id="ijinDinasView"
+        class="hidden"
       >
 
-      <label for="dinasTanggalSelesai">
-        Tanggal Selesai
-      </label>
+        <div class="card dinas-luar-card">
 
-      <input
-        type="date"
-        id="dinasTanggalSelesai"
-      >
+          <!-- KEMBALI -->
 
-      <label for="dinasKeperluan">
-        Keterangan / Keperluan
-      </label>
+          <button
+            id="backIjinDinasBtn"
+            class="action-btn secondary"
+          >
+            ← KEMBALI
+          </button>
 
-      <textarea
-        id="dinasKeperluan"
-        placeholder="Masukkan keterangan / keperluan dinas luar..."
-      ></textarea>
+          <!-- JUDUL -->
 
-      <div
-        id="dinasStatus"
-        class="upload-progress"
-      ></div>
+          <h2>
+            IJIN DINAS LUAR
+          </h2>
 
-      <button
-        id="submitIjinDinasBtn"
-        class="action-btn"
-      >
-        KIRIM IJIN DINAS LUAR
-      </button>
+          <!-- FORM -->
 
-    </div>
+          <div class="ijin-form">
 
+            <label for="dinasTanggalMulai">
+              Tanggal Mulai
+            </label>
 
-    <!-- ========================= -->
-    <!-- SURAT TUGAS -->
-    <!-- ========================= -->
+            <input
+              type="date"
+              id="dinasTanggalMulai"
+            >
 
-    <div class="surat-tugas-section">
+            <label for="dinasTanggalSelesai">
+              Tanggal Selesai
+            </label>
 
-      <h3>SURAT TUGAS YANG DISETUJUI</h3>
+            <input
+              type="date"
+              id="dinasTanggalSelesai"
+            >
 
-      <div
-        id="suratTugasList"
-        class="surat-list"
-      ></div>
+            <label for="dinasKeperluan">
+              Keterangan / Keperluan
+            </label>
 
-      <div
-        id="suratTugasDetail"
-      ></div>
+            <textarea
+              id="dinasKeperluan"
+              placeholder="Masukkan keterangan / keperluan dinas luar..."
+            ></textarea>
 
-    </div>
+            <div
+              id="dinasStatus"
+              class="upload-progress"
+            ></div>
 
-  </div>
+            <button
+              id="submitIjinDinasBtn"
+              class="action-btn"
+            >
+              KIRIM IJIN DINAS LUAR
+            </button>
 
-</div>
+          </div>
 
-  
+          <!-- ==================================================
+               SURAT TUGAS YANG DISETUJUI
+               ================================================== -->
+
+          <div class="surat-tugas-section">
+
+            <h3>
+              SURAT TUGAS YANG DISETUJUI
+            </h3>
+
+            <div
+              id="suratTugasList"
+              class="surat-list"
+            ></div>
+
+            <div
+              id="suratTugasDetail"
+            ></div>
+
+          </div>
+
+        </div>
+
+      </div>
 
       <!-- ======================================================
            RIWAYAT IJIN
            ====================================================== -->
 
-      <div id="riwayatIjinView" class="hidden">
+      <div
+        id="riwayatIjinView"
+        class="hidden"
+      >
 
         <div class="card">
 
@@ -886,7 +1088,9 @@
             ← KEMBALI
           </button>
 
-          <h2>RIWAYAT IJIN</h2>
+          <h2>
+            RIWAYAT IJIN
+          </h2>
 
           <div id="riwayatList"></div>
 
@@ -931,16 +1135,27 @@
     const API_URL =
       "https://script.google.com/macros/s/AKfycby18Tlk2W5Nv0RyZTX9AGK7y_inVZVj2VsNjIqlPX2bi6UdJK6HwRKmr2bGv0tH8cKjvQ/exec";
 
-    const NIP_KEY = "absensi_v5_nip";
-    const DEV_KEY = "absensi_v5_device";
-    const VERIFIED_KEY = "absensi_v5_verified";
-    const EMPLOYEE_KEY = "absensi_v5_employee";
+    const NIP_KEY =
+      "absensi_v5_nip";
+
+    const DEV_KEY =
+      "absensi_v5_device";
+
+    const VERIFIED_KEY =
+      "absensi_v5_verified";
+
+    const EMPLOYEE_KEY =
+      "absensi_v5_employee";
 
     let pending = null;
+
     let selectedSuratTugas = null;
+
     let suratTugasData = [];
 
-    const $ = id => document.getElementById(id);
+    const $ =
+      id =>
+        document.getElementById(id);
 
     document.addEventListener(
       "DOMContentLoaded",
@@ -984,7 +1199,8 @@
 
         $(id)?.addEventListener(
           "click",
-          () => handlers[id]?.()
+          () =>
+            handlers[id]?.()
         );
 
       });
@@ -995,7 +1211,9 @@
       );
 
       document
-        .querySelectorAll(".tab-btn")
+        .querySelectorAll(
+          ".tab-btn"
+        )
         .forEach(btn => {
 
           btn.addEventListener(
@@ -1019,15 +1237,19 @@
         );
 
       if (!nip || !deviceId) {
+
         showVerify();
+
         return;
+
       }
 
       try {
 
         const result =
           await api({
-            action: "getSession",
+            action:
+              "getSession",
             nip,
             deviceId
           });
@@ -1043,6 +1265,7 @@
           );
 
           return;
+
         }
 
         clearSession();
@@ -1104,10 +1327,16 @@
         checkGps,
 
       masukBtn:
-        () => attendance("MASUK"),
+        () =>
+          attendance(
+            "MASUK"
+          ),
 
       keluarBtn:
-        () => attendance("KELUAR"),
+        () =>
+          attendance(
+            "KELUAR"
+          ),
 
       ijinSakitBtn:
         openIjinSakit,
@@ -1172,6 +1401,7 @@
       }
 
       return deviceId;
+
     }
 
     // ==========================================================
@@ -1186,10 +1416,12 @@
           .trim();
 
       if (!nip) {
+
         return msg(
           "NIP wajib diisi.",
           "error"
         );
+
       }
 
       busy(
@@ -1202,31 +1434,43 @@
 
         const result =
           await api({
+
             action:
               "verifyNip",
+
             nip,
+
             deviceId:
               device()
+
           });
 
         if (!result.ok) {
+
           return msg(
             result.message,
             "error"
           );
+
         }
 
         pending =
           result.employee;
 
-        $("lblNama").textContent =
-          pending.nama || "-";
+        $("lblNama")
+          .textContent =
+          pending.nama ||
+          "-";
 
-        $("lblBagian").textContent =
-          pending.bagian || "-";
+        $("lblBagian")
+          .textContent =
+          pending.bagian ||
+          "-";
 
-        $("lblJabatan").textContent =
-          pending.jabatan || "-";
+        $("lblJabatan")
+          .textContent =
+          pending.jabatan ||
+          "-";
 
         $("cekBtn")
           .classList
@@ -1239,7 +1483,10 @@
         $("nip").disabled =
           true;
 
-        msg("", "");
+        msg(
+          "",
+          ""
+        );
 
       } catch (error) {
 
@@ -1264,7 +1511,8 @@
 
       pending = null;
 
-      $("nip").value = "";
+      $("nip").value =
+        "";
 
       $("nip").disabled =
         false;
@@ -1277,7 +1525,10 @@
         .classList
         .remove("hidden");
 
-      msg("", "");
+      msg(
+        "",
+        ""
+      );
 
     }
 
@@ -1300,12 +1551,16 @@
 
         const result =
           await api({
+
             action:
               "confirmVerification",
+
             nip:
               pending.nip,
+
             deviceId:
               device()
+
           });
 
         if (!result.ok) {
@@ -1355,7 +1610,9 @@
     // SESSION
     // ==========================================================
 
-    function saveSession(employee) {
+    function saveSession(
+      employee
+    ) {
 
       if (
         !employee ||
@@ -1449,13 +1706,15 @@
         "ijinSakitView",
         "ijinDinasView",
         "riwayatIjinView"
-      ].forEach(id => {
+      ].forEach(
+        id => {
 
-        $(id)
-          ?.classList
-          .add("hidden");
+          $(id)
+            ?.classList
+            .add("hidden");
 
-      });
+        }
+      );
 
       $("tab-absen")
         ?.classList
@@ -1463,7 +1722,9 @@
 
     }
 
-    function showAttendance(employee) {
+    function showAttendance(
+      employee
+    ) {
 
       if (!employee)
         return showVerify();
@@ -1478,20 +1739,10 @@
 
       hideIjinViews();
 
-      const dateStr =
-        new Date()
-          .toLocaleDateString(
-            "id-ID",
-            {
-              day: "numeric",
-              month: "short",
-              year: "numeric"
-            }
-          );
-
       const firstName =
         String(
-          employee.nama || ""
+          employee.nama ||
+          ""
         )
           .trim()
           .split(" ")[0] ||
@@ -1501,17 +1752,17 @@
         .textContent =
         `${firstName} - ${employee.bagian || "-"} - ${employee.jabatan || "-"}`;
 
-      $("headerDate")
-        .textContent =
-        dateStr;
-
       updateClock();
 
-      switchTab("utama");
+      switchTab(
+        "utama"
+      );
 
     }
 
-    function switchTab(tabName) {
+    function switchTab(
+      tabName
+    ) {
 
       hideIjinViews();
 
@@ -1519,27 +1770,31 @@
         .querySelectorAll(
           ".tab-btn"
         )
-        .forEach(b => {
+        .forEach(
+          b => {
 
-          b.classList.toggle(
-            "active",
-            b.dataset.tab ===
-              tabName
-          );
+            b.classList.toggle(
+              "active",
+              b.dataset.tab ===
+                tabName
+            );
 
-        });
+          }
+        );
 
       document
         .querySelectorAll(
           ".tab-content"
         )
-        .forEach(c => {
+        .forEach(
+          c => {
 
-          c.classList.remove(
-            "active"
-          );
+            c.classList.remove(
+              "active"
+            );
 
-        });
+          }
+        );
 
       if (
         tabName ===
@@ -1553,6 +1808,7 @@
         fetchUtama();
 
         return;
+
       }
 
       if (
@@ -1572,6 +1828,7 @@
         );
 
         return;
+
       }
 
       if (
@@ -1600,7 +1857,9 @@
 
       hideIjinViews();
 
-      switchTab("absen");
+      switchTab(
+        "absen"
+      );
 
     }
 
@@ -1615,16 +1874,20 @@
         "Memuat informasi dari server...";
 
       $("utamaList")
-        .innerHTML = "";
+        .innerHTML =
+        "";
 
       try {
 
         const res =
           await api({
+
             action:
               "getContent",
+
             page:
               "UTAMA"
+
           });
 
         if (!res.ok) {
@@ -1659,7 +1922,8 @@
           rows.find(
             item =>
               String(
-                item.tipe || ""
+                item.tipe ||
+                ""
               )
                 .toUpperCase() ===
               "DESKRIPSI"
@@ -1669,7 +1933,8 @@
           rows.filter(
             item =>
               String(
-                item.tipe || ""
+                item.tipe ||
+                ""
               )
                 .toUpperCase() !==
               "DESKRIPSI"
@@ -1677,7 +1942,8 @@
 
         $("utamaDesc")
           .textContent =
-          description?.judul || "";
+          description?.judul ||
+          "";
 
         if (!items.length) {
 
@@ -1692,42 +1958,45 @@
         $("utamaList")
           .innerHTML =
           items
-            .map(item => {
+            .map(
+              item => {
 
-              const title =
-                esc(
-                  item.judul ||
-                  "Tanpa judul"
-                );
+                const title =
+                  esc(
+                    item.judul ||
+                    "Tanpa judul"
+                  );
 
-              const link =
-                String(
-                  item.link || ""
-                )
-                  .trim();
+                const link =
+                  String(
+                    item.link ||
+                    ""
+                  )
+                    .trim();
 
-              if (link) {
+                if (link) {
+
+                  return `
+                    <a
+                      href="${esc(link)}"
+                      target="_blank"
+                      rel="noopener"
+                      class="utama-item"
+                    >
+                      ${title}
+                    </a>
+                  `;
+
+                }
 
                 return `
-                  <a
-                    href="${esc(link)}"
-                    target="_blank"
-                    rel="noopener"
-                    class="utama-item"
-                  >
+                  <div class="utama-item">
                     ${title}
-                  </a>
+                  </div>
                 `;
 
               }
-
-              return `
-                <div class="utama-item">
-                  ${title}
-                </div>
-              `;
-
-            })
+            )
             .join("");
 
       } catch (e) {
@@ -1744,23 +2013,29 @@
     // PERDA / SOP / INFO
     // ==========================================================
 
-    async function fetchDynamicContent(type) {
+    async function fetchDynamicContent(
+      type
+    ) {
 
       $("dynamicDesc")
         .textContent =
         "Memuat informasi dari server...";
 
       $("dynamicList")
-        .innerHTML = "";
+        .innerHTML =
+        "";
 
       try {
 
         const res =
           await api({
+
             action:
               "getContent",
+
             page:
               type
+
           });
 
         if (!res.ok) {
@@ -1785,7 +2060,8 @@
           rows.find(
             item =>
               String(
-                item.tipe || ""
+                item.tipe ||
+                ""
               )
                 .toUpperCase() ===
               "DESKRIPSI"
@@ -1795,7 +2071,8 @@
           rows.filter(
             item =>
               String(
-                item.tipe || ""
+                item.tipe ||
+                ""
               )
                 .toUpperCase() !==
               "DESKRIPSI"
@@ -1803,7 +2080,8 @@
 
         $("dynamicDesc")
           .textContent =
-          description?.judul || "";
+          description?.judul ||
+          "";
 
         if (!items.length) {
 
@@ -1818,42 +2096,45 @@
         $("dynamicList")
           .innerHTML =
           items
-            .map(item => {
+            .map(
+              item => {
 
-              const title =
-                esc(
-                  item.judul ||
-                  "Tanpa judul"
-                );
+                const title =
+                  esc(
+                    item.judul ||
+                    "Tanpa judul"
+                  );
 
-              const link =
-                String(
-                  item.link || ""
-                )
-                  .trim();
+                const link =
+                  String(
+                    item.link ||
+                    ""
+                  )
+                    .trim();
 
-              if (link) {
+                if (link) {
+
+                  return `
+                    <a
+                      href="${esc(link)}"
+                      target="_blank"
+                      rel="noopener"
+                      class="sub-item"
+                    >
+                      ${title}
+                    </a>
+                  `;
+
+                }
 
                 return `
-                  <a
-                    href="${esc(link)}"
-                    target="_blank"
-                    rel="noopener"
-                    class="sub-item"
-                  >
+                  <div class="sub-item">
                     ${title}
-                  </a>
+                  </div>
                 `;
 
               }
-
-              return `
-                <div class="sub-item">
-                  ${title}
-                </div>
-              `;
-
-            })
+            )
             .join("");
 
       } catch (e) {
@@ -1870,7 +2151,9 @@
     // ABSENSI
     // ==========================================================
 
-    async function attendance(type) {
+    async function attendance(
+      type
+    ) {
 
       const nip =
         localStorage.getItem(
@@ -1882,7 +2165,10 @@
           DEV_KEY
         );
 
-      if (!nip || !deviceId)
+      if (
+        !nip ||
+        !deviceId
+      )
         return showVerify();
 
       $("gpsStatus")
@@ -1902,7 +2188,8 @@
 
         const accuracy =
           Math.round(
-            positionData.coords.accuracy
+            positionData.coords
+              .accuracy
           );
 
         $("gpsStatus")
@@ -2056,7 +2343,9 @@
       autoCheck = false
     ) {
 
-      if (!navigator.geolocation) {
+      if (
+        !navigator.geolocation
+      ) {
 
         $("gpsStatus")
           .textContent =
@@ -2157,7 +2446,9 @@
 
         if (
           /Lokasi tidak tersedia|GPS sedang mati/i
-            .test(message)
+            .test(
+              message
+            )
         ) {
 
           $("gpsStatus")
@@ -2258,6 +2549,7 @@
               },
 
               {
+
                 enableHighAccuracy:
                   true,
 
@@ -2299,16 +2591,20 @@
     function resetSakitForm() {
 
       $("sakitTanggalMulai")
-        .value = "";
+        .value =
+        "";
 
       $("sakitTanggalSelesai")
-        .value = "";
+        .value =
+        "";
 
       $("sakitAlasan")
-        .value = "";
+        .value =
+        "";
 
       $("skdFile")
-        .value = "";
+        .value =
+        "";
 
       $("skdPreview")
         .classList
@@ -2320,20 +2616,26 @@
         );
 
       $("skdFileInfo")
-        .textContent = "";
+        .textContent =
+        "";
 
       $("skdUploadStatus")
-        .textContent = "";
+        .textContent =
+        "";
 
       $("submitIjinSakitBtn")
-        .disabled = false;
+        .disabled =
+        false;
 
     }
 
-    function previewSKD(event) {
+    function previewSKD(
+      event
+    ) {
 
       const file =
-        event.target.files?.[0];
+        event.target
+          .files?.[0];
 
       if (!file)
         return;
@@ -2453,10 +2755,16 @@
         $("skdFile")
           .files?.[0];
 
-      if (!nip || !deviceId)
+      if (
+        !nip ||
+        !deviceId
+      )
         return showVerify();
 
-      if (!mulai || !selesai) {
+      if (
+        !mulai ||
+        !selesai
+      ) {
 
         return setUploadStatus(
           "Tanggal mulai dan selesai wajib diisi.",
@@ -2465,7 +2773,9 @@
 
       }
 
-      if (selesai < mulai) {
+      if (
+        selesai < mulai
+      ) {
 
         return setUploadStatus(
           "Tanggal selesai tidak boleh lebih awal dari tanggal mulai.",
@@ -2530,7 +2840,8 @@
 
       try {
 
-        let fileSKD = "";
+        let fileSKD =
+          "";
 
         if (file) {
 
@@ -2644,10 +2955,12 @@
         );
 
         $("sakitAlasan")
-          .value = "";
+          .value =
+          "";
 
         $("skdFile")
-          .value = "";
+          .value =
+          "";
 
         $("skdPreview")
           .classList
@@ -2659,7 +2972,8 @@
           );
 
         $("skdFileInfo")
-          .textContent = "";
+          .textContent =
+          "";
 
       } catch (error) {
 
@@ -2681,7 +2995,9 @@
 
     }
 
-    function fileToBase64(file) {
+    function fileToBase64(
+      file
+    ) {
 
       return new Promise(
         (
@@ -2774,27 +3090,40 @@
         null;
 
       $("dinasTanggalMulai")
-        .value = "";
+        .value =
+        "";
 
       $("dinasTanggalSelesai")
-        .value = "";
+        .value =
+        "";
 
       $("dinasKeperluan")
-        .value = "";
+        .value =
+        "";
 
       $("suratTugasDetail")
-        .innerHTML = "";
+        .innerHTML =
+        "";
 
       $("dinasStatus")
         .textContent =
-        "Memuat Surat Tugas...";
+        "";
 
       $("suratTugasList")
-        .innerHTML = "";
+        .innerHTML =
+        `
+          <div class="ijin-status">
+            Memuat Surat Tugas yang disetujui...
+          </div>
+        `;
 
       await loadSuratTugas();
 
     }
+
+    // ==========================================================
+    // LOAD SURAT TUGAS
+    // ==========================================================
 
     async function loadSuratTugas() {
 
@@ -2808,7 +3137,10 @@
           DEV_KEY
         );
 
-      if (!nip || !deviceId)
+      if (
+        !nip ||
+        !deviceId
+      )
         return showVerify();
 
       try {
@@ -2832,10 +3164,18 @@
 
           $("suratTugasList")
             .innerHTML =
-            `<div class="ijin-status error">${esc(res.message || "Surat Tugas tidak tersedia.")}</div>`;
+            `
+              <div class="ijin-status error">
+                ${esc(
+                  res.message ||
+                  "Surat Tugas tidak tersedia."
+                )}
+              </div>
+            `;
 
           $("dinasStatus")
-            .textContent = "";
+            .textContent =
+            "";
 
           return;
 
@@ -2862,14 +3202,25 @@
 
         $("suratTugasList")
           .innerHTML =
-          `<div class="ijin-status error">${esc(error.message)}</div>`;
+          `
+            <div class="ijin-status error">
+              ${esc(
+                error.message
+              )}
+            </div>
+          `;
 
         $("dinasStatus")
-          .textContent = "";
+          .textContent =
+          "";
 
       }
 
     }
+
+    // ==========================================================
+    // RENDER SURAT TUGAS
+    // ==========================================================
 
     function renderSuratTugas(
       list
@@ -2878,13 +3229,21 @@
       const container =
         $("suratTugasList");
 
-      if (!list.length) {
+      if (
+        !Array.isArray(list) ||
+        list.length === 0
+      ) {
 
         container.innerHTML =
-          '<div class="ijin-status">Belum ada Surat Tugas yang disetujui untuk NIP Anda.</div>';
+          `
+            <div class="ijin-status">
+              Belum ada Surat Tugas yang disetujui.
+            </div>
+          `;
 
         $("dinasStatus")
-          .textContent = "";
+          .textContent =
+          "";
 
         return;
 
@@ -2902,6 +3261,34 @@
               index
             ) => {
 
+              const nomor =
+                item.nomorSurat ||
+                item.nomor ||
+                item.Nomor_Surat ||
+                "-";
+
+              const keperluan =
+                item.keperluan ||
+                item.Keperluan ||
+                "-";
+
+              const mulai =
+                item.tanggalMulai ||
+                item.Tanggal_Mulai ||
+                "-";
+
+              const selesai =
+                item.tanggalSelesai ||
+                item.Tanggal_Selesai ||
+                "-";
+
+              const status =
+                item.status ||
+                item.Status ||
+                item.statusAtasan ||
+                item.Status_Atasan ||
+                "ACC";
+
               const fileUrl =
                 item.fileUrl ||
                 item.filePdf ||
@@ -2914,73 +3301,102 @@
                 "";
 
               return `
+
                 <div
                   class="surat-item"
                   data-index="${index}"
                 >
 
-                  <div class="surat-item-title">
+                  <div class="surat-item-row">
+
+                    <span class="surat-item-label">
+                      Nomor Surat
+                    </span>
+
+                    <br>
+
                     ${esc(
-                      item.nomorSurat ||
-                      item.nomor ||
-                      item.Nomor_Surat ||
-                      item.Surat_Tugas_ID ||
-                      "Surat Tugas"
+                      nomor
                     )}
+
                   </div>
 
-                  <div class="surat-item-info">
 
-                    ${esc(
-                      item.keperluan ||
-                      item.Keperluan ||
-                      "Tidak ada keterangan keperluan."
-                    )}
+                  <div class="surat-item-row">
+
+                    <span class="surat-item-label">
+                      Keperluan
+                    </span>
 
                     <br>
 
-                    Periode:
                     ${esc(
-                      item.tanggalMulai ||
-                      item.Tanggal_Mulai ||
-                      "-"
+                      keperluan
                     )}
+
+                  </div>
+
+
+                  <div class="surat-item-row">
+
+                    <span class="surat-item-label">
+                      Periode
+                    </span>
+
+                    <br>
+
+                    ${esc(
+                      mulai
+                    )}
+
                     s.d.
+
                     ${esc(
-                      item.tanggalSelesai ||
-                      item.Tanggal_Selesai ||
-                      "-"
+                      selesai
                     )}
 
-                    <br>
+                  </div>
+
+
+                  <div class="surat-status">
 
                     Status:
                     ${esc(
-                      item.status ||
-                      item.statusAtasan ||
-                      "ACC"
+                      status
                     )}
-
-                    ${
-                      fileUrl
-                        ? `
-                          <br>
-                          <a
-                            href="${esc(fileUrl)}"
-                            target="_blank"
-                            rel="noopener"
-                            class="surat-file-link"
-                            onclick="event.stopPropagation()"
-                          >
-                            LIHAT / DOWNLOAD
-                          </a>
-                        `
-                        : ""
-                    }
 
                   </div>
 
+
+                  ${
+                    fileUrl
+                      ? `
+                        <a
+                          class="surat-download"
+                          href="${esc(fileUrl)}"
+                          target="_blank"
+                          rel="noopener"
+                          onclick="event.stopPropagation()"
+                        >
+                          LIHAT / DOWNLOAD
+                        </a>
+                      `
+                      : `
+                        <div
+                          class="surat-download"
+                          style="
+                            opacity:.5;
+                            cursor:default;
+                            background:#9aa4ab;
+                          "
+                        >
+                          FILE TIDAK TERSEDIA
+                        </div>
+                      `
+                  }
+
                 </div>
+
               `;
 
             }
@@ -3008,6 +3424,10 @@
         );
 
     }
+
+    // ==========================================================
+    // PILIH SURAT TUGAS
+    // ==========================================================
 
     function selectSuratTugas(
       index
@@ -3038,7 +3458,8 @@
       if (!selectedSuratTugas) {
 
         $("suratTugasDetail")
-          .innerHTML = "";
+          .innerHTML =
+          "";
 
         return;
 
@@ -3072,9 +3493,10 @@
         "-";
 
       $("suratTugasDetail")
-        .innerHTML = `
+        .innerHTML =
+        `
 
-          <div class="ijin-status success">
+          <div class="surat-selected-info">
 
             <strong>
               Surat Tugas dipilih
@@ -3146,7 +3568,15 @@
 
       }
 
+      $("dinasStatus")
+        .textContent =
+        "Surat Tugas dipilih. Periksa tanggal dan keterangan sebelum mengirim.";
+
     }
+
+    // ==========================================================
+    // SUBMIT DINAS LUAR
+    // ==========================================================
 
     async function submitIjinDinas() {
 
@@ -3173,43 +3603,68 @@
           .value
           .trim();
 
-      if (!nip || !deviceId)
+      if (
+        !nip ||
+        !deviceId
+      )
         return showVerify();
 
-      if (!selectedSuratTugas)
+      if (
+        !selectedSuratTugas
+      ) {
+
         return setDinasStatus(
           "Pilih Surat Tugas terlebih dahulu.",
           "error"
         );
 
-      if (!mulai || !selesai)
+      }
+
+      if (
+        !mulai ||
+        !selesai
+      ) {
+
         return setDinasStatus(
           "Tanggal mulai dan selesai wajib diisi.",
           "error"
         );
 
-      if (selesai < mulai)
+      }
+
+      if (
+        selesai < mulai
+      ) {
+
         return setDinasStatus(
           "Tanggal selesai tidak boleh lebih awal dari tanggal mulai.",
           "error"
         );
 
-      if (!keperluan)
+      }
+
+      if (!keperluan) {
+
         return setDinasStatus(
           "Keperluan dinas luar wajib diisi.",
           "error"
         );
+
+      }
 
       const suratTugasId =
         selectedSuratTugas.suratTugasId ||
         selectedSuratTugas.id ||
         selectedSuratTugas.Surat_Tugas_ID;
 
-      if (!suratTugasId)
+      if (!suratTugasId) {
+
         return setDinasStatus(
           "ID Surat Tugas tidak ditemukan.",
           "error"
         );
+
+      }
 
       busy(
         "submitIjinDinasBtn",
@@ -3275,7 +3730,8 @@
       } catch (error) {
 
         setDinasStatus(
-          error.message,
+          error.message ||
+            "Terjadi kesalahan.",
           "error"
         );
 
@@ -3330,7 +3786,11 @@
 
       $("riwayatList")
         .innerHTML =
-        '<div class="ijin-status">Memuat riwayat...</div>';
+        `
+          <div class="ijin-status">
+            Memuat riwayat...
+          </div>
+        `;
 
       const nip =
         localStorage.getItem(
@@ -3342,7 +3802,10 @@
           DEV_KEY
         );
 
-      if (!nip || !deviceId)
+      if (
+        !nip ||
+        !deviceId
+      )
         return showVerify();
 
       try {
@@ -3363,7 +3826,14 @@
 
           $("riwayatList")
             .innerHTML =
-            `<div class="ijin-status error">${esc(res.message || "Riwayat tidak dapat dimuat.")}</div>`;
+            `
+              <div class="ijin-status error">
+                ${esc(
+                  res.message ||
+                  "Riwayat tidak dapat dimuat."
+                )}
+              </div>
+            `;
 
           return;
 
@@ -3390,7 +3860,13 @@
 
         $("riwayatList")
           .innerHTML =
-          `<div class="ijin-status error">${esc(error.message)}</div>`;
+          `
+            <div class="ijin-status error">
+              ${esc(
+                error.message
+              )}
+            </div>
+          `;
 
       }
 
@@ -3404,7 +3880,11 @@
 
         $("riwayatList")
           .innerHTML =
-          '<div class="ijin-status">Belum ada pengajuan ijin.</div>';
+          `
+            <div class="ijin-status">
+              Belum ada pengajuan ijin.
+            </div>
+          `;
 
         return;
 
@@ -3413,142 +3893,150 @@
       $("riwayatList")
         .innerHTML =
         list
-          .map(item => {
+          .map(
+            item => {
 
-            const jenis =
-              item.jenisIjin ||
-              item.jenis ||
-              item.Jenis_Ijin ||
-              "-";
+              const jenis =
+                item.jenisIjin ||
+                item.jenis ||
+                item.Jenis_Ijin ||
+                "-";
 
-            const mulai =
-              item.tanggalMulai ||
-              item.Tanggal_Mulai ||
-              "-";
+              const mulai =
+                item.tanggalMulai ||
+                item.Tanggal_Mulai ||
+                "-";
 
-            const selesai =
-              item.tanggalSelesai ||
-              item.Tanggal_Selesai ||
-              "-";
+              const selesai =
+                item.tanggalSelesai ||
+                item.Tanggal_Selesai ||
+                "-";
 
-            const status =
-              item.status ||
-              item.Status ||
-              "MENUNGGU";
+              const status =
+                item.status ||
+                item.Status ||
+                "MENUNGGU";
 
-            const statusAtasan =
-              item.statusAtasan ||
-              item.Status_Atasan ||
-              "-";
+              const statusAtasan =
+                item.statusAtasan ||
+                item.Status_Atasan ||
+                "-";
 
-            const statusAdmin =
-              item.statusAdmin ||
-              item.Status_Admin ||
-              "-";
+              const statusAdmin =
+                item.statusAdmin ||
+                item.Status_Admin ||
+                "-";
 
-            const alasan =
-              item.alasan ||
-              item.alasanAtauKeperluan ||
-              item.keperluan ||
-              item.Alasan_Atau_Keperluan ||
-              "-";
+              const alasan =
+                item.alasan ||
+                item.alasanAtauKeperluan ||
+                item.keperluan ||
+                item.Alasan_Atau_Keperluan ||
+                "-";
 
-            const id =
-              item.idIjin ||
-              item.id ||
-              item.ID_Ijin ||
-              "-";
+              const id =
+                item.idIjin ||
+                item.id ||
+                item.ID_Ijin ||
+                "-";
 
-            const upperStatus =
-              String(
-                status
-              )
-                .toUpperCase();
+              const upperStatus =
+                String(
+                  status
+                )
+                  .toUpperCase();
 
-            const cls =
-              upperStatus ===
-              "ACC"
+              const cls =
+                upperStatus ===
+                "ACC"
 
-                ? "status-acc"
+                  ? "status-acc"
 
-                : upperStatus ===
-                  "DITOLAK"
+                  : upperStatus ===
+                    "DITOLAK"
 
-                  ? "status-tolak"
+                    ? "status-tolak"
 
-                  : "status-menunggu";
+                    : "status-menunggu";
 
-            return `
+              return `
 
-              <div class="riwayat-item">
+                <div class="riwayat-item">
 
-                <div class="riwayat-title">
+                  <div class="riwayat-title">
 
-                  ${esc(jenis)}
+                    ${esc(
+                      jenis
+                    )}
 
-                  <span class="${cls}">
-                    (${esc(status)})
-                  </span>
+                    <span
+                      class="${cls}"
+                    >
+                      (${esc(
+                        status
+                      )})
+                    </span>
+
+                  </div>
+
+                  <div class="riwayat-info">
+
+                    ID:
+                    ${esc(id)}
+
+                    <br>
+
+                    Periode:
+                    ${esc(mulai)}
+                    s.d.
+                    ${esc(selesai)}
+
+                    <br>
+
+                    Keterangan:
+                    ${esc(alasan)}
+
+                    <br>
+
+                    Status Atasan:
+                    ${esc(statusAtasan)}
+
+                    <br>
+
+                    Status Admin:
+                    ${esc(statusAdmin)}
+
+                    <br>
+
+                    Status Akhir:
+                    <strong>
+                      ${esc(status)}
+                    </strong>
+
+                    ${
+                      item.catatan ||
+                      item.Catatan
+
+                        ? `
+                          <br>
+                          Catatan:
+                          ${esc(
+                            item.catatan ||
+                            item.Catatan
+                          )}
+                        `
+
+                        : ""
+                    }
+
+                  </div>
 
                 </div>
 
-                <div class="riwayat-info">
+              `;
 
-                  ID:
-                  ${esc(id)}
-
-                  <br>
-
-                  Periode:
-                  ${esc(mulai)}
-                  s.d.
-                  ${esc(selesai)}
-
-                  <br>
-
-                  Keterangan:
-                  ${esc(alasan)}
-
-                  <br>
-
-                  Status Atasan:
-                  ${esc(statusAtasan)}
-
-                  <br>
-
-                  Status Admin:
-                  ${esc(statusAdmin)}
-
-                  <br>
-
-                  Status Akhir:
-                  <strong>
-                    ${esc(status)}
-                  </strong>
-
-                  ${
-                    item.catatan ||
-                    item.Catatan
-
-                      ? `
-                        <br>
-                        Catatan:
-                        ${esc(
-                          item.catatan ||
-                          item.Catatan
-                        )}
-                      `
-
-                      : ""
-                  }
-
-                </div>
-
-              </div>
-
-            `;
-
-          })
+            }
+          )
           .join("");
 
     }
