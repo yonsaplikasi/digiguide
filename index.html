@@ -1,0 +1,1439 @@
+```html
+<!doctype html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Digital Guide SATPOL PP</title>
+
+  <style>
+    /* ============================================================
+       RESET & BASE STYLES
+       ============================================================ */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f3f5f7;
+      font-family: Arial, sans-serif;
+      color: #17202a;
+    }
+
+
+    /* ============================================================
+       MAIN LAYOUT
+       ============================================================ */
+
+    .app {
+      width: min(100%, 520px);
+      margin: auto;
+      padding: 20px 16px;
+      min-height: 100vh;
+      background: #fff;
+    }
+
+
+    /* ============================================================
+       HEADER
+       ============================================================ */
+
+    .header-box {
+      border: 1px solid #17202a;
+      padding: 30px 10px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .header-box h1 {
+      margin: 0;
+      font-size: 32px;
+      font-weight: 500;
+    }
+
+
+    /* ============================================================
+       USER INFO BAR
+       ============================================================ */
+
+    .user-info-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 15px;
+      color: #17202a;
+    }
+
+
+    /* ============================================================
+       NAVIGATION TABS
+       ============================================================ */
+
+    .tabs {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 25px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px 4px;
+      background: #fff;
+      border: 1px solid #17202a;
+      color: #17202a;
+      font-weight: 400;
+      margin: 0;
+      font-size: 14px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: #0088cc;
+      color: #fff;
+      border-color: #0088cc;
+    }
+
+
+    /* ============================================================
+       TAB CONTENTS
+       ============================================================ */
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+
+    /* ============================================================
+       DYNAMIC LIST
+       ============================================================ */
+
+    .dynamic-desc {
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 25px;
+      color: #17202a;
+      text-align: left;
+    }
+
+
+    /* ============================================================
+       SUB MENU BOXES
+       ============================================================ */
+
+    .sub-item {
+      display: flex;
+      align-items: center;
+      border: 1px solid #17202a;
+      padding: 20px 15px;
+      margin-bottom: 15px;
+      font-size: 26px;
+      text-decoration: none;
+      color: #17202a;
+      background: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .sub-item:hover {
+      background: #f3f5f7;
+    }
+
+
+    /* ============================================================
+       FORMS & UTILITIES
+       ============================================================ */
+
+    .card {
+      background: #fff;
+      border: 1px solid #e0e5e9;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid #cbd2d8;
+      padding: 12px 14px;
+      font-size: 16px;
+      height: 50px;
+      font-family: inherit;
+    }
+
+    button.action-btn {
+      width: 100%;
+      min-height: 50px;
+      border: 0;
+      padding: 12px 16px;
+      font-weight: 700;
+      margin-top: 10px;
+      cursor: pointer;
+      background: #263746;
+      color: #fff;
+    }
+
+    button.action-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .secondary {
+      background: #e9edf0 !important;
+      color: #263746 !important;
+    }
+
+    .masuk {
+      background: #24734a !important;
+      font-size: 18px !important;
+    }
+
+    .keluar {
+      background: #a64b3b !important;
+      font-size: 18px !important;
+    }
+
+
+    /* ============================================================
+       MESSAGES
+       ============================================================ */
+
+    .message {
+      padding: 12px;
+      margin-bottom: 14px;
+      border: 1px solid #cbd2d8;
+    }
+
+    .message.error {
+      background: #fff0ee;
+      border-color: #f5c2c7;
+      color: #842029;
+    }
+
+    .message.success {
+      background: #edf8f1;
+      border-color: #badbcc;
+      color: #0f5132;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+
+    footer {
+      text-align: center;
+      color: #7b858d;
+      padding: 20px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <main class="app">
+
+    <div class="header-box">
+      <h1>Judul</h1>
+    </div>
+
+
+    <section id="message" class="message hidden"></section>
+
+
+    <!-- ========================================================
+         LAYAR LOGIN
+         Hanya muncul jika belum verifikasi
+         ======================================================== -->
+
+    <section id="setupView" class="card">
+
+      <div
+        style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;"
+      >
+        <label
+          for="nip"
+          style="font-weight: bold; font-size: 16px;"
+        >
+          NIP :
+        </label>
+
+        <input
+          id="nip"
+          type="text"
+          inputmode="numeric"
+          style="flex: 1; margin: 0;"
+          placeholder="Ketik NIP Anda"
+        >
+      </div>
+
+
+      <button
+        id="cekBtn"
+        class="action-btn"
+        style="margin-top: 0;"
+      >
+        CEK NIP
+      </button>
+
+
+      <div id="dataPegawai" class="hidden">
+
+        <div
+          style="margin: 20px 0; line-height: 2; font-size: 16px;"
+        >
+
+          <div style="display: flex;">
+            <span style="width: 80px;">Nama</span>:
+            <strong
+              id="lblNama"
+              style="margin-left: 8px;"
+            ></strong>
+          </div>
+
+          <div style="display: flex;">
+            <span style="width: 80px;">Bagian</span>:
+            <strong
+              id="lblBagian"
+              style="margin-left: 8px;"
+            ></strong>
+          </div>
+
+          <div style="display: flex;">
+            <span style="width: 80px;">Jabatan</span>:
+            <strong
+              id="lblJabatan"
+              style="margin-left: 8px;"
+            ></strong>
+          </div>
+
+        </div>
+
+
+        <div
+          style="display: flex; gap: 10px; margin-top: 20px;"
+        >
+          <button
+            id="simpanBtn"
+            class="action-btn"
+            style="flex: 1;"
+          >
+            Simpan
+          </button>
+
+          <button
+            id="ulangiBtn"
+            class="action-btn secondary"
+            style="flex: 1;"
+          >
+            Ulangi
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================================================
+         LAYAR UTAMA APLIKASI
+         ======================================================== -->
+
+    <section id="attendanceView" class="hidden">
+
+      <!-- Header Informasi Pegawai -->
+      <div class="user-info-bar">
+        <span id="headerUser">
+          Nama - Bagian - Jabatan
+        </span>
+
+        <span id="headerDate">
+          Tgl.
+        </span>
+      </div>
+
+
+      <!-- Tombol Navigasi 4 Tab -->
+      <div class="tabs">
+
+        <button
+          class="tab-btn active"
+          data-tab="absen"
+        >
+          Absen
+        </button>
+
+        <button
+          class="tab-btn"
+          data-tab="perda"
+        >
+          Perda
+        </button>
+
+        <button
+          class="tab-btn"
+          data-tab="sop"
+        >
+          SOP
+        </button>
+
+        <button
+          class="tab-btn"
+          data-tab="info"
+        >
+          Info
+        </button>
+
+      </div>
+
+
+      <!-- ======================================================
+           TAB ABSENSI
+           ====================================================== -->
+
+      <div
+        id="tab-absen"
+        class="tab-content active"
+      >
+
+        <div
+          class="card"
+          style="border: none; padding: 0;"
+        >
+          <p
+            id="gpsStatus"
+            style="font-size: 14px; margin-top: 0;"
+          >
+            Lokasi belum diperiksa.
+          </p>
+
+          <button
+            id="gpsBtn"
+            class="action-btn secondary"
+          >
+            CEK / AKTIFKAN GPS
+          </button>
+        </div>
+
+
+        <button
+          id="masukBtn"
+          class="action-btn masuk"
+        >
+          ABSEN MASUK
+        </button>
+
+        <button
+          id="keluarBtn"
+          class="action-btn keluar"
+        >
+          ABSEN KELUAR
+        </button>
+
+
+        <div
+          id="attendanceMessage"
+          class="message hidden"
+          style="margin-top: 15px;"
+        ></div>
+
+      </div>
+
+
+      <!-- ======================================================
+           TAB DINAMIS
+           Digunakan oleh Perda, SOP, dan Info
+           ====================================================== -->
+
+      <div
+        id="tab-dynamic"
+        class="tab-content"
+      >
+
+        <p
+          id="dynamicDesc"
+          class="dynamic-desc"
+        >
+          Memuat data...
+        </p>
+
+
+        <!-- Daftar kotak Sub -->
+        <div id="dynamicList"></div>
+
+      </div>
+
+    </section>
+
+
+    <footer>
+      Digital Guide SATPOL PP &copy; 2026
+    </footer>
+
+  </main>
+
+
+  <script>
+    // ==========================================================
+    // API CONFIGURATION
+    // ==========================================================
+
+    // PENTING:
+    // Ganti dengan URL Web App Apps Script Anda
+    // yang baru dari Google Apps Script.
+
+    const API_URL =
+      "https://script.google.com/macros/s/AKfycbxS2KVFhhD60FYMuRnCNlC3xfhVrdg5K1WNEbPljEh3aPb_WaUuYqYfXFaSaOm57R2Ifg/exec";
+
+    const NIP_KEY = "absensi_v5_nip";
+    const DEV_KEY = "absensi_v5_device";
+    const VERIFIED_KEY = "absensi_v5_verified";
+    const EMPLOYEE_KEY = "absensi_v5_employee";
+
+
+    // ==========================================================
+    // GLOBAL VARIABLES
+    // ==========================================================
+
+    let pending = null;
+
+    const $ = id =>
+      document.getElementById(id);
+
+
+    // ==========================================================
+    // INITIALIZATION
+    // ==========================================================
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      init
+    );
+
+
+    async function init() {
+
+      [
+        "cekBtn",
+        "simpanBtn",
+        "ulangiBtn",
+        "gpsBtn",
+        "masukBtn",
+        "keluarBtn"
+      ].forEach(id => {
+        $(id)?.addEventListener(
+          "click",
+          () => handlers[id]()
+        );
+      });
+
+
+      document
+        .querySelectorAll(".tab-btn")
+        .forEach(btn => {
+          btn.addEventListener(
+            "click",
+            e => switchTab(
+              e.target.dataset.tab
+            )
+          );
+        });
+
+
+      const nip =
+        localStorage.getItem(NIP_KEY);
+
+      const deviceId =
+        localStorage.getItem(DEV_KEY);
+
+
+      if (!nip || !deviceId) {
+        showVerify();
+        return;
+      }
+
+
+      try {
+
+        const result = await api({
+          action: "getSession",
+          nip,
+          deviceId
+        });
+
+
+        if (result.ok) {
+          saveSession(result.employee);
+          showAttendance(result.employee);
+          return;
+        }
+
+
+        clearSession();
+        showVerify();
+
+        msg(
+          result.message,
+          "error"
+        );
+
+      } catch (error) {
+
+        const cachedEmployee =
+          loadCachedEmployee();
+
+
+        if (cachedEmployee) {
+
+          showAttendance(
+            cachedEmployee
+          );
+
+          msg(
+            "Sesi tersimpan. Server offline.",
+            "error"
+          );
+
+        } else {
+
+          showVerify();
+
+          msg(
+            error.message,
+            "error"
+          );
+        }
+      }
+    }
+
+
+    // ==========================================================
+    // EVENT HANDLERS
+    // ==========================================================
+
+    const handlers = {
+      cekBtn: verifyNip,
+      simpanBtn: confirmVerification,
+      ulangiBtn: resetSetup,
+      gpsBtn: checkGps,
+      masukBtn: () =>
+        attendance("MASUK"),
+      keluarBtn: () =>
+        attendance("KELUAR")
+    };
+
+
+    // ==========================================================
+    // DEVICE
+    // ==========================================================
+
+    function device() {
+
+      let deviceId =
+        localStorage.getItem(DEV_KEY);
+
+
+      if (!deviceId) {
+
+        deviceId =
+          "DEV-" +
+          (
+            crypto.randomUUID
+              ? crypto.randomUUID()
+              : Math.random()
+                  .toString(36)
+                  .slice(2) +
+                Date.now()
+          );
+
+
+        localStorage.setItem(
+          DEV_KEY,
+          deviceId
+        );
+      }
+
+
+      return deviceId;
+    }
+
+
+    // ==========================================================
+    // VERIFY NIP
+    // ==========================================================
+
+    async function verifyNip() {
+
+      const nip =
+        $("nip").value.trim();
+
+
+      if (!nip) {
+        return msg(
+          "NIP wajib diisi.",
+          "error"
+        );
+      }
+
+
+      busy(
+        "cekBtn",
+        true,
+        "Memeriksa..."
+      );
+
+
+      try {
+
+        const result = await api({
+          action: "verifyNip",
+          nip,
+          deviceId: device()
+        });
+
+
+        if (!result.ok) {
+          return msg(
+            result.message,
+            "error"
+          );
+        }
+
+
+        pending =
+          result.employee;
+
+
+        $("lblNama").textContent =
+          pending.nama;
+
+        $("lblBagian").textContent =
+          pending.bagian;
+
+        $("lblJabatan").textContent =
+          pending.jabatan;
+
+
+        $("cekBtn")
+          .classList
+          .add("hidden");
+
+        $("dataPegawai")
+          .classList
+          .remove("hidden");
+
+        $("nip").disabled = true;
+
+
+        msg("", "");
+
+      } catch (error) {
+
+        msg(
+          error.message,
+          "error"
+        );
+
+      } finally {
+
+        busy(
+          "cekBtn",
+          false,
+          "CEK NIP"
+        );
+      }
+    }
+
+
+    // ==========================================================
+    // RESET SETUP
+    // ==========================================================
+
+    function resetSetup() {
+
+      pending = null;
+
+      $("nip").value = "";
+      $("nip").disabled = false;
+
+      $("dataPegawai")
+        .classList
+        .add("hidden");
+
+      $("cekBtn")
+        .classList
+        .remove("hidden");
+
+      msg("", "");
+    }
+
+
+    // ==========================================================
+    // CONFIRM VERIFICATION
+    // ==========================================================
+
+    async function confirmVerification() {
+
+      if (!pending) {
+        return;
+      }
+
+
+      busy(
+        "simpanBtn",
+        true,
+        "Menyimpan..."
+      );
+
+
+      try {
+
+        const result =
+          await api({
+            action:
+              "confirmVerification",
+
+            nip:
+              pending.nip,
+
+            deviceId:
+              device()
+          });
+
+
+        if (!result.ok) {
+          return msg(
+            result.message,
+            "error"
+          );
+        }
+
+
+        saveSession(
+          result.employee ||
+          pending
+        );
+
+
+        showAttendance(
+          result.employee ||
+          pending
+        );
+
+
+        msg(
+          "Verifikasi berhasil.",
+          "success"
+        );
+
+      } catch (error) {
+
+        msg(
+          error.message,
+          "error"
+        );
+
+      } finally {
+
+        busy(
+          "simpanBtn",
+          false,
+          "Simpan"
+        );
+      }
+    }
+
+
+    // ==========================================================
+    // SESSION
+    // ==========================================================
+
+    function saveSession(employee) {
+
+      if (
+        !employee ||
+        !employee.nip
+      ) {
+        return;
+      }
+
+
+      localStorage.setItem(
+        NIP_KEY,
+        employee.nip
+      );
+
+      localStorage.setItem(
+        VERIFIED_KEY,
+        "1"
+      );
+
+      localStorage.setItem(
+        EMPLOYEE_KEY,
+        JSON.stringify(employee)
+      );
+    }
+
+
+    function loadCachedEmployee() {
+
+      try {
+
+        const raw =
+          localStorage.getItem(
+            EMPLOYEE_KEY
+          );
+
+        return raw
+          ? JSON.parse(raw)
+          : null;
+
+      } catch (e) {
+
+        return null;
+      }
+    }
+
+
+    function clearSession() {
+
+      localStorage.removeItem(
+        NIP_KEY
+      );
+
+      localStorage.removeItem(
+        DEV_KEY
+      );
+
+      localStorage.removeItem(
+        VERIFIED_KEY
+      );
+
+      localStorage.removeItem(
+        EMPLOYEE_KEY
+      );
+
+
+      pending = null;
+    }
+
+
+    // ==========================================================
+    // VIEW
+    // ==========================================================
+
+    function showVerify() {
+
+      $("setupView")
+        .classList
+        .remove("hidden");
+
+      $("attendanceView")
+        .classList
+        .add("hidden");
+
+      resetSetup();
+    }
+
+
+    function showAttendance(employee) {
+
+      if (!employee) {
+        return showVerify();
+      }
+
+
+      $("setupView")
+        .classList
+        .add("hidden");
+
+      $("attendanceView")
+        .classList
+        .remove("hidden");
+
+
+      // Format Tanggal:
+      // "3 Okt 2026"
+
+      const dateStr =
+        new Date()
+          .toLocaleDateString(
+            "id-ID",
+            {
+              day: "numeric",
+              month: "short",
+              year: "numeric"
+            }
+          );
+
+
+      // Ambil nama panggilan
+      // (kata pertama)
+
+      const firstName =
+        employee.nama.split(" ")[0];
+
+
+      // Isi data ke Header
+      // Sesuai Wireframe
+
+      $("headerUser").textContent =
+        `${firstName} - ${employee.bagian} - ${employee.jabatan}`;
+
+      $("headerDate").textContent =
+        dateStr;
+
+
+      switchTab("absen");
+    }
+
+
+    // ==========================================================
+    // TAB NAVIGATION
+    // ==========================================================
+
+    function switchTab(tabName) {
+
+      document
+        .querySelectorAll(".tab-btn")
+        .forEach(b => {
+          b.classList.toggle(
+            "active",
+            b.dataset.tab === tabName
+          );
+        });
+
+
+      document
+        .querySelectorAll(".tab-content")
+        .forEach(c => {
+          c.classList.remove(
+            "active"
+          );
+        });
+
+
+      if (tabName === "absen") {
+
+        $("tab-absen")
+          .classList
+          .add("active");
+
+      } else {
+
+        $("tab-dynamic")
+          .classList
+          .add("active");
+
+        fetchDynamicContent(
+          tabName.toUpperCase()
+        );
+      }
+    }
+
+
+    // ==========================================================
+    // DYNAMIC CONTENT
+    // ==========================================================
+
+    async function fetchDynamicContent(type) {
+
+      $("dynamicDesc").textContent =
+        "Memuat informasi dari server...";
+
+      $("dynamicList").innerHTML = "";
+
+
+      try {
+
+        const res =
+          await api({
+            action: "getContent",
+            contentType: type
+          });
+
+
+        if (res.ok) {
+
+          $("dynamicDesc").textContent =
+            res.deskripsi;
+
+
+          // Merender kotak-kotak
+          // sub-menu
+
+          $("dynamicList").innerHTML =
+            res.items
+              .map(
+                item => `
+                  <a
+                    href="${item.url || "#"}"
+                    target="_blank"
+                    rel="noopener"
+                    class="sub-item"
+                  >
+                    ${esc(item.judul)}
+                  </a>
+                `
+              )
+              .join("");
+
+        } else {
+
+          $("dynamicDesc").textContent =
+            res.message;
+        }
+
+      } catch (e) {
+
+        $("dynamicDesc").textContent =
+          "Gagal memuat data. Periksa koneksi internet Anda.";
+      }
+    }
+
+
+    // ==========================================================
+    // ATTENDANCE
+    // ==========================================================
+
+    async function attendance(type) {
+
+      const nip =
+        localStorage.getItem(
+          NIP_KEY
+        );
+
+      const deviceId =
+        localStorage.getItem(
+          DEV_KEY
+        );
+
+
+      if (!nip || !deviceId) {
+        return showVerify();
+      }
+
+
+      $("gpsStatus").textContent =
+        "Meminta lokasi GPS...";
+
+
+      $("masukBtn").disabled = true;
+      $("keluarBtn").disabled = true;
+
+
+      try {
+
+        const positionData =
+          await position();
+
+
+        const result =
+          await api({
+            action:
+              "submitAttendance",
+
+            type,
+            nip,
+            deviceId,
+
+            latitude:
+              positionData.coords.latitude,
+
+            longitude:
+              positionData.coords.longitude,
+
+            accuracy:
+              positionData.coords.accuracy,
+
+            browser:
+              navigator.userAgent,
+
+            os: os()
+          });
+
+
+        attendanceMsg(
+          result.message,
+          result.ok
+            ? "success"
+            : "error"
+        );
+
+      } catch (error) {
+
+        attendanceMsg(
+          error.message,
+          "error"
+        );
+
+      } finally {
+
+        $("masukBtn").disabled =
+          false;
+
+        $("keluarBtn").disabled =
+          false;
+      }
+    }
+
+
+    // ==========================================================
+    // CHECK GPS
+    // ==========================================================
+
+    async function checkGps() {
+
+      busy(
+        "gpsBtn",
+        true,
+        "Mencari..."
+      );
+
+
+      try {
+
+        const pos =
+          await position();
+
+
+        $("gpsStatus").textContent =
+          "GPS aktif. Akurasi ±" +
+          Math.round(
+            pos.coords.accuracy
+          ) +
+          " meter.";
+
+      } catch (error) {
+
+        $("gpsStatus").textContent =
+          "GPS gagal: " +
+          error.message;
+
+      } finally {
+
+        busy(
+          "gpsBtn",
+          false,
+          "CEK / AKTIFKAN GPS"
+        );
+      }
+    }
+
+
+    // ==========================================================
+    // GEOLOCATION
+    // ==========================================================
+
+    function position() {
+
+      return new Promise(
+        (resolve, reject) => {
+
+          if (!navigator.geolocation) {
+            return reject(
+              Error(
+                "GPS tidak didukung perangkat ini."
+              )
+            );
+          }
+
+
+          navigator.geolocation.getCurrentPosition(
+            resolve,
+
+            error => {
+              reject(
+                Error(
+                  error.code === 1
+                    ? "Izin lokasi ditolak."
+                    : error.code === 2
+                    ? "Lokasi mati."
+                    : "Timeout."
+                )
+              );
+            },
+
+            {
+              enableHighAccuracy: true,
+              timeout: 15000,
+              maximumAge: 0
+            }
+          );
+        }
+      );
+    }
+
+
+    // ==========================================================
+    // API REQUEST
+    // ==========================================================
+
+    async function api(payload) {
+
+      if (
+        API_URL.includes(
+          "PASTE_APPS_SCRIPT"
+        )
+      ) {
+        throw Error(
+          "API_URL belum diisi dengan URL dari Google Apps Script."
+        );
+      }
+
+
+      const response =
+        await fetch(
+          API_URL,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "text/plain;charset=utf-8"
+            },
+
+            body:
+              JSON.stringify(payload)
+          }
+        );
+
+
+      const text =
+        await response.text();
+
+
+      try {
+
+        return JSON.parse(text);
+
+      } catch (error) {
+
+        throw Error(
+          "Respons gagal diproses."
+        );
+      }
+    }
+
+
+    // ==========================================================
+    // UTILITY
+    // ==========================================================
+
+    function esc(value) {
+
+      return String(
+        value ?? ""
+      ).replace(
+        /[&<>"']/g,
+
+        m =>
+          ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+          }[m])
+      );
+    }
+
+
+    function busy(
+      id,
+      isBusy,
+      text
+    ) {
+
+      $(id).disabled =
+        isBusy;
+
+      $(id).textContent =
+        text;
+    }
+
+
+    function msg(
+      text,
+      type
+    ) {
+
+      const el =
+        $("message");
+
+      el.textContent =
+        text || "";
+
+      el.className =
+        text
+          ? "message " + type
+          : "message hidden";
+    }
+
+
+    function attendanceMsg(
+      text,
+      type
+    ) {
+
+      const el =
+        $("attendanceMessage");
+
+      el.textContent =
+        text || "";
+
+      el.className =
+        text
+          ? "message " + type
+          : "message hidden";
+    }
+
+
+    // ==========================================================
+    // OPERATING SYSTEM
+    // ==========================================================
+
+    function os() {
+
+      const ua =
+        navigator.userAgent;
+
+
+      if (/Android/i.test(ua)) {
+        return "Android";
+      }
+
+
+      if (
+        /iPhone|iPad|iPod/i.test(ua)
+      ) {
+        return "iOS";
+      }
+
+
+      if (/Windows/i.test(ua)) {
+        return "Windows";
+      }
+
+
+      return "Unknown";
+    }
+  </script>
+
+</body>
+
+</html>
+```
