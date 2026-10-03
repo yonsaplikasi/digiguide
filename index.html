@@ -1394,38 +1394,95 @@
     // ATTENDANCE
     // ==========================================================
     async function attendance(type) {
-      const nip = localStorage.getItem(NIP_KEY);
-      const deviceId = localStorage.getItem(DEV_KEY);
+  const nip = localStorage.getItem(NIP_KEY);
+  const deviceId = localStorage.getItem(DEV_KEY);
 
-      if (!nip || !deviceId) return showVerify();
+  if (!nip || !deviceId) return showVerify();
 
-      $("gpsStatus").textContent = "Meminta lokasi GPS...";
-      $("masukBtn").disabled = true;
-      $("keluarBtn").disabled = true;
+  $("gpsStatus").textContent = "Meminta lokasi GPS...";
+  $("masukBtn").disabled = true;
+  $("keluarBtn").disabled = true;
 
-      try {
-        const positionData = await position();
+  try {
+    const positionData = await position();
 
-        const result = await api({
-          action: "submitAttendance",
-          type,
-          nip,
-          deviceId,
-          latitude: positionData.coords.latitude,
-          longitude: positionData.coords.longitude,
-          accuracy: positionData.coords.accuracy,
-          browser: navigator.userAgent,
-          os: os()
-        });
+    const accuracy = Math.round(positionData.coords.accuracy);
 
-        attendanceMsg(result.message, result.ok ? "success" : "error");
-      } catch (error) {
-        attendanceMsg(error.message, "error");
-      } finally {
-        $("masukBtn").disabled = false;
-        $("keluarBtn").disabled = false;
+    $("gpsStatus").textContent =
+      "GPS aktif. Akurasi ±" + accuracy + " meter.";
+
+    const result = await api({
+      action: "submitAttendance",
+      type,
+      nip,
+      deviceId,
+      latitude: positionData.coords.latitude,
+      longitude: positionData.coords.longitude,
+      accuracy: positionData.coords.accuracy,
+      browser: navigator.userAgent,
+      os: os()
+    });
+
+    /*
+     * Jika absensi berhasil
+     */
+    if (result.ok) {
+      attendanceMsg(
+        result.message || "Absensi berhasil.",
+        "success"
+      );
+      return;
+    }
+
+    /*
+     * Jika ditolak karena di luar radius
+     */
+    if (
+      result.distance !== undefined &&
+      result.radius !== undefined
+    ) {
+      const jarak = Math.round(Number(result.distance));
+      const radius = Math.round(Number(result.radius));
+
+      if (
+        Number.isFinite(jarak) &&
+        Number.isFinite(radius)
+      ) {
+        const selisih = Math.max(0, jarak - radius);
+
+        attendanceMsg(
+          "Absen ditolak.\n\n" +
+          "Jarak Anda dari kantor: " + jarak + " meter\n" +
+          "Radius absensi: " + radius + " meter\n" +
+          "Di luar radius: " + selisih + " meter\n" +
+          "Akurasi GPS: ±" + accuracy + " meter",
+          "error"
+        );
+
+        return;
       }
     }
+
+    /*
+     * Jika error lain
+     */
+    attendanceMsg(
+      result.message || "Absensi ditolak.",
+      "error"
+    );
+
+  } catch (error) {
+
+    attendanceMsg(
+      error.message || "Gagal melakukan absensi.",
+      "error"
+    );
+
+  } finally {
+    $("masukBtn").disabled = false;
+    $("keluarBtn").disabled = false;
+  }
+}
 
     async function checkGps(autoCheck = false) {
       if (!navigator.geolocation) {
