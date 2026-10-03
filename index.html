@@ -754,8 +754,8 @@
     </div>
 
     <div class="ijin-card-desc">
-      Pengajuan ijin sakit dengan melampirkan
-      foto SKD.
+      Pengajuan sakit, cuti, atau tidak masuk.
+  Foto SKD dapat dilampirkan jika diperlukan.
     </div>
 
     <button
@@ -1642,70 +1642,188 @@
     }
 
     async function submitIjinSakit() {
-      const nip = localStorage.getItem(NIP_KEY);
-      const deviceId = localStorage.getItem(DEV_KEY);
-      const mulai = $("sakitTanggalMulai").value;
-      const selesai = $("sakitTanggalSelesai").value;
-      const alasan = $("sakitAlasan").value.trim();
-      const file = $("skdFile").files?.[0];
+  const nip = localStorage.getItem(NIP_KEY);
+  const deviceId = localStorage.getItem(DEV_KEY);
+  const mulai = $("sakitTanggalMulai").value;
+  const selesai = $("sakitTanggalSelesai").value;
+  const alasan = $("sakitAlasan").value.trim();
+  const file = $("skdFile").files?.[0];
 
-      if (!nip || !deviceId) return showVerify();
-      if (!mulai || !selesai) return setUploadStatus("Tanggal mulai dan selesai wajib diisi.", "error");
-      if (selesai < mulai) return setUploadStatus("Tanggal selesai tidak boleh lebih awal dari tanggal mulai.", "error");
-      if (!alasan) return setUploadStatus("Alasan / keterangan sakit wajib diisi.", "error");
-      if (!file) return setUploadStatus("Foto SKD wajib dilampirkan.", "error");
+  if (!nip || !deviceId) return showVerify();
 
-      const allowed = ["image/jpeg", "image/png", "image/webp"];
-      if (!allowed.includes(file.type)) return setUploadStatus("Format SKD harus JPG, PNG, atau WEBP.", "error");
-      if (file.size > 5 * 1024 * 1024) return setUploadStatus("Ukuran foto SKD maksimal 5 MB.", "error");
+  if (!mulai || !selesai) {
+    return setUploadStatus(
+      "Tanggal mulai dan selesai wajib diisi.",
+      "error"
+    );
+  }
 
-      busy("submitIjinSakitBtn", true, "Mengunggah SKD...");
-      setUploadStatus("Mengunggah foto SKD...", "");
+  if (selesai < mulai) {
+    return setUploadStatus(
+      "Tanggal selesai tidak boleh lebih awal dari tanggal mulai.",
+      "error"
+    );
+  }
 
-      try {
-        const base64 = await fileToBase64(file);
+  if (!alasan) {
+    return setUploadStatus(
+      "Alasan / keterangan tidak masuk wajib diisi.",
+      "error"
+    );
+  }
 
-        const upload = await api({
-          action: "uploadSKD",
-          nip,
-          deviceId,
-          fileBase64: base64,
-          mimeType: file.type,
-          fileName: file.name
-        });
+  // ==========================================================
+  // SKD OPSIONAL
+  // Jika user memilih SKD, lakukan validasi dan upload.
+  // Jika tidak memilih SKD, pengajuan tetap bisa dikirim.
+  // ==========================================================
 
-        if (!upload.ok) {
-          return setUploadStatus(upload.message || "Upload SKD gagal.", "error");
-        }
+  if (file) {
+    const allowed = [
+      "image/jpeg",
+      "image/png",
+      "image/webp"
+    ];
 
-        setUploadStatus("SKD berhasil diunggah. Menyimpan pengajuan...", "success");
-
-        const result = await api({
-  action: "submitIjin",
-  jenisIjin: "SAKIT",
-  nip,
-  deviceId,
-  tanggalMulai: mulai,
-  tanggalSelesai: selesai,
-  alasanAtauKeperluan: alasan,
-  fileSKD: upload.fileUrl || upload.fileId || "SKD_TERUNGGAH",
-  browser: navigator.userAgent,
-  os: os()
-});
-
-        if (!result.ok) {
-          return setUploadStatus(result.message || "Pengajuan ijin sakit gagal disimpan.", "error");
-        }
-
-        setUploadStatus(result.message || "Pengajuan ijin sakit berhasil dikirim.", "success");
-        $("sakitAlasan").value = "";
-        $("skdFile").value = "";
-      } catch (error) {
-        setUploadStatus(error.message, "error");
-      } finally {
-        busy("submitIjinSakitBtn", false, "KIRIM IJIN SAKIT");
-      }
+    if (!allowed.includes(file.type)) {
+      return setUploadStatus(
+        "Format SKD harus JPG, PNG, atau WEBP.",
+        "error"
+      );
     }
+
+    if (file.size > 5 * 1024 * 1024) {
+      return setUploadStatus(
+        "Ukuran foto SKD maksimal 5 MB.",
+        "error"
+      );
+    }
+  }
+
+  busy(
+    "submitIjinSakitBtn",
+    true,
+    file ? "Mengunggah SKD..." : "Mengirim..."
+  );
+
+  try {
+
+    // ========================================================
+    // FILE SKD
+    // ========================================================
+
+    let fileSKD = "";
+
+    // Upload SKD HANYA jika user memilih file
+    if (file) {
+
+      setUploadStatus(
+        "Mengunggah foto SKD...",
+        ""
+      );
+
+      const base64 = await fileToBase64(file);
+
+      const upload = await api({
+        action: "uploadSKD",
+        nip,
+        deviceId,
+        fileBase64: base64,
+        mimeType: file.type,
+        fileName: file.name
+      });
+
+      if (!upload.ok) {
+        return setUploadStatus(
+          upload.message || "Upload SKD gagal.",
+          "error"
+        );
+      }
+
+      fileSKD =
+        upload.fileUrl ||
+        upload.fileId ||
+        "SKD_TERUNGGAH";
+
+      setUploadStatus(
+        "SKD berhasil diunggah. Menyimpan pengajuan...",
+        "success"
+      );
+
+    } else {
+
+      setUploadStatus(
+        "Tidak ada SKD. Menyimpan pengajuan...",
+        ""
+      );
+
+    }
+
+
+    // ========================================================
+    // SIMPAN IJIN
+    // ========================================================
+
+    const result = await api({
+      action: "submitIjin",
+      jenisIjin: "SAKIT",
+      nip,
+      deviceId,
+      tanggalMulai: mulai,
+      tanggalSelesai: selesai,
+
+      // Nama field harus sesuai dengan Apps Script
+      alasanAtauKeperluan: alasan,
+
+      // Boleh kosong jika tidak ada SKD
+      fileSKD: fileSKD,
+
+      browser: navigator.userAgent,
+      os: os()
+    });
+
+
+    // ========================================================
+    // HASIL
+    // ========================================================
+
+    if (!result.ok) {
+      return setUploadStatus(
+        result.message ||
+        "Pengajuan ijin tidak masuk gagal disimpan.",
+        "error"
+      );
+    }
+
+    setUploadStatus(
+      result.message ||
+      "Pengajuan ijin tidak masuk berhasil dikirim.",
+      "success"
+    );
+
+    $("sakitAlasan").value = "";
+    $("skdFile").value = "";
+
+    $("skdPreview").classList.add("hidden");
+    $("skdPreviewImg").removeAttribute("src");
+    $("skdFileInfo").textContent = "";
+
+  } catch (error) {
+
+    setUploadStatus(
+      error.message || "Terjadi kesalahan.",
+      "error"
+    );
+
+  } finally {
+
+    busy(
+      "submitIjinSakitBtn",
+      false,
+      "KIRIM IJIN TIDAK MASUK"
+    );
+  }
+}
 
     function fileToBase64(file) {
       return new Promise((resolve, reject) => {
