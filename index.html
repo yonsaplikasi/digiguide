@@ -22,21 +22,26 @@
       background: #fff;
     }
     .header-box {
-      border: 1px solid #17202a;
-      padding: 30px 10px;
-      text-align: center;
-      margin-bottom: 10px;
-    }
+  border: 1px solid #B8D5D9;
+  padding: 30px 10px;
+  text-align: center;
+  margin-bottom: 10px;
+
+  background: #E8F3F5;
+  border-radius: 10px;
+}
     .header-box h1 {
-      margin: 0;
-      font-size: 32px;
-      font-weight: 500;
-    }
+  margin: 0;
+  font-size: 32px;
+  font-weight: 600;
+  color: #183B43;
+}
     .header-subtitle {
-      margin-top: 6px;
-      font-size: 14px;
-      font-weight: 400;
-    }
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #45666D;
+}
     .clock-box {
       border: 1px solid #17202a;
       padding: 20px 10px;
@@ -218,6 +223,41 @@
       color: #0f5132;
     }
 
+/* ========================================================
+   LOADING INDICATOR
+   ======================================================== */
+
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  margin: 14px 0;
+  padding: 10px;
+
+  font-size: 13px;
+  color: #45666D;
+}
+
+.loading-spinner {
+  width: 18px;
+  height: 18px;
+
+  border: 3px solid #D5E5E8;
+  border-top-color: #5D929C;
+
+  border-radius: 50%;
+
+  animation: digitalGuideSpin 0.8s linear infinite;
+}
+
+@keyframes digitalGuideSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+    
     .hidden {
       display: none !important;
     }
@@ -545,6 +585,13 @@
         CEK NIP
       </button>
 
+<div id="verifyLoading" class="loading-indicator hidden">
+  <span class="loading-spinner"></span>
+  <span id="verifyLoadingText">
+    Memproses, harap tunggu...
+  </span>
+</div>
+      
       <div id="dataPegawai" class="hidden">
 
         <div
@@ -1402,11 +1449,15 @@
 
       }
 
-      busy(
-        "cekBtn",
-        true,
-        "Memeriksa..."
-      );
+     busy(
+  "cekBtn",
+  true,
+  "Memeriksa..."
+);
+
+showVerifyLoading(
+  "Memeriksa data NIP, harap tunggu..."
+);
 
       try {
 
@@ -1475,15 +1526,17 @@
 
       } finally {
 
-        busy(
-          "cekBtn",
-          false,
-          "CEK NIP"
-        );
+  busy(
+    "cekBtn",
+    false,
+    "CEK NIP"
+  );
 
-      }
+  hideVerifyLoading();
 
-    }
+}
+
+    
 
     function resetSetup() {
 
@@ -1520,10 +1573,14 @@
         return;
 
       busy(
-        "simpanBtn",
-        true,
-        "Menyimpan..."
-      );
+  "simpanBtn",
+  true,
+  "Menyimpan..."
+);
+
+showVerifyLoading(
+  "Menyimpan verifikasi, harap tunggu..."
+);
 
       try {
 
@@ -1574,13 +1631,15 @@
 
       } finally {
 
-        busy(
-          "simpanBtn",
-          false,
-          "Simpan"
-        );
+  busy(
+    "simpanBtn",
+    false,
+    "Simpan"
+  );
 
-      }
+  hideVerifyLoading();
+
+}
 
     }
 
@@ -4194,35 +4253,94 @@ function setDinasStatus(
     }
 
     function esc(
-      value
-    ) {
+  value
+) {
 
-      return String(
-        value ?? ""
-      ).replace(
-        /[&<>"']/g,
-        m =>
-          ({
-            "&":
-              "&amp;",
-            "<":
-              "&lt;",
-            ">":
-              "&gt;",
-            '"':
-              "&quot;",
-            "'":
-              "&#39;"
-          }[m])
-      );
+  return String(
+    value ?? ""
+  ).replace(
+    /[&<>"']/g,
+    m =>
+      ({
+        "&":
+          "&amp;",
+        "<":
+          "&lt;",
+        ">":
+          "&gt;",
+        '"':
+          "&quot;",
+        "'":
+          "&#39;"
+      }[m])
+  );
 
-    }
+}
 
-    function busy(
-      id,
-      isBusy,
-      text
-    ) {
+
+/* ==========================================================
+   LOADING VERIFIKASI
+========================================================== */
+
+function showVerifyLoading(text) {
+
+  const loading =
+    $("verifyLoading");
+
+  const label =
+    $("verifyLoadingText");
+
+  if (!loading)
+    return;
+
+  if (label) {
+
+    label.textContent =
+      text ||
+      "Memproses, harap tunggu...";
+
+  }
+
+  loading.classList
+    .remove("hidden");
+
+}
+
+
+function hideVerifyLoading() {
+
+  const loading =
+    $("verifyLoading");
+
+  if (!loading)
+    return;
+
+  loading.classList
+    .add("hidden");
+
+}
+
+
+/* ==========================================================
+   BUSY BUTTON
+========================================================== */
+
+function busy(
+  id,
+  isBusy,
+  text
+) {
+
+  if (!$(id))
+    return;
+
+  $(id).disabled =
+    isBusy;
+
+  $(id).textContent =
+    text;
+
+}
 
       if (!$(id))
         return;
