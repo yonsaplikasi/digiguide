@@ -386,22 +386,11 @@
     }
 
     .surat-item {
-      border: 1px solid #cbd2d8;
-      padding: 15px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      background: #fff;
-      transition: all 0.2s;
-    }
-
-    .surat-item:hover {
-      background: #f8fafb;
-    }
-
-    .surat-item.selected {
-      border-color: #0088cc;
-      background: #eef8fd;
-      box-shadow: 0 0 0 1px #0088cc;
+  border: 1px solid #cbd2d8;
+  padding: 15px;
+  margin-bottom: 12px;
+  background: #fff;
+}
     }
 
     .surat-item-row {
@@ -808,9 +797,9 @@
             </div>
 
             <div class="ijin-card-desc">
-              Pengajuan sakit, cuti, atau tidak masuk.
-              Foto SKD dapat dilampirkan jika diperlukan.
-            </div>
+  Pengajuan dinas luar. Surat Tugas akan
+  tampil setelah dibuat dan disetujui admin.
+</div>
 
             <button
               id="ijinSakitBtn"
@@ -3062,325 +3051,533 @@
     // ==========================================================
     // DINAS LUAR
     // ==========================================================
+// ==========================================================
+// DINAS LUAR
+// ==========================================================
 
-    async function openIjinDinas() {
+async function openIjinDinas() {
 
-      hideIjinViews();
+  hideIjinViews();
 
-      $("tab-absen")
-        .classList
-        .remove("active");
+  $("tab-absen")
+    .classList
+    .remove("active");
 
-      $("ijinDinasView")
-        .classList
-        .remove("hidden");
+  $("ijinDinasView")
+    .classList
+    .remove("hidden");
 
-      $("dinasTanggalMulai")
-        .value = "";
 
-      $("dinasTanggalSelesai")
-        .value = "";
+  // Bersihkan form
+  $("dinasTanggalMulai")
+    .value = "";
 
-      $("dinasKeperluan")
-        .value = "";
+  $("dinasTanggalSelesai")
+    .value = "";
 
-      $("dinasStatus")
-        .textContent = "";
+  $("dinasKeperluan")
+    .value = "";
+
+  $("dinasStatus")
+    .textContent = "";
+
+  $("suratTugasList")
+    .innerHTML =
+    `
+      <div class="ijin-status">
+        Memuat Surat Tugas yang disetujui...
+      </div>
+    `;
+
+
+  // Ambil Surat Tugas yang sudah ACC
+  await loadSuratTugas();
+
+}
+
+
+// ==========================================================
+// LOAD SURAT TUGAS
+// ==========================================================
+
+async function loadSuratTugas() {
+
+  const nip =
+    localStorage.getItem(
+      NIP_KEY
+    );
+
+  const deviceId =
+    localStorage.getItem(
+      DEV_KEY
+    );
+
+
+  if (
+    !nip ||
+    !deviceId
+  ) {
+    return showVerify();
+  }
+
+
+  try {
+
+    const res =
+      await api({
+
+        action:
+          "getSuratTugas",
+
+        nip,
+
+        deviceId
+
+      });
+
+
+    if (!res.ok) {
+
+      suratTugasData = [];
 
       $("suratTugasList")
-        .innerHTML = `
-          <div class="ijin-status">
-            Memuat Surat Tugas...
+        .innerHTML =
+        `
+          <div class="ijin-status error">
+            ${esc(
+              res.message ||
+              "Surat Tugas tidak tersedia."
+            )}
           </div>
         `;
 
-      await loadSuratTugas();
+      return;
 
     }
 
-    // ==========================================================
-    // LOAD SURAT TUGAS
-    // ==========================================================
 
-    async function loadSuratTugas() {
+    suratTugasData =
+      Array.isArray(
+        res.data
+      )
+        ? res.data
+        : (
+            Array.isArray(
+              res.suratTugas
+            )
+              ? res.suratTugas
+              : []
+          );
 
-      const nip =
-        localStorage.getItem(NIP_KEY);
 
-      const deviceId =
-        localStorage.getItem(DEV_KEY);
+    renderSuratTugas(
+      suratTugasData
+    );
 
-      if (!nip || !deviceId) {
-        return showVerify();
-      }
 
-      try {
+  } catch (error) {
 
-        const res = await api({
-          action: "getSuratTugas",
-          nip,
-          deviceId
-        });
+    suratTugasData = [];
 
-        if (!res.ok) {
+    $("suratTugasList")
+      .innerHTML =
+      `
+        <div class="ijin-status error">
+          ${esc(
+            error.message ||
+            "Surat Tugas gagal dimuat."
+          )}
+        </div>
+      `;
 
-          $("suratTugasList").innerHTML = `
-            <div class="ijin-status error">
-              ${esc(res.message || "Surat Tugas tidak tersedia.")}
+  }
+
+}
+
+
+// ==========================================================
+// RENDER SURAT TUGAS
+// ==========================================================
+
+function renderSuratTugas(
+  list
+) {
+
+  const container =
+    $("suratTugasList");
+
+
+  if (
+    !Array.isArray(list) ||
+    list.length === 0
+  ) {
+
+    container.innerHTML =
+      `
+        <div class="ijin-status">
+          Belum ada Surat Tugas yang disetujui.
+        </div>
+      `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    list
+      .map(
+        item => {
+
+          const nomor =
+            item.nomorSurat ||
+            item.nomor ||
+            item.Nomor_Surat ||
+            "-";
+
+
+          const keperluan =
+            item.keperluan ||
+            item.Keperluan ||
+            "-";
+
+
+          const mulai =
+            item.tanggalMulai ||
+            item.Tanggal_Mulai ||
+            "-";
+
+
+          const selesai =
+            item.tanggalSelesai ||
+            item.Tanggal_Selesai ||
+            "-";
+
+
+          const status =
+            item.status ||
+            item.Status ||
+            "ACC";
+
+
+          const fileUrl =
+            item.fileUrl ||
+            item.filePdf ||
+            item.url ||
+            item.URL ||
+            "";
+
+
+          return `
+
+            <div class="surat-item">
+
+              <div class="surat-item-row">
+
+                <span class="surat-item-label">
+                  Nomor Surat
+                </span>
+
+                <br>
+
+                ${esc(
+                  nomor
+                )}
+
+              </div>
+
+
+              <div class="surat-item-row">
+
+                <span class="surat-item-label">
+                  Keperluan
+                </span>
+
+                <br>
+
+                ${esc(
+                  keperluan
+                )}
+
+              </div>
+
+
+              <div class="surat-item-row">
+
+                <span class="surat-item-label">
+                  Periode
+                </span>
+
+                <br>
+
+                ${esc(
+                  mulai
+                )}
+
+                s.d.
+
+                ${esc(
+                  selesai
+                )}
+
+              </div>
+
+
+              <div class="surat-status">
+
+                Status:
+                ${esc(
+                  status
+                )}
+
+              </div>
+
+
+              ${
+                fileUrl
+                  ?
+
+                  `
+                    <a
+                      class="surat-download"
+                      href="${esc(fileUrl)}"
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      LIHAT / DOWNLOAD
+                    </a>
+                  `
+
+                  :
+
+                  `
+                    <div
+                      class="surat-download"
+                      style="
+                        opacity:.5;
+                        cursor:default;
+                        background:#9aa4ab;
+                      "
+                    >
+                      FILE TIDAK TERSEDIA
+                    </div>
+                  `
+              }
+
             </div>
+
           `;
 
-          return;
         }
+      )
+      .join("");
 
-        suratTugasData = Array.isArray(res.data)
-          ? res.data
-          : (Array.isArray(res.suratTugas) ? res.suratTugas : []);
+}
 
-        renderSuratTugas(suratTugasData);
 
-      } catch (error) {
+// ==========================================================
+// SUBMIT DINAS LUAR
+// ==========================================================
 
-        $("suratTugasList").innerHTML = `
-          <div class="ijin-status error">
-            ${esc(error.message || "Gagal memuat Surat Tugas.")}
-          </div>
-        `;
+async function submitIjinDinas() {
 
-      }
+  const nip =
+    localStorage.getItem(
+      NIP_KEY
+    );
 
-    }
+  const deviceId =
+    localStorage.getItem(
+      DEV_KEY
+    );
 
-    // ==========================================================
-    // RENDER SURAT TUGAS
-    // ==========================================================
 
-    function renderSuratTugas(list) {
+  const mulai =
+    $("dinasTanggalMulai")
+      .value;
 
-      const container = $("suratTugasList");
 
-      if (!Array.isArray(list) || list.length === 0) {
+  const selesai =
+    $("dinasTanggalSelesai")
+      .value;
 
-        container.innerHTML = `
-          <div class="ijin-status">
-            Belum ada Surat Tugas.
-          </div>
-        `;
 
-        return;
-      }
+  const keperluan =
+    $("dinasKeperluan")
+      .value
+      .trim();
 
-      container.innerHTML = list.map(item => {
 
-        const nomor =
-          item.nomorSurat ||
-          item.nomor ||
-          item.Nomor_Surat ||
-          "-";
+  if (
+    !nip ||
+    !deviceId
+  ) {
+    return showVerify();
+  }
 
-        const keperluan =
-          item.keperluan ||
-          item.Keperluan ||
-          "-";
 
-        const mulai =
-          item.tanggalMulai ||
-          item.Tanggal_Mulai ||
-          "-";
+  if (
+    !mulai ||
+    !selesai
+  ) {
 
-        const selesai =
-          item.tanggalSelesai ||
-          item.Tanggal_Selesai ||
-          "-";
+    return setDinasStatus(
+      "Tanggal mulai dan selesai wajib diisi.",
+      "error"
+    );
 
-        const status =
-          item.status ||
-          item.Status ||
-          "ACC";
+  }
 
-        const fileUrl =
-          item.fileUrl ||
-          item.filePdf ||
-          item.url ||
-          item.URL ||
-          "";
 
-        return `
-          <div class="surat-item">
+  if (
+    selesai < mulai
+  ) {
 
-            <div class="surat-item-row">
-              <span class="surat-item-label">
-                Nomor Surat
-              </span>
-              <br>
-              ${esc(nomor)}
-            </div>
+    return setDinasStatus(
+      "Tanggal selesai tidak boleh lebih awal dari tanggal mulai.",
+      "error"
+    );
 
-            <div class="surat-item-row">
-              <span class="surat-item-label">
-                Keperluan
-              </span>
-              <br>
-              ${esc(keperluan)}
-            </div>
+  }
 
-            <div class="surat-item-row">
-              <span class="surat-item-label">
-                Periode
-              </span>
-              <br>
-              ${esc(mulai)} s.d. ${esc(selesai)}
-            </div>
 
-            <div class="surat-status">
-              Status: ${esc(status)}
-            </div>
+  if (!keperluan) {
 
-            ${fileUrl ? `
-              <a
-                class="surat-download"
-                href="${esc(fileUrl)}"
-                target="_blank"
-                rel="noopener"
-              >
-                LIHAT / DOWNLOAD
-              </a>
-            ` : `
-              <div class="surat-download disabled-link">
-                FILE TIDAK TERSEDIA
-              </div>
-            `}
+    return setDinasStatus(
+      "Keperluan dinas luar wajib diisi.",
+      "error"
+    );
 
-          </div>
-        `;
+  }
 
-      }).join("");
 
-    }
+  busy(
+    "submitIjinDinasBtn",
+    true,
+    "Mengirim..."
+  );
 
-    // ==========================================================
-    // SUBMIT DINAS LUAR
-    // ==========================================================
 
-    async function submitIjinDinas() {
+  setDinasStatus(
+    "Menyimpan pengajuan dinas luar...",
+    ""
+  );
 
-      const nip =
-        localStorage.getItem(NIP_KEY);
 
-      const deviceId =
-        localStorage.getItem(DEV_KEY);
+  try {
 
-      const mulai =
-        $("dinasTanggalMulai").value;
+    const result =
+      await api({
 
-      const selesai =
-        $("dinasTanggalSelesai").value;
+        action:
+          "submitIjin",
 
-      const keperluan =
-        $("dinasKeperluan")
-          .value
-          .trim();
+        jenisIjin:
+          "DINAS_LUAR",
 
-      if (!nip || !deviceId) {
-        return showVerify();
-      }
+        nip,
 
-      if (!mulai || !selesai) {
-        return setDinasStatus(
-          "Tanggal mulai dan selesai wajib diisi.",
-          "error"
-        );
-      }
+        deviceId,
 
-      if (selesai < mulai) {
-        return setDinasStatus(
-          "Tanggal selesai tidak boleh lebih awal dari tanggal mulai.",
-          "error"
-        );
-      }
+        tanggalMulai:
+          mulai,
 
-      if (!keperluan) {
-        return setDinasStatus(
-          "Keperluan dinas luar wajib diisi.",
-          "error"
-        );
-      }
+        tanggalSelesai:
+          selesai,
 
-      busy(
-        "submitIjinDinasBtn",
-        true,
-        "Mengirim..."
+        alasanAtauKeperluan:
+          keperluan,
+
+        browser:
+          navigator.userAgent,
+
+        os:
+          os()
+
+      });
+
+
+    if (!result.ok) {
+
+      return setDinasStatus(
+        result.message ||
+          "Pengajuan dinas luar gagal.",
+        "error"
       );
 
-      setDinasStatus(
-        "Menyimpan pengajuan...",
-        ""
-      );
-
-      try {
-
-        const result = await api({
-          action: "submitIjin",
-          jenisIjin: "DINAS_LUAR",
-          nip,
-          deviceId,
-          tanggalMulai: mulai,
-          tanggalSelesai: selesai,
-          alasanAtauKeperluan: keperluan,
-          browser: navigator.userAgent,
-          os: os()
-        });
-
-        if (!result.ok) {
-          return setDinasStatus(
-            result.message || "Pengajuan dinas luar gagal.",
-            "error"
-          );
-        }
-
-        setDinasStatus(
-          result.message || "Pengajuan dinas luar berhasil dikirim.",
-          "success"
-        );
-
-        $("dinasTanggalMulai").value = "";
-        $("dinasTanggalSelesai").value = "";
-        $("dinasKeperluan").value = "";
-
-        // Setelah pengajuan berhasil, cek ulang Surat Tugas.
-        // Biasanya belum ada karena admin baru akan membuatnya.
-        await loadSuratTugas();
-
-      } catch (error) {
-
-        setDinasStatus(
-          error.message || "Terjadi kesalahan.",
-          "error"
-        );
-
-      } finally {
-
-        busy(
-          "submitIjinDinasBtn",
-          false,
-          "KIRIM IJIN DINAS LUAR"
-        );
-
-      }
-
     }
 
-    function setDinasStatus(text, type) {
 
-      const el = $("dinasStatus");
+    setDinasStatus(
+      result.message ||
+        "Pengajuan dinas luar berhasil dikirim. Surat Tugas akan diproses oleh admin.",
+      "success"
+    );
 
-      el.textContent = text || "";
 
-      el.className =
-        "upload-progress" +
-        (type ? " " + type : "");
+    // Kosongkan form setelah berhasil
+    $("dinasTanggalMulai")
+      .value = "";
 
-    }
+    $("dinasTanggalSelesai")
+      .value = "";
+
+    $("dinasKeperluan")
+      .value = "";
+
+
+    // Muat ulang Surat Tugas
+    await loadSuratTugas();
+
+
+  } catch (error) {
+
+    setDinasStatus(
+      error.message ||
+        "Terjadi kesalahan.",
+      "error"
+    );
+
+
+  } finally {
+
+    busy(
+      "submitIjinDinasBtn",
+      false,
+      "KIRIM IJIN DINAS LUAR"
+    );
+
+  }
+
+}
+
+
+// ==========================================================
+// STATUS DINAS LUAR
+// ==========================================================
+
+function setDinasStatus(
+  text,
+  type
+) {
+
+  const el =
+    $("dinasStatus");
+
+
+  el.textContent =
+    text || "";
+
+
+  el.className =
+    "upload-progress" +
+    (
+      type
+        ? " " + type
+        : ""
+    );
+
+}
 
     // ==========================================================
     // RIWAYAT IJIN
