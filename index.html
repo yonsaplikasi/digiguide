@@ -260,65 +260,6 @@
     transform: rotate(360deg);
   }
 }
-
-/* ========================================================
-   LOADING BAR MASUK KE HALAMAN UTAMA
-   ======================================================== */
-
-.page-loading {
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.94);
-}
-
-.page-loading.hidden {
-  display: none !important;
-}
-
-.page-loading-box {
-  width: min(82%, 520px);
-  text-align: center;
-}
-
-.page-loading-text {
-  margin-bottom: 14px;
-  font-size: 17px;
-  font-weight: 600;
-  color: #173F4A;
-}
-
-.page-loading-bar {
-  position: relative;
-  width: 100%;
-  height: 30px;
-  overflow: hidden;
-  border: 1px solid #17202a;
-  background: #d8d1cd;
-}
-
-.page-loading-progress {
-  height: 100%;
-  width: 0%;
-  background: #e50914;
-  transition: width 0.25s ease;
-}
-
-.page-loading-percent {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 17px;
-  font-weight: 700;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
-}
-
     
     .hidden {
       display: none !important;
@@ -598,24 +539,6 @@
 </head>
 
 <body>
-
-  <!-- ========================================================
-       LOADING MASUK KE HALAMAN UTAMA
-       ======================================================== -->
-
-  <div id="pageLoading" class="page-loading hidden" aria-live="polite">
-    <div class="page-loading-box">
-      <div id="pageLoadingText" class="page-loading-text">
-        Menyiapkan DIGITAL GUIDE...
-      </div>
-
-      <div class="page-loading-bar">
-        <div id="pageLoadingProgress" class="page-loading-progress"></div>
-        <div id="pageLoadingPercent" class="page-loading-percent">0%</div>
-      </div>
-    </div>
-  </div>
-
 
   <main class="app">
 
@@ -1361,25 +1284,17 @@
 
         if (result.ok) {
 
-          showPageLoading(
-            "Menyiapkan halaman utama..."
-          );
-
           saveSession(
             result.employee
           );
 
-          await showAttendance(
+          showAttendance(
             result.employee
           );
-
-          hidePageLoading();
 
           return;
 
         }
-
-        hidePageLoading();
 
         clearSession();
 
@@ -1397,15 +1312,9 @@
 
         if (cachedEmployee) {
 
-          showPageLoading(
-            "Memulihkan sesi dan menyiapkan halaman utama..."
-          );
-
-          await showAttendance(
+          showAttendance(
             cachedEmployee
           );
-
-          hidePageLoading();
 
           msg(
             "Sesi tersimpan. Server sedang tidak dapat dihubungi.",
@@ -1413,8 +1322,6 @@
           );
 
         } else {
-
-          hidePageLoading();
 
           showVerify();
 
@@ -1703,21 +1610,15 @@ showVerifyLoading(
 
         }
 
-        showPageLoading(
-          "Menyiapkan halaman utama..."
-        );
-
         saveSession(
           result.employee ||
           pending
         );
 
-        await showAttendance(
+        showAttendance(
           result.employee ||
           pending
         );
-
-        hidePageLoading();
 
         msg(
           "Verifikasi berhasil.",
@@ -1740,7 +1641,6 @@ showVerifyLoading(
   );
 
   hideVerifyLoading();
-  hidePageLoading();
 
 }
 
@@ -1828,8 +1728,6 @@ showVerifyLoading(
 
     function showVerify() {
 
-      hidePageLoading();
-
       $("setupView")
         .classList
         .remove("hidden");
@@ -1864,7 +1762,7 @@ showVerifyLoading(
 
     }
 
-    async function showAttendance(
+    function showAttendance(
       employee
     ) {
 
@@ -1896,13 +1794,13 @@ showVerifyLoading(
 
       updateClock();
 
-      await switchTab(
+      switchTab(
         "utama"
       );
 
     }
 
-    async function switchTab(
+    function switchTab(
       tabName
     ) {
 
@@ -1947,7 +1845,7 @@ showVerifyLoading(
           .classList
           .add("active");
 
-        await fetchUtama();
+        fetchUtama();
 
         return;
 
@@ -4386,164 +4284,6 @@ function setDinasStatus(
 /* ==========================================================
    LOADING VERIFIKASI
 ========================================================== */
-
-
-/* ==========================================================
-   LOADING BAR HALAMAN UTAMA
-   ========================================================== */
-
-let pageLoadingTimer = null;
-let pageLoadingValue = 0;
-
-function showPageLoading(text) {
-
-  const loading =
-    $("pageLoading");
-
-  const label =
-    $("pageLoadingText");
-
-  const progress =
-    $("pageLoadingProgress");
-
-  const percent =
-    $("pageLoadingPercent");
-
-  if (!loading)
-    return;
-
-  if (label) {
-    label.textContent =
-      text ||
-      "Menyiapkan DIGITAL GUIDE...";
-  }
-
-  clearInterval(
-    pageLoadingTimer
-  );
-
-  pageLoadingValue = 0;
-
-  if (progress) {
-    progress.style.width =
-      "0%";
-  }
-
-  if (percent) {
-    percent.textContent =
-      "0%";
-  }
-
-  loading.classList
-    .remove("hidden");
-
-  /*
-   * Progress berjalan sampai 90%.
-   * Angka 100% diberikan setelah halaman utama
-   * selesai dimuat dari server.
-   */
-  pageLoadingTimer =
-    setInterval(
-      () => {
-
-        if (
-          pageLoadingValue <
-          90
-        ) {
-
-          pageLoadingValue +=
-            Math.random() * 5;
-
-          if (
-            pageLoadingValue >
-            90
-          ) {
-            pageLoadingValue =
-              90;
-          }
-
-          const value =
-            Math.round(
-              pageLoadingValue
-            );
-
-          if (progress) {
-            progress.style.width =
-              value + "%";
-          }
-
-          if (percent) {
-            percent.textContent =
-              value + "%";
-          }
-
-        }
-
-      },
-      300
-    );
-
-}
-
-
-function hidePageLoading() {
-
-  const loading =
-    $("pageLoading");
-
-  const progress =
-    $("pageLoadingProgress");
-
-  const percent =
-    $("pageLoadingPercent");
-
-  clearInterval(
-    pageLoadingTimer
-  );
-
-  pageLoadingTimer =
-    null;
-
-  if (!loading)
-    return;
-
-  pageLoadingValue =
-    100;
-
-  if (progress) {
-    progress.style.width =
-      "100%";
-  }
-
-  if (percent) {
-    percent.textContent =
-      "100%";
-  }
-
-  /*
-   * Tahan sebentar di 100% supaya perpindahan
-   * ke halaman utama terlihat halus.
-   */
-  setTimeout(
-    () => {
-
-      loading.classList
-        .add("hidden");
-
-      pageLoadingValue =
-        0;
-
-      if (progress) {
-        progress.style.width =
-          "0%";
-      }
-
-    },
-    300
-  );
-
-}
-
 
 function showVerifyLoading(text) {
 
