@@ -1112,7 +1112,7 @@
     // ==========================================================
 
     const API_URL =
-      "https://script.google.com/macros/s/AKfycbyJygKpWIc7LMvm2ORf6I7_kpLzYSZ8Ftkb1p9gVzH0DYT8688d6wN2f-ObBWd4p2vZNw/exec";
+      "https://script.google.com/macros/s/AKfycbwNE-MkKrNqkQDiczQLcWWdH-EhG99Y79FBzHY8Sl5A02W_7t2a9uNPrQi5UcCrYXwo_w/exec";
 
     const NIP_KEY =
       "absensi_v5_nip";
@@ -3194,6 +3194,28 @@ async function loadSuratTugas() {
 
 }
 
+// ==========================================================
+// Format Tanggal Indonesia
+// ==========================================================
+    
+    function formatTanggalIndonesia(value) {
+
+  if (!value || value === "-") {
+    return "-";
+  }
+
+  const d = new Date(value);
+
+  if (isNaN(d.getTime())) {
+    return String(value);
+  }
+
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const yyyy = d.getFullYear();
+
+  return `${dd}/${mm}/${yyyy}`;
+}
 
 // ==========================================================
 // RENDER SURAT TUGAS
@@ -3242,16 +3264,20 @@ function renderSuratTugas(
             "-";
 
 
-          const mulai =
-            item.tanggalMulai ||
-            item.Tanggal_Mulai ||
-            "-";
+         const mulai =
+  formatTanggalIndonesia(
+    item.tanggalMulai ||
+    item.Tanggal_Mulai ||
+    "-"
+  );
 
 
-          const selesai =
-            item.tanggalSelesai ||
-            item.Tanggal_Selesai ||
-            "-";
+const selesai =
+  formatTanggalIndonesia(
+    item.tanggalSelesai ||
+    item.Tanggal_Selesai ||
+    "-"
+  );
 
 
           const status =
