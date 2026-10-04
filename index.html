@@ -156,6 +156,87 @@
       background: #f3f5f7;
     }
 
+
+    /* ========================================================
+       ACCORDION KONTEN UTAMA / PERDA / SOP / INFO
+       ======================================================== */
+
+    .accordion-item {
+      margin-bottom: 12px;
+    }
+
+    .accordion-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border: 1px solid #17202a;
+      padding: 16px;
+      margin: 0;
+      background: #fff;
+      color: #17202a;
+      font-family: inherit;
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.5;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .accordion-toggle:hover {
+      background: #f3f5f7;
+    }
+
+    .accordion-title {
+      flex: 1;
+    }
+
+    .accordion-arrow {
+      flex: 0 0 auto;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .accordion-panel {
+      display: none;
+      border: 1px solid #17202a;
+      border-top: 0;
+      padding: 16px;
+      background: #fff;
+      color: #17202a;
+      font-size: 16px;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    .accordion-panel.open {
+      display: block;
+    }
+
+    .accordion-content {
+      margin: 0;
+    }
+
+    .accordion-file-link {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 10px 14px;
+      border: 1px solid #17202a;
+      background: #173f4a;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .accordion-empty {
+      color: #68737d;
+      font-size: 14px;
+      font-style: italic;
+    }
+
     .card {
       background: #fff;
       border: 1px solid #e0e5e9;
@@ -1162,7 +1243,7 @@
     // ==========================================================
 
     const API_URL =
-      "https://script.google.com/macros/s/AKfycbyQ1WQCbPni70oS2YX7fhvUAN1VBDjTNfaZiJ8bFZDbwK6u4j3PAhk_xiCqoVzhPUigDA/exec";
+      "https://script.google.com/macros/s/AKfycbx6kXS6SShMcGx5CH4wMBLtwgiH6xCtPxutWvFNe8IbnrPYbuOi6V3lOe9ImnjFDsy_CA/exec";
 
     const NIP_KEY =
       "absensi_v5_nip";
@@ -1985,59 +2066,11 @@ showVerifyLoading(
           description?.judul ||
           "";
 
-        if (!items.length) {
-
-          $("utamaList")
-            .innerHTML =
-            '<div class="card">Belum ada menu atau informasi tambahan.</div>';
-
-          return;
-
-        }
-
-        $("utamaList")
-          .innerHTML =
-          items
-            .map(
-              item => {
-
-                const title =
-                  esc(
-                    item.judul ||
-                    "Tanpa judul"
-                  );
-
-                const link =
-                  String(
-                    item.link ||
-                    ""
-                  )
-                    .trim();
-
-                if (link) {
-
-                  return `
-                    <a
-                      href="${esc(link)}"
-                      target="_blank"
-                      rel="noopener"
-                      class="utama-item"
-                    >
-                      ${title}
-                    </a>
-                  `;
-
-                }
-
-                return `
-                  <div class="utama-item">
-                    ${title}
-                  </div>
-                `;
-
-              }
-            )
-            .join("");
+        renderAccordionItems(
+          $("utamaList"),
+          items,
+          "utama"
+        );
 
       } catch (e) {
 
@@ -2123,59 +2156,11 @@ showVerifyLoading(
           description?.judul ||
           "";
 
-        if (!items.length) {
-
-          $("dynamicList")
-            .innerHTML =
-            '<div class="card">Belum ada data.</div>';
-
-          return;
-
-        }
-
-        $("dynamicList")
-          .innerHTML =
-          items
-            .map(
-              item => {
-
-                const title =
-                  esc(
-                    item.judul ||
-                    "Tanpa judul"
-                  );
-
-                const link =
-                  String(
-                    item.link ||
-                    ""
-                  )
-                    .trim();
-
-                if (link) {
-
-                  return `
-                    <a
-                      href="${esc(link)}"
-                      target="_blank"
-                      rel="noopener"
-                      class="sub-item"
-                    >
-                      ${title}
-                    </a>
-                  `;
-
-                }
-
-                return `
-                  <div class="sub-item">
-                    ${title}
-                  </div>
-                `;
-
-              }
-            )
-            .join("");
+        renderAccordionItems(
+          $("dynamicList"),
+          items,
+          type.toLowerCase()
+        );
 
       } catch (e) {
 
@@ -2184,6 +2169,245 @@ showVerifyLoading(
           "Gagal memuat data. Periksa koneksi internet Anda.";
 
       }
+
+    }
+
+    // ==========================================================
+    // ACCORDION KONTEN
+    // ==========================================================
+
+    function renderAccordionItems(
+      container,
+      items,
+      prefix
+    ) {
+
+      if (!container)
+        return;
+
+      container.innerHTML = "";
+
+      if (!Array.isArray(items) || !items.length) {
+
+        const empty =
+          document.createElement("div");
+
+        empty.className =
+          "card";
+
+        empty.textContent =
+          "Belum ada data.";
+
+        container.appendChild(
+          empty
+        );
+
+        return;
+
+      }
+
+      items.forEach(
+        (item, index) => {
+
+          const wrapper =
+            document.createElement("div");
+
+          wrapper.className =
+            "accordion-item";
+
+          const button =
+            document.createElement("button");
+
+          button.type =
+            "button";
+
+          button.className =
+            "accordion-toggle";
+
+          const title =
+            document.createElement("span");
+
+          title.className =
+            "accordion-title";
+
+          title.textContent =
+            item.judul ||
+            "Tanpa judul";
+
+          const arrow =
+            document.createElement("span");
+
+          arrow.className =
+            "accordion-arrow";
+
+          arrow.textContent =
+            "▼";
+
+          button.appendChild(
+            title
+          );
+
+          button.appendChild(
+            arrow
+          );
+
+          const panel =
+            document.createElement("div");
+
+          panel.className =
+            "accordion-panel";
+
+          const content =
+            document.createElement("div");
+
+          content.className =
+            "accordion-content";
+
+          const isi =
+            String(
+              item.isi ||
+              ""
+            ).trim();
+
+          if (isi) {
+
+            content.textContent =
+              isi;
+
+          } else {
+
+            const empty =
+              document.createElement("div");
+
+            empty.className =
+              "accordion-empty";
+
+            empty.textContent =
+              "Belum ada isi lengkap untuk bagian ini.";
+
+            content.appendChild(
+              empty
+            );
+
+          }
+
+          panel.appendChild(
+            content
+          );
+
+          const link =
+            String(
+              item.link ||
+              ""
+            ).trim();
+
+          if (link) {
+
+            const fileLink =
+              document.createElement("a");
+
+            fileLink.className =
+              "accordion-file-link";
+
+            fileLink.href =
+              link;
+
+            fileLink.target =
+              "_blank";
+
+            fileLink.rel =
+              "noopener";
+
+            fileLink.textContent =
+              "LIHAT / BUKA FILE";
+
+            panel.appendChild(
+              fileLink
+            );
+
+          }
+
+          button.addEventListener(
+            "click",
+            () => {
+
+              const isOpen =
+                panel.classList.contains(
+                  "open"
+                );
+
+              /*
+               * Hanya satu sub yang terbuka
+               * pada satu waktu di halaman yang sama.
+               */
+              container
+                .querySelectorAll(
+                  ".accordion-panel.open"
+                )
+                .forEach(
+                  openPanel => {
+
+                    openPanel.classList
+                      .remove("open");
+
+                    const parent =
+                      openPanel.parentElement;
+
+                    const openButton =
+                      parent?.querySelector(
+                        ".accordion-toggle"
+                      );
+
+                    const openArrow =
+                      openButton?.querySelector(
+                        ".accordion-arrow"
+                      );
+
+                    if (openArrow) {
+                      openArrow.textContent =
+                        "▼";
+                    }
+
+                  }
+                );
+
+              if (!isOpen) {
+
+                panel.classList
+                  .add("open");
+
+                arrow.textContent =
+                  "▲";
+
+                panel.scrollIntoView({
+                  behavior: "smooth",
+                  block: "nearest"
+                });
+
+              } else {
+
+                arrow.textContent =
+                  "▼";
+
+              }
+
+            }
+          );
+
+          wrapper.appendChild(
+            button
+          );
+
+          wrapper.appendChild(
+            panel
+          );
+
+          container.appendChild(
+            wrapper
+          );
+
+        }
+      );
 
     }
 
