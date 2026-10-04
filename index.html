@@ -1,23 +1,19 @@
 <!doctype html>
 <html lang="id">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Digital Guide SATPOL PP</title>
-
   <style>
     * {
       box-sizing: border-box;
     }
-
     body {
       margin: 0;
       background: #f3f5f7;
       font-family: Arial, sans-serif;
       color: #17202a;
     }
-
     .app {
       width: min(100%, 520px);
       margin: auto;
@@ -25,26 +21,22 @@
       min-height: 100vh;
       background: #fff;
     }
-
     .header-box {
       border: 1px solid #17202a;
       padding: 30px 10px;
       text-align: center;
       margin-bottom: 10px;
     }
-
     .header-box h1 {
       margin: 0;
       font-size: 32px;
       font-weight: 500;
     }
-
     .header-subtitle {
       margin-top: 6px;
       font-size: 14px;
       font-weight: 400;
     }
-
     .clock-box {
       border: 1px solid #17202a;
       padding: 20px 10px;
@@ -52,14 +44,12 @@
       margin: 0 0 28px;
       background: #fff;
     }
-
     .clock-time {
       font-size: 42px;
       line-height: 1.15;
       font-weight: 700;
       letter-spacing: 1px;
     }
-
     .clock-source {
       margin-top: 4px;
       font-size: 12px;
@@ -67,19 +57,16 @@
       opacity: 0.75;
       text-transform: uppercase;
     }
-
     .clock-date {
       margin-top: 4px;
       font-size: 20px;
       font-weight: 400;
     }
-
     .utama-description {
       font-size: 16px;
       line-height: 1.6;
       margin: 0 0 18px;
     }
-
     .utama-item {
       display: block;
       border: 1px solid #17202a;
@@ -91,11 +78,9 @@
       font-size: 18px;
       line-height: 1.5;
     }
-
     .utama-item:hover {
       background: #f3f5f7;
     }
-
     .user-info-bar {
       display: flex;
       justify-content: space-between;
@@ -103,7 +88,6 @@
       margin-bottom: 15px;
       color: #17202a;
     }
-
     .tabs {
       display: flex;
       gap: 5px;
@@ -455,6 +439,12 @@
 
     .surat-download:hover {
       background: #006fa8;
+    }
+
+    .disabled-link {
+      opacity: .5;
+      cursor: default;
+      background: #9aa4ab;
     }
 
     .surat-selected-info {
@@ -840,8 +830,8 @@
             </div>
 
             <div class="ijin-card-desc">
-              Pengajuan dinas luar menggunakan
-              Surat Tugas yang telah disetujui atasan.
+              Pengajuan dinas luar. Surat Tugas akan tampil
+              setelah dibuat oleh admin.
             </div>
 
             <button
@@ -1133,7 +1123,7 @@
     // ==========================================================
 
     const API_URL =
-      "https://script.google.com/macros/s/AKfycby18Tlk2W5Nv0RyZTX9AGK7y_inVZVj2VsNjIqlPX2bi6UdJK6HwRKmr2bGv0tH8cKjvQ/exec";
+      "https://script.google.com/macros/s/AKfycbxTS_EPv8LoyPtsD2z4GF6rTWYScOH4WBT_LlfhL_wcuKoK9WdiBQt7vQ7kMv0KfwWv4g/exec";
 
     const NIP_KEY =
       "absensi_v5_nip";
@@ -1149,7 +1139,6 @@
 
     let pending = null;
 
-    let selectedSuratTugas = null;
 
     let suratTugasData = [];
 
@@ -3086,34 +3075,22 @@
         .classList
         .remove("hidden");
 
-      selectedSuratTugas =
-        null;
-
       $("dinasTanggalMulai")
-        .value =
-        "";
+        .value = "";
 
       $("dinasTanggalSelesai")
-        .value =
-        "";
+        .value = "";
 
       $("dinasKeperluan")
-        .value =
-        "";
-
-      $("suratTugasDetail")
-        .innerHTML =
-        "";
+        .value = "";
 
       $("dinasStatus")
-        .textContent =
-        "";
+        .textContent = "";
 
       $("suratTugasList")
-        .innerHTML =
-        `
+        .innerHTML = `
           <div class="ijin-status">
-            Memuat Surat Tugas yang disetujui...
+            Memuat Surat Tugas...
           </div>
         `;
 
@@ -3128,91 +3105,47 @@
     async function loadSuratTugas() {
 
       const nip =
-        localStorage.getItem(
-          NIP_KEY
-        );
+        localStorage.getItem(NIP_KEY);
 
       const deviceId =
-        localStorage.getItem(
-          DEV_KEY
-        );
+        localStorage.getItem(DEV_KEY);
 
-      if (
-        !nip ||
-        !deviceId
-      )
+      if (!nip || !deviceId) {
         return showVerify();
+      }
 
       try {
 
-        const res =
-          await api({
-
-            action:
-              "getSuratTugas",
-
-            nip,
-
-            deviceId
-
-          });
+        const res = await api({
+          action: "getSuratTugas",
+          nip,
+          deviceId
+        });
 
         if (!res.ok) {
 
-          suratTugasData =
-            [];
-
-          $("suratTugasList")
-            .innerHTML =
-            `
-              <div class="ijin-status error">
-                ${esc(
-                  res.message ||
-                  "Surat Tugas tidak tersedia."
-                )}
-              </div>
-            `;
-
-          $("dinasStatus")
-            .textContent =
-            "";
-
-          return;
-
-        }
-
-        suratTugasData =
-          Array.isArray(
-            res.data
-          )
-            ? res.data
-            : (
-                Array.isArray(
-                  res.suratTugas
-                )
-                  ? res.suratTugas
-                  : []
-              );
-
-        renderSuratTugas(
-          suratTugasData
-        );
-
-      } catch (error) {
-
-        $("suratTugasList")
-          .innerHTML =
-          `
+          $("suratTugasList").innerHTML = `
             <div class="ijin-status error">
-              ${esc(
-                error.message
-              )}
+              ${esc(res.message || "Surat Tugas tidak tersedia.")}
             </div>
           `;
 
-        $("dinasStatus")
-          .textContent =
-          "";
+          return;
+        }
+
+        suratTugasData = Array.isArray(res.data)
+          ? res.data
+          : (Array.isArray(res.suratTugas) ? res.suratTugas : []);
+
+        renderSuratTugas(suratTugasData);
+
+      } catch (error) {
+
+        $("suratTugasList").innerHTML = `
+          <div class="ijin-status error">
+            ${esc(error.message || "Gagal memuat Surat Tugas.")}
+          </div>
+        `;
 
       }
 
@@ -3222,355 +3155,106 @@
     // RENDER SURAT TUGAS
     // ==========================================================
 
-    function renderSuratTugas(
-      list
-    ) {
+    function renderSuratTugas(list) {
 
-      const container =
-        $("suratTugasList");
+      const container = $("suratTugasList");
 
-      if (
-        !Array.isArray(list) ||
-        list.length === 0
-      ) {
+      if (!Array.isArray(list) || list.length === 0) {
 
-        container.innerHTML =
-          `
-            <div class="ijin-status">
-              Belum ada Surat Tugas yang disetujui.
-            </div>
-          `;
-
-        $("dinasStatus")
-          .textContent =
-          "";
-
-        return;
-
-      }
-
-      $("dinasStatus")
-        .textContent =
-        "Pilih Surat Tugas yang akan digunakan.";
-
-      container.innerHTML =
-        list
-          .map(
-            (
-              item,
-              index
-            ) => {
-
-              const nomor =
-                item.nomorSurat ||
-                item.nomor ||
-                item.Nomor_Surat ||
-                "-";
-
-              const keperluan =
-                item.keperluan ||
-                item.Keperluan ||
-                "-";
-
-              const mulai =
-                item.tanggalMulai ||
-                item.Tanggal_Mulai ||
-                "-";
-
-              const selesai =
-                item.tanggalSelesai ||
-                item.Tanggal_Selesai ||
-                "-";
-
-              const status =
-                item.status ||
-                item.Status ||
-                item.statusAtasan ||
-                item.Status_Atasan ||
-                "ACC";
-
-              const fileUrl =
-                item.fileUrl ||
-                item.filePdf ||
-                item.url ||
-                item.URL ||
-                item.urlSuratTugas ||
-                item.Url_Surat_Tugas ||
-                item.fileSuratTugas ||
-                item.File_Surat_Tugas ||
-                "";
-
-              return `
-
-                <div
-                  class="surat-item"
-                  data-index="${index}"
-                >
-
-                  <div class="surat-item-row">
-
-                    <span class="surat-item-label">
-                      Nomor Surat
-                    </span>
-
-                    <br>
-
-                    ${esc(
-                      nomor
-                    )}
-
-                  </div>
-
-
-                  <div class="surat-item-row">
-
-                    <span class="surat-item-label">
-                      Keperluan
-                    </span>
-
-                    <br>
-
-                    ${esc(
-                      keperluan
-                    )}
-
-                  </div>
-
-
-                  <div class="surat-item-row">
-
-                    <span class="surat-item-label">
-                      Periode
-                    </span>
-
-                    <br>
-
-                    ${esc(
-                      mulai
-                    )}
-
-                    s.d.
-
-                    ${esc(
-                      selesai
-                    )}
-
-                  </div>
-
-
-                  <div class="surat-status">
-
-                    Status:
-                    ${esc(
-                      status
-                    )}
-
-                  </div>
-
-
-                  ${
-                    fileUrl
-                      ? `
-                        <a
-                          class="surat-download"
-                          href="${esc(fileUrl)}"
-                          target="_blank"
-                          rel="noopener"
-                          onclick="event.stopPropagation()"
-                        >
-                          LIHAT / DOWNLOAD
-                        </a>
-                      `
-                      : `
-                        <div
-                          class="surat-download"
-                          style="
-                            opacity:.5;
-                            cursor:default;
-                            background:#9aa4ab;
-                          "
-                        >
-                          FILE TIDAK TERSEDIA
-                        </div>
-                      `
-                  }
-
-                </div>
-
-              `;
-
-            }
-          )
-          .join("");
-
-      container
-        .querySelectorAll(
-          ".surat-item"
-        )
-        .forEach(
-          el => {
-
-            el.addEventListener(
-              "click",
-              () =>
-                selectSuratTugas(
-                  Number(
-                    el.dataset.index
-                  )
-                )
-            );
-
-          }
-        );
-
-    }
-
-    // ==========================================================
-    // PILIH SURAT TUGAS
-    // ==========================================================
-
-    function selectSuratTugas(
-      index
-    ) {
-
-      selectedSuratTugas =
-        suratTugasData[index] ||
-        null;
-
-      document
-        .querySelectorAll(
-          ".surat-item"
-        )
-        .forEach(
-          (
-            el,
-            i
-          ) => {
-
-            el.classList.toggle(
-              "selected",
-              i === index
-            );
-
-          }
-        );
-
-      if (!selectedSuratTugas) {
-
-        $("suratTugasDetail")
-          .innerHTML =
-          "";
-
-        return;
-
-      }
-
-      const id =
-        selectedSuratTugas.suratTugasId ||
-        selectedSuratTugas.id ||
-        selectedSuratTugas.Surat_Tugas_ID ||
-        "-";
-
-      const nomor =
-        selectedSuratTugas.nomorSurat ||
-        selectedSuratTugas.nomor ||
-        selectedSuratTugas.Nomor_Surat ||
-        "-";
-
-      const keperluan =
-        selectedSuratTugas.keperluan ||
-        selectedSuratTugas.Keperluan ||
-        "-";
-
-      const mulai =
-        selectedSuratTugas.tanggalMulai ||
-        selectedSuratTugas.Tanggal_Mulai ||
-        "-";
-
-      const selesai =
-        selectedSuratTugas.tanggalSelesai ||
-        selectedSuratTugas.Tanggal_Selesai ||
-        "-";
-
-      $("suratTugasDetail")
-        .innerHTML =
-        `
-
-          <div class="surat-selected-info">
-
-            <strong>
-              Surat Tugas dipilih
-            </strong>
-
-            <br>
-
-            ID:
-            ${esc(id)}
-
-            <br>
-
-            Nomor:
-            ${esc(nomor)}
-
-            <br>
-
-            Keperluan:
-            ${esc(keperluan)}
-
-            <br>
-
-            Periode Surat:
-            ${esc(mulai)}
-            s.d.
-            ${esc(selesai)}
-
+        container.innerHTML = `
+          <div class="ijin-status">
+            Belum ada Surat Tugas.
           </div>
-
         `;
 
-      if (
-        !$("dinasTanggalMulai")
-          .value &&
-        mulai !== "-"
-      ) {
-
-        $("dinasTanggalMulai")
-          .value =
-          normalizeDateValue(
-            mulai
-          );
-
+        return;
       }
 
-      if (
-        !$("dinasTanggalSelesai")
-          .value &&
-        selesai !== "-"
-      ) {
+      container.innerHTML = list.map(item => {
 
-        $("dinasTanggalSelesai")
-          .value =
-          normalizeDateValue(
-            selesai
-          );
+        const nomor =
+          item.nomorSurat ||
+          item.nomor ||
+          item.Nomor_Surat ||
+          "-";
 
-      }
+        const keperluan =
+          item.keperluan ||
+          item.Keperluan ||
+          "-";
 
-      if (
-        !$("dinasKeperluan")
-          .value &&
-        keperluan !== "-"
-      ) {
+        const mulai =
+          item.tanggalMulai ||
+          item.Tanggal_Mulai ||
+          "-";
 
-        $("dinasKeperluan")
-          .value =
-          keperluan;
+        const selesai =
+          item.tanggalSelesai ||
+          item.Tanggal_Selesai ||
+          "-";
 
-      }
+        const status =
+          item.status ||
+          item.Status ||
+          "ACC";
 
-      $("dinasStatus")
-        .textContent =
-        "Surat Tugas dipilih. Periksa tanggal dan keterangan sebelum mengirim.";
+        const fileUrl =
+          item.fileUrl ||
+          item.filePdf ||
+          item.url ||
+          item.URL ||
+          "";
+
+        return `
+          <div class="surat-item">
+
+            <div class="surat-item-row">
+              <span class="surat-item-label">
+                Nomor Surat
+              </span>
+              <br>
+              ${esc(nomor)}
+            </div>
+
+            <div class="surat-item-row">
+              <span class="surat-item-label">
+                Keperluan
+              </span>
+              <br>
+              ${esc(keperluan)}
+            </div>
+
+            <div class="surat-item-row">
+              <span class="surat-item-label">
+                Periode
+              </span>
+              <br>
+              ${esc(mulai)} s.d. ${esc(selesai)}
+            </div>
+
+            <div class="surat-status">
+              Status: ${esc(status)}
+            </div>
+
+            ${fileUrl ? `
+              <a
+                class="surat-download"
+                href="${esc(fileUrl)}"
+                target="_blank"
+                rel="noopener"
+              >
+                LIHAT / DOWNLOAD
+              </a>
+            ` : `
+              <div class="surat-download disabled-link">
+                FILE TIDAK TERSEDIA
+              </div>
+            `}
+
+          </div>
+        `;
+
+      }).join("");
 
     }
 
@@ -3581,89 +3265,45 @@
     async function submitIjinDinas() {
 
       const nip =
-        localStorage.getItem(
-          NIP_KEY
-        );
+        localStorage.getItem(NIP_KEY);
 
       const deviceId =
-        localStorage.getItem(
-          DEV_KEY
-        );
+        localStorage.getItem(DEV_KEY);
 
       const mulai =
-        $("dinasTanggalMulai")
-          .value;
+        $("dinasTanggalMulai").value;
 
       const selesai =
-        $("dinasTanggalSelesai")
-          .value;
+        $("dinasTanggalSelesai").value;
 
       const keperluan =
         $("dinasKeperluan")
           .value
           .trim();
 
-      if (
-        !nip ||
-        !deviceId
-      )
+      if (!nip || !deviceId) {
         return showVerify();
-
-      if (
-        !selectedSuratTugas
-      ) {
-
-        return setDinasStatus(
-          "Pilih Surat Tugas terlebih dahulu.",
-          "error"
-        );
-
       }
 
-      if (
-        !mulai ||
-        !selesai
-      ) {
-
+      if (!mulai || !selesai) {
         return setDinasStatus(
           "Tanggal mulai dan selesai wajib diisi.",
           "error"
         );
-
       }
 
-      if (
-        selesai < mulai
-      ) {
-
+      if (selesai < mulai) {
         return setDinasStatus(
           "Tanggal selesai tidak boleh lebih awal dari tanggal mulai.",
           "error"
         );
-
       }
 
       if (!keperluan) {
-
         return setDinasStatus(
           "Keperluan dinas luar wajib diisi.",
           "error"
         );
-
-      }
-
-      const suratTugasId =
-        selectedSuratTugas.suratTugasId ||
-        selectedSuratTugas.id ||
-        selectedSuratTugas.Surat_Tugas_ID;
-
-      if (!suratTugasId) {
-
-        return setDinasStatus(
-          "ID Surat Tugas tidak ditemukan.",
-          "error"
-        );
-
       }
 
       busy(
@@ -3679,59 +3319,42 @@
 
       try {
 
-        const result =
-          await api({
-
-            action:
-              "submitIjin",
-
-            jenisIjin:
-              "DINAS_LUAR",
-
-            nip,
-
-            deviceId,
-
-            tanggalMulai:
-              mulai,
-
-            tanggalSelesai:
-              selesai,
-
-            alasanAtauKeperluan:
-              keperluan,
-
-            suratTugasId,
-
-            browser:
-              navigator.userAgent,
-
-            os:
-              os()
-
-          });
+        const result = await api({
+          action: "submitIjin",
+          jenisIjin: "DINAS_LUAR",
+          nip,
+          deviceId,
+          tanggalMulai: mulai,
+          tanggalSelesai: selesai,
+          alasanAtauKeperluan: keperluan,
+          browser: navigator.userAgent,
+          os: os()
+        });
 
         if (!result.ok) {
-
           return setDinasStatus(
-            result.message ||
-              "Pengajuan dinas luar gagal.",
+            result.message || "Pengajuan dinas luar gagal.",
             "error"
           );
-
         }
 
         setDinasStatus(
-          result.message ||
-            "Pengajuan dinas luar berhasil dikirim.",
+          result.message || "Pengajuan dinas luar berhasil dikirim.",
           "success"
         );
+
+        $("dinasTanggalMulai").value = "";
+        $("dinasTanggalSelesai").value = "";
+        $("dinasKeperluan").value = "";
+
+        // Setelah pengajuan berhasil, cek ulang Surat Tugas.
+        // Biasanya belum ada karena admin baru akan membuatnya.
+        await loadSuratTugas();
 
       } catch (error) {
 
         setDinasStatus(
-          error.message ||
-            "Terjadi kesalahan.",
+          error.message || "Terjadi kesalahan.",
           "error"
         );
 
@@ -3747,24 +3370,15 @@
 
     }
 
-    function setDinasStatus(
-      text,
-      type
-    ) {
+    function setDinasStatus(text, type) {
 
-      const el =
-        $("dinasStatus");
+      const el = $("dinasStatus");
 
-      el.textContent =
-        text || "";
+      el.textContent = text || "";
 
       el.className =
         "upload-progress" +
-        (
-          type
-            ? " " + type
-            : ""
-        );
+        (type ? " " + type : "");
 
     }
 
