@@ -1483,7 +1483,7 @@
     // ==========================================================
 
     const API_URL =
-      "https://script.google.com/macros/s/AKfycbw9NAWowz3MTWPI7nZWvuzScWmtE5F9gttEnVv4F6l3jDxXuCKMiAgGxRlHzm-4NGeoaQ/exec";
+      "https://script.google.com/macros/s/AKfycbws2E2F9F7JJX2qlt59UsZjUgOyzUuY8JGqzKhv0gNKdgyI9QWkxDRsBvFiXc5Gtl1M_Q/exec";
 
     const NIP_KEY =
       "absensi_v5_nip";
@@ -3737,7 +3737,7 @@ async function loadDashboard() {
 
     $("dashboardStatus").className = "dashboard-loading";
     $("dashboardStatus").textContent =
-      `Bulan: ${formatMonthIndonesia(res.bulan)} | Hari kerja: ${res.hariKerja} | Patokan masuk: ${res.jamMasuk}`;
+      `Bulan: ${formatMonthIndonesia(res.bulan)} | Hari kerja: ${res.hariKerja} | Bawahan: ${(res.data || []).length} | Patokan masuk: ${res.jamMasuk}`;
 
     renderDashboardRanks("dashboardBestList", res.best || [], "best");
     renderDashboardRanks("dashboardWorstList", res.worst || [], "worst");
