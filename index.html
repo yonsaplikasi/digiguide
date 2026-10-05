@@ -137,6 +137,109 @@
       display: block;
     }
 
+    /* ========================================================
+       DASBOARD ATASAN / RANKING ABSENSI
+       ======================================================== */
+
+    .dashboard-page h2 {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .dashboard-subtitle {
+      font-size: 13px;
+      color: #68737d;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .dashboard-month {
+      margin-bottom: 16px;
+    }
+
+    .dashboard-month label {
+      display: block;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .dashboard-section-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 22px 0 10px;
+    }
+
+    .dashboard-best-title {
+      color: #0f5132;
+    }
+
+    .dashboard-worst-title {
+      color: #842029;
+    }
+
+    .dashboard-rank-card {
+      border: 1px solid #cbd2d8;
+      padding: 14px;
+      margin-bottom: 10px;
+      background: #fff;
+    }
+
+    .dashboard-rank-name {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .dashboard-rank-meta {
+      font-size: 13px;
+      color: #68737d;
+      line-height: 1.55;
+    }
+
+    .dashboard-rank-number {
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .dashboard-table-wrap {
+      overflow-x: auto;
+      border: 1px solid #cbd2d8;
+      background: #fff;
+    }
+
+    .dashboard-table {
+      width: 100%;
+      min-width: 950px;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .dashboard-table th,
+    .dashboard-table td {
+      border: 1px solid #d9dee3;
+      padding: 9px 7px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .dashboard-table th {
+      background: #eef3f5;
+      font-weight: 700;
+    }
+
+    .dashboard-table td:nth-child(2),
+    .dashboard-table td:nth-child(3) {
+      text-align: left;
+    }
+
+    .dashboard-loading {
+      padding: 14px;
+      border: 1px solid #d9dee3;
+      color: #68737d;
+      font-size: 13px;
+    }
+
     .surat-filter-actions {
       display: flex;
       gap: 8px;
@@ -839,6 +942,14 @@
         </button>
 
         <button
+          id="dashboardTabBtn"
+          class="tab-btn hidden"
+          data-tab="dashboard"
+        >
+          Dasboard
+        </button>
+
+        <button
           class="tab-btn"
           data-tab="surat-tugas"
         >
@@ -958,12 +1069,12 @@
             IJIN
           </div>
 
-          <!-- SAKIT / CUTI / TIDAK MASUK / LEPAS PIKET-->
+          <!-- SAKIT / CUTI / TIDAK MASUK -->
 
           <div class="ijin-card">
 
             <div class="ijin-card-title">
-              SAKIT/CUTI/TIDAK MASUK/LEPAS PIKET
+              SAKIT/CUTI/TIDAK MASUK/PIKET
             </div>
 
             <div class="ijin-card-desc">
@@ -975,7 +1086,7 @@
               id="ijinSakitBtn"
               class="action-btn"
             >
-              IJIN SAKIT/CUTI/TIDAK MASUK/LEPAS PIKET
+              IJIN SAKIT/CUTI/TIDAK MASUK/PIKET
             </button>
 
           </div>
@@ -1080,7 +1191,7 @@
               <option value="SAKIT">Sakit</option>
               <option value="CUTI">Cuti</option>
               <option value="KEPERLUAN_MENDADAK">Keperluan Mendadak</option>
-              <option value="LEPAS_PIKET">LEPAS PIKET</option>
+              <option value="PIKET">PIKET</option>
             </select>
 
             <label for="sakitAlasan">
@@ -1372,7 +1483,7 @@
     // ==========================================================
 
     const API_URL =
-      "https://script.google.com/macros/s/AKfycbzRlqCX6NklqsjQ7PpYraTdrGF7sspK4Td48nLmpsSlS5CshO4H8NE10DHXcc1wSrXjww/exec";
+      "https://script.google.com/macros/s/AKfycbx9YiDy0sLuxsVKslQ-cI4abCTF1I2IKjrbro5RJRSfJvE9Du1t3bBRkbg4CQykzK9gqA/exec";
 
     const NIP_KEY =
       "absensi_v5_nip";
@@ -1433,6 +1544,7 @@
         "backIjinDinasBtn",
         "submitIjinDinasBtn",
         "backRiwayatIjinBtn",
+        "dashboardLoadBtn",
         "filterSuratTugasBtn",
         "resetSuratTugasFilterBtn"
       ].forEach(id => {
@@ -1601,6 +1713,9 @@
 
       backRiwayatIjinBtn:
         backToAttendance,
+
+      dashboardLoadBtn:
+        loadDashboard,
 
       filterSuratTugasBtn:
         filterSuratTugasAdmin,
@@ -2010,6 +2125,8 @@ showVerifyLoading(
         .textContent =
         `${firstName} - ${employee.bagian || "-"} - ${employee.jabatan || "-"}`;
 
+      checkDashboardAccess(employee);
+
       updateClock();
 
       switchTab(
@@ -2084,6 +2201,21 @@ showVerifyLoading(
           },
           250
         );
+
+        return;
+
+      }
+
+      if (
+        tabName ===
+        "dashboard"
+      ) {
+
+        $("tab-dashboard")
+          .classList
+          .add("active");
+
+        loadDashboard();
 
         return;
 
@@ -3507,6 +3639,203 @@ showVerifyLoading(
     // ==========================================================
     // DINAS LUAR
     // ==========================================================
+
+// ==========================================================
+// DASBOARD ATASAN
+// ==========================================================
+
+function setDashboardTabVisible(employee) {
+
+  const btn = $("dashboardTabBtn");
+  if (!btn) return;
+
+  const atasanNip = String(employee?.atasanNip || '').trim();
+
+  // Dashboard hanya ditampilkan jika NIP pengguna adalah Atasan_NIP
+  // pada minimal satu pegawai aktif di MASTER. Pemeriksaan final
+  // tetap dilakukan oleh backend.
+  if (atasanNip === '') {
+    btn.classList.remove("hidden");
+  } else {
+    btn.classList.add("hidden");
+  }
+}
+
+async function checkDashboardAccess(employee) {
+
+  const btn = $("dashboardTabBtn");
+  if (!btn) return;
+
+  btn.classList.add("hidden");
+
+  const nip = localStorage.getItem(NIP_KEY);
+  const deviceId = localStorage.getItem(DEV_KEY);
+
+  if (!nip || !deviceId) return;
+
+  try {
+    const res = await api({
+      action: "getDashboard",
+      nip,
+      deviceId,
+      bulan: ""
+    });
+
+    if (res.ok) {
+      btn.classList.remove("hidden");
+    }
+  } catch (e) {
+    // Tidak menampilkan menu jika akses atasan gagal diperiksa.
+  }
+}
+
+function setDashboardDefaultMonth() {
+  const input = $("dashboardBulan");
+  if (!input || input.value) return;
+
+  const now = new Date();
+  input.value =
+    now.getFullYear() +
+    "-" +
+    String(now.getMonth() + 1).padStart(2, "0");
+}
+
+async function loadDashboard() {
+
+  const nip = localStorage.getItem(NIP_KEY);
+  const deviceId = localStorage.getItem(DEV_KEY);
+
+  if (!nip || !deviceId) {
+    return showVerify();
+  }
+
+  setDashboardDefaultMonth();
+
+  const bulan = $("dashboardBulan")?.value || "";
+
+  $("dashboardStatus").textContent =
+    "Memuat ranking absensi...";
+
+  $("dashboardBestList").innerHTML = "";
+  $("dashboardWorstList").innerHTML = "";
+  $("dashboardTableBody").innerHTML = "";
+
+  try {
+    const res = await api({
+      action: "getDashboard",
+      nip,
+      deviceId,
+      bulan
+    });
+
+    if (!res.ok) {
+      $("dashboardStatus").className = "dashboard-loading";
+      $("dashboardStatus").textContent =
+        res.message || "Dashboard tidak tersedia.";
+      return;
+    }
+
+    $("dashboardStatus").className = "dashboard-loading";
+    $("dashboardStatus").textContent =
+      `Bulan: ${formatMonthIndonesia(res.bulan)} | Hari kerja: ${res.hariKerja} | Patokan masuk: ${res.jamMasuk}`;
+
+    renderDashboardRanks("dashboardBestList", res.best || [], "best");
+    renderDashboardRanks("dashboardWorstList", res.worst || [], "worst");
+    renderDashboardTable(res.data || []);
+
+  } catch (error) {
+    $("dashboardStatus").textContent =
+      error.message || "Dashboard gagal dimuat.";
+  }
+}
+
+function formatMonthIndonesia(value) {
+  const parts = String(value || "").split("-");
+  if (parts.length !== 2) return value || "-";
+
+  const names = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+  ];
+
+  const index = Number(parts[1]) - 1;
+  return `${names[index] || parts[1]} ${parts[0]}`;
+}
+
+function renderDashboardRanks(id, list, type) {
+
+  const container = $(id);
+  if (!container) return;
+
+  if (!Array.isArray(list) || !list.length) {
+    container.innerHTML =
+      `<div class="dashboard-loading">Belum ada data ranking.</div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(item => {
+    const rank = Number(item.rank || 0);
+    const title = type === "best"
+      ? `Peringkat ${rank} — THE BEST`
+      : `Peringkat ${rank} — THE WORST`;
+
+    return `
+      <div class="dashboard-rank-card">
+        <div class="dashboard-rank-number">${esc(title)}</div>
+        <div class="dashboard-rank-name">${esc(item.nama || "-")}</div>
+        <div class="dashboard-rank-meta">
+          NIP: ${esc(item.nip || "-")}<br>
+          Bagian: ${esc(item.bagian || "-")}<br>
+          Masuk: ${Number(item.masuk || 0)} hari &nbsp;|&nbsp;
+          Terlambat: ${Number(item.terlambat || 0)} hari &nbsp;|&nbsp;
+          Tdk Masuk: ${Number(item.tidakMasuk || 0)} hari &nbsp;|&nbsp;
+          Dinas Luar: ${Number(item.dinasLuar || 0)} hari
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderDashboardTable(list) {
+
+  const body = $("dashboardTableBody");
+  if (!body) return;
+
+  if (!Array.isArray(list) || !list.length) {
+    body.innerHTML = `
+      <tr>
+        <td colspan="13">Tidak ada data bawahan.</td>
+      </tr>
+    `;
+    return;
+  }
+
+  const ranked = list.slice().sort((a, b) => {
+    return (b.masuk - a.masuk) ||
+      (a.terlambat - b.terlambat) ||
+      (a.tidakMasuk - b.tidakMasuk) ||
+      String(a.nama || "").localeCompare(String(b.nama || ""));
+  });
+
+  body.innerHTML = ranked.map((item, index) => `
+    <tr>
+      <td>${index + 1}</td>
+      <td>${esc(item.nip || "-")}</td>
+      <td>${esc(item.nama || "-")}</td>
+      <td>${esc(item.bagian || "-")}</td>
+      <td>${Number(item.masuk || 0)}</td>
+      <td>${Number(item.terlambat || 0)}</td>
+      <td>${Number(item.sakit || 0)}</td>
+      <td>${Number(item.cuti || 0)}</td>
+      <td>${Number(item.keperluan || 0)}</td>
+      <td>${Number(item.piket || 0)}</td>
+      <td>${Number(item.tidakMasuk || 0)}</td>
+      <td>${Number(item.dinasLuar || 0)}</td>
+      <td>${index + 1}</td>
+    </tr>
+  `).join("");
+}
+
 // ==========================================================
 // SURAT TUGAS LANGSUNG DARI ADMIN
 // ==========================================================
