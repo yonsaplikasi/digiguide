@@ -1376,6 +1376,101 @@
            SURAT TUGAS LANGSUNG DARI ADMIN
            ====================================================== -->
 
+      <!-- ======================================================
+           DASBOARD ATASAN
+           ====================================================== -->
+
+      <div
+        id="tab-dashboard"
+        class="tab-content dashboard-page"
+      >
+
+        <div class="card">
+
+          <h2>Dasboard Atasan</h2>
+
+          <div class="dashboard-subtitle">
+            Ranking absensi pegawai yang tercatat langsung sebagai bawahan
+            pada kolom <strong>Atasan_NIP</strong> di MASTER.
+          </div>
+
+          <div class="dashboard-month">
+            <label for="dashboardBulan">Bulan</label>
+            <input
+              id="dashboardBulan"
+              type="month"
+            >
+          </div>
+
+          <button
+            id="dashboardLoadBtn"
+            class="action-btn"
+          >
+            TAMPILKAN DASBOARD
+          </button>
+
+          <div
+            id="dashboardStatus"
+            class="dashboard-loading"
+            style="margin-top:12px;"
+          >
+            Pilih bulan lalu tampilkan dasboard.
+          </div>
+
+        </div>
+
+        <div
+          class="dashboard-section-title dashboard-best-title"
+        >
+          THE BEST — 3 TERBAIK
+        </div>
+
+        <div id="dashboardBestList"></div>
+
+        <div
+          class="dashboard-section-title dashboard-worst-title"
+        >
+          THE WORST — 3 TERBURUK
+        </div>
+
+        <div id="dashboardWorstList"></div>
+
+        <div
+          class="dashboard-section-title"
+        >
+          REKAP SELURUH BAWAHAN
+        </div>
+
+        <div class="dashboard-table-wrap">
+
+          <table class="dashboard-table">
+
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>NIP</th>
+                <th>Nama</th>
+                <th>Bagian</th>
+                <th>Masuk</th>
+                <th>Terlambat</th>
+                <th>Sakit</th>
+                <th>Cuti</th>
+                <th>Keperluan</th>
+                <th>Piket</th>
+                <th>Tdk Masuk</th>
+                <th>Dinas Luar</th>
+                <th>Rank</th>
+              </tr>
+            </thead>
+
+            <tbody id="dashboardTableBody"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
       <div
         id="tab-surat-tugas"
         class="tab-content"
@@ -1483,7 +1578,7 @@
     // ==========================================================
 
     const API_URL =
-      "https://script.google.com/macros/s/AKfycbws2E2F9F7JJX2qlt59UsZjUgOyzUuY8JGqzKhv0gNKdgyI9QWkxDRsBvFiXc5Gtl1M_Q/exec";
+      "https://script.google.com/macros/s/AKfycbztvvEm-FC5Otz2kANNQzgQIG5AMK_n_iZu37z4azqNt9sekCkg99t0VAmAaCtdhlN22w/exec";
 
     const NIP_KEY =
       "absensi_v5_nip";
@@ -2125,7 +2220,7 @@ showVerifyLoading(
         .textContent =
         `${firstName} - ${employee.bagian || "-"} - ${employee.jabatan || "-"}`;
 
-      checkDashboardAccess(employee);
+      checkDashboardAccess();
 
       updateClock();
 
@@ -3644,28 +3739,12 @@ showVerifyLoading(
 // DASBOARD ATASAN
 // ==========================================================
 
-function setDashboardTabVisible(employee) {
+async function checkDashboardAccess() {
 
   const btn = $("dashboardTabBtn");
   if (!btn) return;
 
-  const atasanNip = String(employee?.atasanNip || '').trim();
-
-  // Dashboard hanya ditampilkan jika NIP pengguna adalah Atasan_NIP
-  // pada minimal satu pegawai aktif di MASTER. Pemeriksaan final
-  // tetap dilakukan oleh backend.
-  if (atasanNip === '') {
-    btn.classList.remove("hidden");
-  } else {
-    btn.classList.add("hidden");
-  }
-}
-
-async function checkDashboardAccess(employee) {
-
-  const btn = $("dashboardTabBtn");
-  if (!btn) return;
-
+  // Selalu mulai dalam keadaan tersembunyi.
   btn.classList.add("hidden");
 
   const nip = localStorage.getItem(NIP_KEY);
@@ -3674,19 +3753,27 @@ async function checkDashboardAccess(employee) {
   if (!nip || !deviceId) return;
 
   try {
+
+    // Backend hanya melakukan pemeriksaan hubungan
+    // MASTER.Atasan_NIP karena bulan dikosongkan.
     const res = await api({
       action: "getDashboard",
-      nip,
-      deviceId,
+      nip: nip,
+      deviceId: deviceId,
       bulan: ""
     });
 
-    if (res.ok) {
+    if (res && res.ok === true && Number(res.bawahan || 0) > 0) {
       btn.classList.remove("hidden");
     }
-  } catch (e) {
-    // Tidak menampilkan menu jika akses atasan gagal diperiksa.
+
+  } catch (error) {
+    console.warn(
+      "Pemeriksaan akses Dasboard gagal:",
+      error
+    );
   }
+
 }
 
 function setDashboardDefaultMonth() {
