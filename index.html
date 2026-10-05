@@ -1069,13 +1069,26 @@
               id="sakitTanggalSelesai"
             >
 
+            <label for="sakitJenisIjin">
+              Jenis Ijin
+            </label>
+
+            <select
+              id="sakitJenisIjin"
+            >
+              <option value="">-- Pilih Jenis Ijin --</option>
+              <option value="SAKIT">Sakit</option>
+              <option value="CUTI">Cuti</option>
+              <option value="KEPERLUAN_MENDADAK">Keperluan Mendadak</option>
+            </select>
+
             <label for="sakitAlasan">
-              Alasan / Keterangan Tidak Masuk
+              Keterangan / Alasan Tidak Masuk
             </label>
 
             <textarea
               id="sakitAlasan"
-              placeholder="Masukkan alasan Tidak Masuk..."
+              placeholder="Pilih jenis ijin terlebih dahulu, kemudian isi keterangan..."
             ></textarea>
 
             <label for="skdFile">
@@ -1358,7 +1371,7 @@
     // ==========================================================
 
     const API_URL =
-      "https://script.google.com/macros/s/AKfycbyDLa9mGW5PE-1S0XPnPxe582VAz2vE3MR3jVGd9EWdRs5og1y_eH7-R7Vbw-tEoCK6AA/exec";
+      "https://script.google.com/macros/s/AKfycbwz6j3mfljAO7i4nhmTzJLF3PDslHOY7MnKifFJYd8TAI6hF9ooaqzCTufRzbPk3Nwz4A/exec";
 
     const NIP_KEY =
       "absensi_v5_nip";
@@ -3000,6 +3013,10 @@ showVerifyLoading(
         .value =
         "";
 
+      $("sakitJenisIjin")
+        .value =
+        "";
+
       $("sakitAlasan")
         .value =
         "";
@@ -3148,6 +3165,11 @@ showVerifyLoading(
         $("sakitTanggalSelesai")
           .value;
 
+      const jenisIjin =
+        $("sakitJenisIjin")
+          .value
+          .trim();
+
       const alasan =
         $("sakitAlasan")
           .value
@@ -3186,10 +3208,19 @@ showVerifyLoading(
 
       }
 
+      if (!jenisIjin) {
+
+        return setUploadStatus(
+          "Jenis ijin wajib dipilih.",
+          "error"
+        );
+
+      }
+
       if (!alasan) {
 
         return setUploadStatus(
-          "Alasan / keterangan tidak masuk wajib diisi.",
+          "Keterangan / alasan tidak masuk wajib diisi.",
           "error"
         );
 
@@ -3314,7 +3345,7 @@ showVerifyLoading(
               "submitIjin",
 
             jenisIjin:
-              "SAKIT",
+              jenisIjin,
 
             nip,
 
