@@ -99,11 +99,19 @@
       display: flex;
       gap: 5px;
       margin-bottom: 25px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar {
+      display: none;
     }
 
     .tab-btn {
-      flex: 1;
-      padding: 12px 4px;
+      flex: 0 0 auto;
+      min-width: 92px;
+      padding: 12px 10px;
       background: #fff;
       border: 1px solid #17202a;
       color: #17202a;
@@ -127,6 +135,30 @@
 
     .tab-content.active {
       display: block;
+    }
+
+    .surat-filter-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .surat-filter-actions .action-btn {
+      flex: 1;
+      margin: 0;
+    }
+
+    .surat-tugas-page h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+    .surat-tugas-page .surat-item {
+      cursor: default;
+    }
+
+    .surat-tugas-page .surat-item:hover {
+      background: #fff;
     }
 
     .dynamic-desc {
@@ -806,6 +838,13 @@
           Info
         </button>
 
+        <button
+          class="tab-btn"
+          data-tab="surat-tugas"
+        >
+          Surat Tugas
+        </button>
+
       </div>
 
       <!-- ======================================================
@@ -1209,6 +1248,82 @@
       </div>
 
       <!-- ======================================================
+           SURAT TUGAS LANGSUNG DARI ADMIN
+           ====================================================== -->
+
+      <div
+        id="tab-surat-tugas"
+        class="tab-content"
+      >
+
+        <div class="surat-tugas-page">
+
+          <h2>SURAT TUGAS</h2>
+
+          <div class="surat-tugas-filter card">
+
+            <div class="ijin-form">
+
+              <label for="suratTugasTanggalMulai">
+                Tanggal Surat Mulai
+              </label>
+
+              <input
+                type="date"
+                id="suratTugasTanggalMulai"
+              >
+
+              <label for="suratTugasTanggalSelesai">
+                Tanggal Surat Sampai
+              </label>
+
+              <input
+                type="date"
+                id="suratTugasTanggalSelesai"
+              >
+
+              <div class="surat-filter-actions">
+
+                <button
+                  id="filterSuratTugasBtn"
+                  class="action-btn"
+                >
+                  FILTER
+                </button>
+
+                <button
+                  id="resetSuratTugasFilterBtn"
+                  class="action-btn secondary"
+                >
+                  RESET
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div
+            id="suratTugasAdminStatus"
+            class="upload-progress"
+          ></div>
+
+          <div
+            id="suratTugasAdminList"
+            class="surat-list"
+          >
+            <div class="ijin-status">
+              Memuat Surat Tugas...
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ======================================================
            PERDA / SOP / INFO
            ====================================================== -->
 
@@ -1243,7 +1358,7 @@
     // ==========================================================
 
     const API_URL =
-      "https://script.google.com/macros/s/AKfycbx6kXS6SShMcGx5CH4wMBLtwgiH6xCtPxutWvFNe8IbnrPYbuOi6V3lOe9ImnjFDsy_CA/exec";
+      "https://script.google.com/macros/s/AKfycbyDLa9mGW5PE-1S0XPnPxe582VAz2vE3MR3jVGd9EWdRs5og1y_eH7-R7Vbw-tEoCK6AA/exec";
 
     const NIP_KEY =
       "absensi_v5_nip";
@@ -1303,7 +1418,9 @@
         "submitIjinSakitBtn",
         "backIjinDinasBtn",
         "submitIjinDinasBtn",
-        "backRiwayatIjinBtn"
+        "backRiwayatIjinBtn",
+        "filterSuratTugasBtn",
+        "resetSuratTugasFilterBtn"
       ].forEach(id => {
 
         $(id)?.addEventListener(
@@ -1469,7 +1586,13 @@
         submitIjinDinas,
 
       backRiwayatIjinBtn:
-        backToAttendance
+        backToAttendance,
+
+      filterSuratTugasBtn:
+        filterSuratTugasAdmin,
+
+      resetSuratTugasFilterBtn:
+        resetSuratTugasFilter
 
     };
 
@@ -1947,6 +2070,21 @@ showVerifyLoading(
           },
           250
         );
+
+        return;
+
+      }
+
+      if (
+        tabName ===
+        "surat-tugas"
+      ) {
+
+        $("tab-surat-tugas")
+          .classList
+          .add("active");
+
+        loadSuratTugasAdmin();
 
         return;
 
@@ -3338,6 +3476,414 @@ showVerifyLoading(
     // DINAS LUAR
     // ==========================================================
 // ==========================================================
+// SURAT TUGAS LANGSUNG DARI ADMIN
+// ==========================================================
+
+let suratTugasAdminData = [];
+
+async function loadSuratTugasAdmin() {
+
+  const nip =
+    localStorage.getItem(
+      NIP_KEY
+    );
+
+  const deviceId =
+    localStorage.getItem(
+      DEV_KEY
+    );
+
+  if (
+    !nip ||
+    !deviceId
+  ) {
+    return showVerify();
+  }
+
+  $("suratTugasAdminStatus")
+    .textContent =
+    "Memuat Surat Tugas...";
+
+  $("suratTugasAdminList")
+    .innerHTML =
+    `
+      <div class="ijin-status">
+        Memuat Surat Tugas...
+      </div>
+    `;
+
+  try {
+
+    const res =
+      await api({
+
+        action:
+          "getSuratTugasLangsung",
+
+        nip,
+        deviceId
+
+      });
+
+    if (!res.ok) {
+
+      suratTugasAdminData = [];
+
+      $("suratTugasAdminStatus")
+        .textContent = "";
+
+      $("suratTugasAdminList")
+        .innerHTML =
+        `
+          <div class="ijin-status error">
+            ${esc(
+              res.message ||
+              "Surat Tugas tidak tersedia."
+            )}
+          </div>
+        `;
+
+      return;
+    }
+
+    suratTugasAdminData =
+      Array.isArray(res.data)
+        ? res.data
+        : [];
+
+    $("suratTugasAdminStatus")
+      .textContent =
+      suratTugasAdminData.length
+        ? `${suratTugasAdminData.length} Surat Tugas ditemukan.`
+        : "";
+
+    renderSuratTugasAdmin(
+      suratTugasAdminData
+    );
+
+  } catch (error) {
+
+    suratTugasAdminData = [];
+
+    $("suratTugasAdminStatus")
+      .textContent = "";
+
+    $("suratTugasAdminList")
+      .innerHTML =
+      `
+        <div class="ijin-status error">
+          ${esc(
+            error.message ||
+            "Surat Tugas gagal dimuat."
+          )}
+        </div>
+      `;
+
+  }
+
+}
+
+
+function filterSuratTugasAdmin() {
+
+  const mulai =
+    $("suratTugasTanggalMulai")
+      .value;
+
+  const selesai =
+    $("suratTugasTanggalSelesai")
+      .value;
+
+  if (
+    mulai &&
+    selesai &&
+    selesai < mulai
+  ) {
+
+    $("suratTugasAdminStatus")
+      .textContent =
+      "Tanggal sampai tidak boleh lebih awal dari tanggal mulai.";
+
+    return;
+  }
+
+  const filtered =
+    suratTugasAdminData
+      .filter(
+        item => {
+
+          const tanggal =
+            String(
+              item.tanggalSurat ||
+              item.Tanggal_Surat ||
+              ""
+            ).slice(0, 10);
+
+          if (
+            mulai &&
+            tanggal < mulai
+          ) {
+            return false;
+          }
+
+          if (
+            selesai &&
+            tanggal > selesai
+          ) {
+            return false;
+          }
+
+          return true;
+        }
+      );
+
+  $("suratTugasAdminStatus")
+    .textContent =
+    filtered.length
+      ? `${filtered.length} Surat Tugas ditemukan.`
+      : "Tidak ada Surat Tugas pada tanggal yang dipilih.";
+
+  renderSuratTugasAdmin(
+    filtered
+  );
+}
+
+
+function resetSuratTugasFilter() {
+
+  $("suratTugasTanggalMulai")
+    .value = "";
+
+  $("suratTugasTanggalSelesai")
+    .value = "";
+
+  $("suratTugasAdminStatus")
+    .textContent =
+    suratTugasAdminData.length
+      ? `${suratTugasAdminData.length} Surat Tugas ditemukan.`
+      : "";
+
+  renderSuratTugasAdmin(
+    suratTugasAdminData
+  );
+}
+
+
+async function openSuratTugasFile(event, link) {
+
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  const url =
+    link && link.href
+      ? link.href
+      : '';
+
+  const suratTugasId =
+    link && link.dataset
+      ? link.dataset.suratId
+      : '';
+
+  const nip =
+    localStorage.getItem(NIP_KEY);
+
+  const deviceId =
+    localStorage.getItem(DEV_KEY);
+
+  if (!url || !suratTugasId || !nip || !deviceId) {
+    if (url) {
+      window.open(url, '_blank', 'noopener');
+    }
+    return;
+  }
+
+  /*
+   * Buka tab kosong terlebih dahulu agar browser tidak
+   * memblokir popup. Setelah server mencatat bahwa surat
+   * sudah dibaca, tab tersebut diarahkan ke PDF.
+   */
+  const popup =
+    window.open(
+      'about:blank',
+      '_blank'
+    );
+
+  try {
+
+    await api({
+      action: 'markSuratTugasDibaca',
+      nip,
+      deviceId,
+      suratTugasId,
+      browser: navigator.userAgent,
+      os: os()
+    });
+
+  } catch (error) {
+    /*
+     * Jika pencatatan gagal, file tetap dibuka.
+     * Kegagalan pencatatan tidak boleh menghalangi
+     * pengguna membaca Surat Tugas.
+     */
+  }
+
+  if (popup && !popup.closed) {
+    popup.location.href = url;
+  } else {
+    window.location.href = url;
+  }
+
+}
+
+
+function renderSuratTugasAdmin(
+  list
+) {
+
+  const container =
+    $("suratTugasAdminList");
+
+  if (
+    !Array.isArray(list) ||
+    list.length === 0
+  ) {
+
+    container.innerHTML =
+      `
+        <div class="ijin-status">
+          Belum ada Surat Tugas dari admin.
+        </div>
+      `;
+
+    return;
+  }
+
+  container.innerHTML =
+    list
+      .map(
+        item => {
+
+          const nomor =
+            item.nomorSurat ||
+            item.Nomor_Surat ||
+            "-";
+
+          const tanggalSurat =
+            formatTanggalIndonesia(
+              item.tanggalSurat ||
+              item.Tanggal_Surat ||
+              "-"
+            );
+
+          const keperluan =
+            item.keperluan ||
+            item.Keperluan ||
+            "-";
+
+          const mulai =
+            formatTanggalIndonesia(
+              item.tanggalMulai ||
+              item.Tanggal_Mulai ||
+              "-"
+            );
+
+          const selesai =
+            formatTanggalIndonesia(
+              item.tanggalSelesai ||
+              item.Tanggal_Selesai ||
+              "-"
+            );
+
+          const status =
+            item.status ||
+            item.Status ||
+            "ACC";
+
+          const fileUrl =
+            item.fileUrl ||
+            item.filePdf ||
+            item.File_PDF ||
+            "";
+
+          return `
+            <div class="surat-item">
+
+              <div class="surat-item-row">
+                <span class="surat-item-label">
+                  Nomor Surat
+                </span>
+                <br>
+                ${esc(nomor)}
+              </div>
+
+              <div class="surat-item-row">
+                <span class="surat-item-label">
+                  Tanggal Surat
+                </span>
+                <br>
+                ${esc(tanggalSurat)}
+              </div>
+
+              <div class="surat-item-row">
+                <span class="surat-item-label">
+                  Keperluan
+                </span>
+                <br>
+                ${esc(keperluan)}
+              </div>
+
+              <div class="surat-item-row">
+                <span class="surat-item-label">
+                  Periode Tugas
+                </span>
+                <br>
+                ${esc(mulai)}
+                s.d.
+                ${esc(selesai)}
+              </div>
+
+              <div class="surat-status">
+                Status:
+                ${esc(status)}
+              </div>
+
+              ${
+                fileUrl
+                  ? `
+                    <a
+                      class="surat-download surat-open-link"
+                      href="${esc(fileUrl)}"
+                      data-surat-id="${esc(item.suratTugasId || item.id || item.Surat_Tugas_ID || "")}
+                      onclick="openSuratTugasFile(event, this)"
+                    >
+                      LIHAT / DOWNLOAD
+                    </a>
+                  `
+                  : `
+                    <div
+                      class="surat-download"
+                      style="
+                        opacity:.5;
+                        cursor:default;
+                        background:#9aa4ab;
+                      "
+                    >
+                      FILE TIDAK TERSEDIA
+                    </div>
+                  `
+              }
+
+            </div>
+          `;
+        }
+      )
+      .join("");
+}
+
+
+// ==========================================================
 // DINAS LUAR
 // ==========================================================
 
@@ -3651,10 +4197,10 @@ const selesai =
 
                   `
                     <a
-                      class="surat-download"
+                      class="surat-download surat-open-link"
                       href="${esc(fileUrl)}"
-                      target="_blank"
-                      rel="noopener"
+                      data-surat-id="${esc(item.suratTugasId || item.id || item.Surat_Tugas_ID || "")}
+                      onclick="openSuratTugasFile(event, this)"
                     >
                       LIHAT / DOWNLOAD
                     </a>
